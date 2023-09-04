@@ -13,11 +13,45 @@ struct FolderItemView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Rectangle()
-                .fill(Color.gray)
-                .frame(width: ItemWidth, height: ItemWidth * 1.5)
-                .cornerRadius(10)
-            
+            ZStack {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.15))
+                    .frame(width: ItemWidth, height: ItemWidth * 1.5)
+                    .cornerRadius(10)
+                
+                Image(systemName: "rectangle.stack.badge.play")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: ItemWidth * 0.3, height: ItemWidth * 0.3)
+                    .foregroundColor(Color.gray)
+            }
+            .contextMenu {
+                Button(action: {
+                    // TODO: - Pin
+                }, label: {
+                    Label("Pin", systemImage: "pin")
+                })
+                
+                Button(action: {
+                    // TODO: - Add Favorite functionality
+                }, label: {
+                    Label("Add Favorite", systemImage: "heart")
+                })
+                
+                Divider()
+                
+                Button(action: {
+                    //TODO: - Rename functionality
+                }, label: {
+                    Label("Rename", systemImage: "pencil")
+                })
+                
+                Button(role: .destructive, action: {
+                    // TODO: - Delete
+                }, label: {
+                    Label("Delete", systemImage: "trash")
+                })
+            }
             Text(Folder.Name)
                 .font(.system(size: 15))
         }
