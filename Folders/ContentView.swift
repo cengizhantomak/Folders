@@ -8,55 +8,46 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var views: [String] = []
-    @State private var showAlert: Bool = false
-    @State private var inputName: String = ""
+    @State private var Folders: [FolderModel] = []
+    @State private var ShowAlert: Bool = false
+    @State private var InputName: String = ""
     
-    let columns = [
+    let Columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
     
-    func currentDateTime() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd-HHmmssSSS"
-        return formatter.string(from: Date())
+    func CurrentDateTime() -> String {
+        let Formatter = DateFormatter()
+        Formatter.dateFormat = "yyyyMMdd-HHmmssSSS"
+        return Formatter.string(from: Date())
     }
     
     var body: some View {
         NavigationStack {
-            GeometryReader { geometry in
-                let ekranGenislik = geometry.size.width
-                let itemGenislik = (ekranGenislik - 30) / 2
+            GeometryReader { Geometry in
+                let ScreenWidth = Geometry.size.width
+                let ItemWidth = (ScreenWidth - 30) / 2
                 ScrollView {
-                    LazyVGrid(columns: columns, spacing: 10) {
-                        ForEach(views, id: \.self) { name in
-                            VStack(alignment: .leading) {
-                                Rectangle()
-                                    .fill(Color.gray)
-                                    .frame(width: itemGenislik, height: itemGenislik * 1.5)
-                                    .cornerRadius(10)
-                                
-                                Text(name)
-                                    .font(.system(size: 15))
-                            }
-                            .onTapGesture {
-                                if let index = views.firstIndex(of: name) {
-                                    views.remove(at: index)
+                    LazyVGrid(columns: Columns, spacing: 10) {
+                        ForEach(Folders) { Folder in
+                            FolderItemView(Folder: Folder, ItemWidth: ItemWidth)
+                                .onTapGesture {
+                                    if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
+                                        Folders.remove(at: Index)
+                                    }
                                 }
-                            }
                         }
                     }
                     .padding(10)
                 }
-                
                 .navigationTitle("Videos")
-                .navigationBarItems(leading: addButton)
-                .alert("Create Folder", isPresented: $showAlert) {
-                    TextField("name", text: $inputName)
+                .navigationBarItems(leading: AddButton)
+                .alert("Create Folder", isPresented: $ShowAlert) {
+                    TextField("name", text: $InputName)
                     Button("Save", role: .destructive) {
                         withAnimation(Animation.easeInOut(duration: 0.2)) {
-                            views.insert(inputName, at: 0)
+                            Folders.insert(FolderModel(Name: InputName), at: 0)
                         }
                     }
                     Button("Cancel", role: .cancel) {
@@ -67,10 +58,10 @@ struct ContentView: View {
         }
     }
     
-    var addButton: some View {
+    var AddButton: some View {
         Button(action: {
-            inputName = currentDateTime()
-            showAlert = true
+            InputName = CurrentDateTime()
+            ShowAlert = true
         }) {
             Image(systemName: "plus")
         }
