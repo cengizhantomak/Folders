@@ -42,7 +42,34 @@ struct ContentView: View {
                     .padding(10)
                 }
                 .navigationTitle("Videos")
-                .navigationBarItems(leading: AddButton)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: AddButtonAction) {
+                            Image(systemName: "plus")
+                                .foregroundColor(.black)
+                                .padding(8)
+                                .background(Color.gray.opacity(0.25))
+                                .clipShape(Circle())
+                        }
+                        
+                    }
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        Button(action: FavoritesButtonAction) {
+                            Image(systemName: "heart")
+                                .foregroundColor(.black)
+                                .padding(8)
+                                .background(Color.gray.opacity(0.25))
+                                .clipShape(Circle())
+                        }
+                        Button(action: SelectButtonAction) {
+                            Text("Select")
+                                .foregroundColor(.black)
+                                .padding(8)
+                                .background(Color.gray.opacity(0.25))
+                                .clipShape(Capsule())
+                        }
+                    }
+                }
                 .alert("Create Folder", isPresented: $ShowAlert) {
                     TextField("name", text: $InputName)
                     Button("Save", role: .destructive) {
@@ -58,13 +85,19 @@ struct ContentView: View {
         }
     }
     
-    var AddButton: some View {
-        Button(action: {
-            InputName = CurrentDateTime()
-            ShowAlert = true
-        }) {
-            Image(systemName: "plus")
-        }
+    private func AddButtonAction() {
+        InputName = CurrentDateTime()
+        ShowAlert = true
+    }
+    
+    private func SelectButtonAction() {
+        // TODO: Select Button
+        print("Select Tapped")
+    }
+    
+    private func FavoritesButtonAction() {
+        // TODO: Favorites Button
+        print("Favorites Tapped")
     }
 }
 
