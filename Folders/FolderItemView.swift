@@ -46,11 +46,19 @@ struct FolderItemView: View {
                     Label("Rename", systemImage: "pencil")
                 })
                 
-                Button(role: .destructive, action: {
-                    // TODO: - Delete
-                }, label: {
-                    Label("Delete", systemImage: "trash")
-                })
+                if #available(iOS 15.0, *) {
+                    Button(role: .destructive, action: {
+                        // TODO: - Delete
+                    }, label: {
+                        Label("Delete", systemImage: "trash")
+                    })
+                } else {
+                    Button(action: {
+                        // TODO: - Delete for older iOS
+                    }, label: {
+                        Label("Delete", systemImage: "trash")
+                    })
+                }
             }
             Text(Folder.Name)
                 .font(.system(size: 15))

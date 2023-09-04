@@ -16,7 +16,7 @@ struct ContentView: View {
     ]
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             GeometryReader { Geometry in
                 let ScreenWidth = Geometry.size.width
                 let ItemWidth = (ScreenWidth - 30) / 2
@@ -25,7 +25,7 @@ struct ContentView: View {
                         ForEach(ViewModel.Folders) { Folder in
                             FolderItemView(Folder: Folder, ItemWidth: ItemWidth)
                                 .onTapGesture {
-                                    ViewModel.RemoveFolder(withId: Folder.id)
+                                    ViewModel.RemoveFolder(WithId: Folder.id)
                                 }
                         }
                     }
@@ -59,15 +59,23 @@ struct ContentView: View {
                         }
                     }
                 }
-                .alert("Create Folder", isPresented: $ViewModel.ShowAlert) {
-                    TextField("name", text: $ViewModel.InputName)
-                    Button("Save", role: .destructive) {
-                        ViewModel.AddFolder()
-                    }
-                    Button("Cancel", role: .cancel) {
-                        print("Cancel Tapped")
-                    }
-                }
+//                .alert(isPresented: $ViewModel.ShowAlert, content: {
+//                    alertTF(title: "Create Folder", message: "message", hintText: ViewModel.InputName, primaryTitle: "Save", secondaryTitle: "Cancel") { text in
+//                        print(text)
+//                    } secondaryAction: {
+//                        print("Cancelled")
+//                    }
+//
+//                })
+//                .alert("Create Folder", isPresented: $ViewModel.ShowAlert) {
+//                    TextField("name", text: $ViewModel.InputName)
+//                    Button("Save", role: .destructive) {
+//                        ViewModel.AddFolder()
+//                    }
+//                    Button("Cancel", role: .cancel) {
+//                        print("Cancel Tapped")
+//                    }
+//                }
             }
         }
     }
@@ -75,6 +83,11 @@ struct ContentView: View {
     private func AddButtonAction() {
         ViewModel.InputName = DateHelper.CurrentDateTime()
         ViewModel.ShowAlert = true
+        alertTF(title: "Create Folder", message: "message", hintText: ViewModel.InputName, primaryTitle: "Save", secondaryTitle: "Cancel") {_ in
+            ViewModel.AddFolder()
+        } secondaryAction: {
+            print("Cancelled")
+        }
     }
     
     private func SelectButtonAction() {
