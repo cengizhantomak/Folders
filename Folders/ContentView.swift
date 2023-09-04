@@ -8,20 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var Folders: [FolderModel] = []
-    @State private var ShowAlert: Bool = false
-    @State private var InputName: String = ""
+    @StateObject var ViewModel = FolderViewModel()
     
     let Columns = [
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-    
-    func CurrentDateTime() -> String {
-        let Formatter = DateFormatter()
-        Formatter.dateFormat = "yyyyMMdd-HHmmssSSS"
-        return Formatter.string(from: Date())
-    }
     
     var body: some View {
         NavigationStack {
@@ -30,12 +22,10 @@ struct ContentView: View {
                 let ItemWidth = (ScreenWidth - 30) / 2
                 ScrollView {
                     LazyVGrid(columns: Columns, spacing: 10) {
-                        ForEach(Folders) { Folder in
+                        ForEach(ViewModel.Folders) { Folder in
                             FolderItemView(Folder: Folder, ItemWidth: ItemWidth)
                                 .onTapGesture {
-                                    if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
-                                        Folders.remove(at: Index)
-                                    }
+                                    ViewModel.RemoveFolder(withId: Folder.id)
                                 }
                         }
                     }
@@ -51,7 +41,6 @@ struct ContentView: View {
                                 .background(Color.gray.opacity(0.25))
                                 .clipShape(Circle())
                         }
-                        
                     }
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         Button(action: FavoritesButtonAction) {
@@ -70,12 +59,10 @@ struct ContentView: View {
                         }
                     }
                 }
-                .alert("Create Folder", isPresented: $ShowAlert) {
-                    TextField("name", text: $InputName)
+                .alert("Create Folder", isPresented: $ViewModel.ShowAlert) {
+                    TextField("name", text: $ViewModel.InputName)
                     Button("Save", role: .destructive) {
-                        withAnimation(Animation.easeInOut(duration: 0.2)) {
-                            Folders.insert(FolderModel(Name: InputName), at: 0)
-                        }
+                        ViewModel.AddFolder()
                     }
                     Button("Cancel", role: .cancel) {
                         print("Cancel Tapped")
@@ -86,8 +73,8 @@ struct ContentView: View {
     }
     
     private func AddButtonAction() {
-        InputName = CurrentDateTime()
-        ShowAlert = true
+        ViewModel.InputName = DateHelper.CurrentDateTime()
+        ViewModel.ShowAlert = true
     }
     
     private func SelectButtonAction() {
