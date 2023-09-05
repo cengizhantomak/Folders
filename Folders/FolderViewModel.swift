@@ -13,33 +13,40 @@ class FolderViewModel: ObservableObject {
     @Published var InputName: String = ""
     
     init() {
-        loadFolders()
+        LoadFolders()
     }
     
     func AddFolder() {
         withAnimation(Animation.easeInOut(duration: 0.2)) {
             Folders.insert(FolderModel(Name: InputName), at: 0)
-            saveFolders()
+            SaveFolders()
         }
     }
     
     func RemoveFolder(WithId Id: UUID) {
         if let Index = Folders.firstIndex(where: { $0.id == Id }) {
             Folders.remove(at: Index)
-            saveFolders()
+            SaveFolders()
         }
     }
     
-    private func saveFolders() {
-        if let encoded = try? JSONEncoder().encode(Folders) {
-            UserDefaults.standard.setValue(encoded, forKey: "Folders")
+    func RenameFolder(WithId Id: UUID, NewName: String) {
+        if let Index = Folders.firstIndex(where: { $0.id == Id }) {
+            Folders[Index].Name = NewName
+            SaveFolders()
         }
     }
     
-    private func loadFolders() {
-        if let data = UserDefaults.standard.data(forKey: "Folders"),
-           let decoded = try? JSONDecoder().decode([FolderModel].self, from: data) {
-            Folders = decoded
+    private func SaveFolders() {
+        if let Encoded = try? JSONEncoder().encode(Folders) {
+            UserDefaults.standard.setValue(Encoded, forKey: "Folders")
+        }
+    }
+    
+    private func LoadFolders() {
+        if let Data = UserDefaults.standard.data(forKey: "Folders"),
+           let Decoded = try? JSONDecoder().decode([FolderModel].self, from: Data) {
+            Folders = Decoded
         }
     }
 }

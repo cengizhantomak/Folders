@@ -22,10 +22,10 @@ struct ContentView: View {
                 let ItemWidth = (ScreenWidth - 30) / 2
                 ScrollView {
                     LazyVGrid(columns: Columns, spacing: 10) {
-                        ForEach(ViewModel.Folders) { Folder in
-                            FolderItemView(Folder: Folder, ItemWidth: ItemWidth)
+                        ForEach(ViewModel.Folders.indices, id: \.self) { index in
+                            FolderItemView(Folder: $ViewModel.Folders[index], ItemWidth: ItemWidth, ViewModel: ViewModel)
                                 .onTapGesture {
-                                    ViewModel.RemoveFolder(WithId: Folder.id)
+                                    ViewModel.RemoveFolder(WithId: ViewModel.Folders[index].id)
                                 }
                         }
                     }
@@ -64,6 +64,7 @@ struct ContentView: View {
                     Button("Save", role: .destructive) {
                         ViewModel.AddFolder()
                     }
+                    
                     Button("Cancel", role: .cancel) {
                         print("Cancel Tapped")
                     }

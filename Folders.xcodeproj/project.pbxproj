@@ -62,9 +62,9 @@
 				CB2FBD712AA5B03C007C46F3 /* FoldersApp.swift */,
 				CB2FBD852AA5FD70007C46F3 /* DateHelper.swift */,
 				CB2FBD7F2AA5B146007C46F3 /* FolderModel.swift */,
-				CB2FBD732AA5B03C007C46F3 /* ContentView.swift */,
 				CB2FBD832AA5F669007C46F3 /* FolderViewModel.swift */,
 				CB2FBD812AA5B190007C46F3 /* FolderItemView.swift */,
+				CB2FBD732AA5B03C007C46F3 /* ContentView.swift */,
 				CB2FBD752AA5B03D007C46F3 /* Assets.xcassets */,
 				CB2FBD772AA5B03D007C46F3 /* Preview Content */,
 			);
