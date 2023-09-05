@@ -37,6 +37,14 @@ class FolderViewModel: ObservableObject {
         }
     }
     
+    var TodayFolders: [FolderModel] {
+        return Folders.filter { $0.Name.hasPrefix(DateHelper.CurrentDate()) }
+    }
+    
+    var SessionFolders: [FolderModel] {
+        return Folders.filter { !$0.Name.hasPrefix(DateHelper.CurrentDate()) }
+    }
+    
     private func SaveFolders() {
         if let Encoded = try? JSONEncoder().encode(Folders) {
             UserDefaults.standard.setValue(Encoded, forKey: "Folders")

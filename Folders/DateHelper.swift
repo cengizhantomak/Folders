@@ -13,4 +13,10 @@ struct DateHelper {
         Formatter.dateFormat = "yyyyMMdd-HHmmssSSS"
         return Formatter.string(from: Date())
     }
+    
+    static func CurrentDate() -> String {
+        let Formatter = DateFormatter()
+        Formatter.dateFormat = "yyyyMMdd"
+        return Formatter.string(from: Date())
+    }
 }

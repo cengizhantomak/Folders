@@ -21,13 +21,9 @@ struct ContentView: View {
                 let ScreenWidth = Geometry.size.width
                 let ItemWidth = (ScreenWidth - 30) / 2
                 ScrollView {
-                    LazyVGrid(columns: Columns, spacing: 10) {
-                        ForEach(ViewModel.Folders.indices, id: \.self) { index in
-                            FolderItemView(Folder: $ViewModel.Folders[index], ItemWidth: ItemWidth, ViewModel: ViewModel)
-                                .onTapGesture {
-                                    ViewModel.RemoveFolder(WithId: ViewModel.Folders[index].id)
-                                }
-                        }
+                    VStack(alignment: .leading, spacing: 20) {
+                        CreateSection(WithTitle: "Todays", Folders: ViewModel.TodayFolders, ItemWidth: ItemWidth)
+                        CreateSection(WithTitle: "Session", Folders: ViewModel.SessionFolders, ItemWidth: ItemWidth)
                     }
                     .padding(10)
                 }
@@ -67,6 +63,26 @@ struct ContentView: View {
                     
                     Button("Cancel", role: .cancel) {
                         print("Cancel Tapped")
+                    }
+                }
+            }
+        }
+    }
+    
+    private func CreateSection(WithTitle Title: String, Folders: [FolderModel], ItemWidth: CGFloat) -> some View {
+        Group {
+            if !Folders.isEmpty {
+                VStack(alignment: .leading) {
+                    Divider()
+                    Section(header: Text(Title).font(.headline)) {
+                        LazyVGrid(columns: Columns, spacing: 10) {
+                            ForEach(ViewModel.Folders.indices, id: \.self) { Index in
+                                FolderItemView(Folder: $ViewModel.Folders[Index], ItemWidth: ItemWidth, ViewModel: ViewModel)
+                                    .onTapGesture {
+                                        ViewModel.RemoveFolder(WithId: ViewModel.Folders[Index].id)
+                                    }
+                            }
+                        }
                     }
                 }
             }
