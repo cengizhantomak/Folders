@@ -59,23 +59,15 @@ struct ContentView: View {
                         }
                     }
                 }
-//                .alert(isPresented: $ViewModel.ShowAlert, content: {
-//                    alertTF(title: "Create Folder", message: "message", hintText: ViewModel.InputName, primaryTitle: "Save", secondaryTitle: "Cancel") { text in
-//                        print(text)
-//                    } secondaryAction: {
-//                        print("Cancelled")
-//                    }
-//
-//                })
-//                .alert("Create Folder", isPresented: $ViewModel.ShowAlert) {
-//                    TextField("name", text: $ViewModel.InputName)
-//                    Button("Save", role: .destructive) {
-//                        ViewModel.AddFolder()
-//                    }
-//                    Button("Cancel", role: .cancel) {
-//                        print("Cancel Tapped")
-//                    }
-//                }
+                .alert("Create Folder", isPresented: $ViewModel.ShowAlert) {
+                    TextField("name", text: $ViewModel.InputName)
+                    Button("Save", role: .destructive) {
+                        ViewModel.AddFolder()
+                    }
+                    Button("Cancel", role: .cancel) {
+                        print("Cancel Tapped")
+                    }
+                }
             }
         }
     }
@@ -83,11 +75,6 @@ struct ContentView: View {
     private func AddButtonAction() {
         ViewModel.InputName = DateHelper.CurrentDateTime()
         ViewModel.ShowAlert = true
-        alertTF(title: "Create Folder", message: "message", hintText: ViewModel.InputName, primaryTitle: "Save", secondaryTitle: "Cancel") {_ in
-            ViewModel.AddFolder()
-        } secondaryAction: {
-            print("Cancelled")
-        }
     }
     
     private func SelectButtonAction() {

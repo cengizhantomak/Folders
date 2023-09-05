@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FolderModel: Identifiable {
+struct FolderModel: Identifiable, Codable {
     var id = UUID()
     var Name: String
 }
