@@ -11,32 +11,34 @@ struct FolderItemView: View {
     var Folder: FolderModel
     let ItemWidth: CGFloat
     @StateObject var ViewModel: FolderViewModel
-//    @State private var IsRenameShowAlert = false
+    @State private var IsRenameShowAlert = false
     @State private var IsDeleteShowAlert = false
-//    @State private var NewName = ""
+    @State private var NewName = ""
     
     var body: some View {
         VStack(alignment: .leading) {
             FolderIcon
-            .contextMenu {
-                FolderContextMenu
-            }
+                .contextMenu {
+                    FolderContextMenu
+                }
             Text(Folder.Name)
                 .font(.system(size: 15))
         }
-//        .onAppear {
-//            NewName = Folder.Name
-//        }
-//        .alert("Rename Folder", isPresented: $IsRenameShowAlert) {
-//            TextField("Folder Name", text: $NewName)
-//            Button("Save", role: .destructive) {
-//                ViewModel.RenameFolder(for: Folder, NewName: NewName)
-//            }
-//            Button("Cancel", role: .cancel) {
-//                NewName = Folder.Name
-//                print("Cancel Tapped")
-//            }
-//        }
+        .onAppear {
+            NewName = Folder.Name
+        }
+        .alert("Rename Folder", isPresented: $IsRenameShowAlert) {
+            TextField("Folder Name", text: $NewName)
+            Button("Save", role: .destructive) {
+                if !NewName.isEmpty {
+                    ViewModel.RenameFolder(for: Folder, NewName: NewName)
+                }
+            }
+            Button("Cancel", role: .cancel) {
+                NewName = Folder.Name
+                print("Cancel Tapped")
+            }
+        }
         .alert(isPresented: $IsDeleteShowAlert) {
             Alert(
                 title: Text("Deleting!"),
@@ -81,7 +83,7 @@ struct FolderItemView: View {
             Divider()
             
             Button(action: {
-//                IsRenameShowAlert = true
+                IsRenameShowAlert = true
             }, label: {
                 Label("Rename", systemImage: "pencil")
             })
@@ -95,9 +97,8 @@ struct FolderItemView: View {
     }
 }
 
-//struct FolderItemView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        FolderItemView(Folder: .constant(FolderModel(Name: "unknown")), ItemWidth: 100, ViewModel: FolderViewModel())
-//
-//    }
-//}
+struct FolderItemView_Previews: PreviewProvider {
+    static var previews: some View {
+        FolderItemView(Folder: FolderModel(Name: "LVS"), ItemWidth: 100, ViewModel: FolderViewModel())
+    }
+}

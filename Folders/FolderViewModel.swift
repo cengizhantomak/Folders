@@ -42,10 +42,10 @@ class FolderViewModel: ObservableObject {
     }
     
     func AddFolder() {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
+//        withAnimation(Animation.easeInOut(duration: 0.2)) {
             Folders.insert(FolderModel(Name: InputName), at: 0)
             SaveFolders()
-        }
+//        }
     }
     
     func PinActionLabel(For Name: String) -> String {
