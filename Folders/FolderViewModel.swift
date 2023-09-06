@@ -42,10 +42,10 @@ class FolderViewModel: ObservableObject {
     }
     
     func AddFolder() {
-//        withAnimation(Animation.easeInOut(duration: 0.2)) {
+        withAnimation(Animation.easeInOut(duration: 0.2)) {
             Folders.insert(FolderModel(Name: InputName), at: 0)
             SaveFolders()
-//        }
+        }
     }
     
     func PinActionLabel(For Name: String) -> String {
@@ -53,23 +53,29 @@ class FolderViewModel: ObservableObject {
     }
     
     func PinFolder(for Folder: FolderModel) {
-        if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
-            Folders[Index].IsPinned.toggle()
-            SaveFolders()
+        withAnimation(Animation.easeInOut(duration: 0.2)) {
+            if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
+                Folders[Index].IsPinned.toggle()
+                SaveFolders()
+            }
         }
     }
     
     func RenameFolder(for Folder: FolderModel, NewName: String) {
-        if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
-            Folders[Index].Name = NewName
-            SaveFolders()
+        withAnimation(Animation.easeInOut(duration: 0.2)) {
+            if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
+                Folders[Index].Name = NewName
+                SaveFolders()
+            }
         }
     }
     
     func RemoveFolder(for Folder: FolderModel) {
-        if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
-            Folders.remove(at: Index)
-            SaveFolders()
+        withAnimation(Animation.easeInOut(duration: 0.2)) {
+            if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
+                Folders.remove(at: Index)
+                SaveFolders()
+            }
         }
     }
 }
