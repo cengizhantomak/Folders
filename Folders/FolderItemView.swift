@@ -8,40 +8,41 @@
 import SwiftUI
 
 struct FolderItemView: View {
-    @Binding var Folder: FolderModel
+    var Folder: FolderModel
     let ItemWidth: CGFloat
     @StateObject var ViewModel: FolderViewModel
-    @State private var IsRenameShowAlert = false
+//    @State private var IsRenameShowAlert = false
     @State private var IsDeleteShowAlert = false
-    @State private var NewName = ""
+//    @State private var NewName = ""
     
     var body: some View {
-        Group {
-            VStack(alignment: .leading) {
-                FolderIcon
-                Text(Folder.Name)
-                    .font(.system(size: 15))
+        VStack(alignment: .leading) {
+            FolderIcon
+            .contextMenu {
+                FolderContextMenu
             }
+            Text(Folder.Name)
+                .font(.system(size: 15))
         }
-        .onAppear {
-            NewName = Folder.Name
-        }
-        .alert("Rename Folder", isPresented: $IsRenameShowAlert) {
-            TextField("Folder Name", text: $NewName)
-            Button("Save", role: .destructive) {
-                ViewModel.RenameFolder(WithId: Folder.id, NewName: NewName)
-            }
-            Button("Cancel", role: .cancel) {
-                NewName = Folder.Name
-                print("Cancel Tapped")
-            }
-        }
+//        .onAppear {
+//            NewName = Folder.Name
+//        }
+//        .alert("Rename Folder", isPresented: $IsRenameShowAlert) {
+//            TextField("Folder Name", text: $NewName)
+//            Button("Save", role: .destructive) {
+//                ViewModel.RenameFolder(for: Folder, NewName: NewName)
+//            }
+//            Button("Cancel", role: .cancel) {
+//                NewName = Folder.Name
+//                print("Cancel Tapped")
+//            }
+//        }
         .alert(isPresented: $IsDeleteShowAlert) {
             Alert(
                 title: Text("Deleting!"),
                 message: Text("Are you sure you want to delete the selected folders?"),
                 primaryButton: .destructive(Text("Delete"), action: {
-                    ViewModel.RemoveFolder(WithId: Folder.id)
+                    ViewModel.RemoveFolder(for: Folder)
                 }),
                 secondaryButton: .cancel()
             )
@@ -61,17 +62,14 @@ struct FolderItemView: View {
                 .frame(width: ItemWidth * 0.3, height: ItemWidth * 0.3)
                 .foregroundColor(Color.gray)
         }
-        .contextMenu {
-            FolderContextMenu
-        }
     }
     
     private var FolderContextMenu: some View {
         VStack {
             Button(action: {
-                // TODO: - Pin
+                ViewModel.PinFolder(for: Folder)
             }, label: {
-                Label("Pin", systemImage: "pin")
+                Label(ViewModel.PinActionLabel(For: Folder.Name), systemImage: Folder.IsPinned ? "pin.slash" : "pin")
             })
             
             Button(action: {
@@ -83,7 +81,7 @@ struct FolderItemView: View {
             Divider()
             
             Button(action: {
-                IsRenameShowAlert = true
+//                IsRenameShowAlert = true
             }, label: {
                 Label("Rename", systemImage: "pencil")
             })
@@ -97,9 +95,9 @@ struct FolderItemView: View {
     }
 }
 
-struct FolderItemView_Previews: PreviewProvider {
-    static var previews: some View {
-        FolderItemView(Folder: .constant(FolderModel(Name: "unknown")), ItemWidth: 100, ViewModel: FolderViewModel())
-        
-    }
-}
+//struct FolderItemView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FolderItemView(Folder: .constant(FolderModel(Name: "unknown")), ItemWidth: 100, ViewModel: FolderViewModel())
+//
+//    }
+//}

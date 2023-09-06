@@ -22,6 +22,7 @@ struct ContentView: View {
                 let ItemWidth = (ScreenWidth - 30) / 2
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
+                        CreateSection(WithTitle: "Pinned", Folders: ViewModel.PinnedFolders, ItemWidth: ItemWidth)
                         CreateSection(WithTitle: "Todays", Folders: ViewModel.TodayFolders, ItemWidth: ItemWidth)
                         CreateSection(WithTitle: "Session", Folders: ViewModel.SessionFolders, ItemWidth: ItemWidth)
                     }
@@ -60,7 +61,6 @@ struct ContentView: View {
                     Button("Save", role: .destructive) {
                         ViewModel.AddFolder()
                     }
-                    
                     Button("Cancel", role: .cancel) {
                         print("Cancel Tapped")
                     }
@@ -76,10 +76,10 @@ struct ContentView: View {
                     Divider()
                     Section(header: Text(Title).font(.headline)) {
                         LazyVGrid(columns: Columns, spacing: 10) {
-                            ForEach(ViewModel.Folders.indices, id: \.self) { Index in
-                                FolderItemView(Folder: $ViewModel.Folders[Index], ItemWidth: ItemWidth, ViewModel: ViewModel)
+                            ForEach(Folders) { Folder in
+                                FolderItemView(Folder: Folder, ItemWidth: ItemWidth, ViewModel: ViewModel)
                                     .onTapGesture {
-                                        ViewModel.RemoveFolder(WithId: ViewModel.Folders[Index].id)
+                                        ViewModel.RemoveFolder(for: Folder)
                                     }
                             }
                         }
