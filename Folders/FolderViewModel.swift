@@ -36,6 +36,10 @@ class FolderViewModel: ObservableObject {
         return Folders.filter { $0.IsPinned }
     }
     
+    func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
+        return (ScreenWidth - Padding) / Amount
+    }
+    
     func SaveFolders() {
         if let Encoded = try? JSONEncoder().encode(Folders) {
             UserDefaults.standard.setValue(Encoded, forKey: "Folders")

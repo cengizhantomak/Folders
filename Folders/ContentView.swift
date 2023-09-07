@@ -13,8 +13,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             GeometryReader { Geometry in
-                let ScreenWidth = Geometry.size.width
-                let ItemWidth = (ScreenWidth - 30) / 2
+                let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 30, Amount: 2)
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
                         CreateSection(WithTitle: "Pinned", Folders: ViewModel.PinnedFolders, ItemWidth: ItemWidth)
