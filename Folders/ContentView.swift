@@ -47,7 +47,7 @@ struct ContentView: View {
                         ToolbarItemGroup(placement: .bottomBar) {
                             Spacer()
                             Text("Select Items")
-                                .foregroundColor(.gray)
+                                .foregroundColor(ViewModel.SelectedFolders.isEmpty ? .gray : .primary)
                             Spacer()
                             Button(action: {
                                 if !ViewModel.SelectedFolders.isEmpty {
@@ -55,7 +55,7 @@ struct ContentView: View {
                                 }
                             }) {
                                 Image(systemName: "trash")
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(ViewModel.SelectedFolders.isEmpty ? .gray : .primary)
                             }
                         }
                     }
