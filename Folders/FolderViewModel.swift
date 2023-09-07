@@ -9,10 +9,16 @@ import SwiftUI
 
 class FolderViewModel: ObservableObject {
     @Published var Folders: [FolderModel] = []
-    @Published var ShowAlert: Bool = false
-    @Published var InputName: String = ""
-    @Published var isSelecting = false
-    @Published var selectedFolders: [FolderModel] = []
+    @Published var SelectedFolders: [FolderModel] = []
+    @Published var Columns = [GridItem(.flexible()), GridItem(.flexible())]
+    @Published var InputName = ""
+    @Published var IsSelecting = false
+    @Published var ShowBottomBarDeleteAlert = false
+    @Published var ShowCreatedAlert = false
+    
+    @Published var ShowRenameAlert = false
+    @Published var ShowDeleteAlert = false
+    @Published var NewName = ""
     
     init() {
         LoadFolders()
@@ -50,11 +56,28 @@ class FolderViewModel: ObservableObject {
         }
     }
     
+    func AddButtonAction() {
+        InputName = DateHelper.CurrentDateTime()
+        ShowCreatedAlert = true
+    }
+    
+    func SelectCancelButtonAction() {
+        IsSelecting.toggle()
+        if !IsSelecting {
+            SelectedFolders.removeAll()
+        }
+    }
+    
+    func FavoritesButtonAction() {
+        // TODO: Favorites Button
+        print("Favorites Tapped")
+    }
+    
     func PinActionLabel(For Name: String) -> String {
         return Folders.contains { $0.Name == Name && $0.IsPinned } ? "Unpin" : "Pin"
     }
     
-    func PinFolder(for Folder: FolderModel) {
+    func PinFolder(For Folder: FolderModel) {
         withAnimation(Animation.easeInOut(duration: 0.2)) {
             if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
                 Folders[Index].IsPinned.toggle()
@@ -63,7 +86,7 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-    func RenameFolder(for Folder: FolderModel, NewName: String) {
+    func RenameFolder(For Folder: FolderModel, NewName: String) {
         withAnimation(Animation.easeInOut(duration: 0.2)) {
             if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
                 Folders[Index].Name = NewName
@@ -72,7 +95,7 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-    func RemoveFolder(for Folder: FolderModel) {
+    func RemoveFolder(For Folder: FolderModel) {
         withAnimation(Animation.easeInOut(duration: 0.2)) {
             if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
                 Folders.remove(at: Index)

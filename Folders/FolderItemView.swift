@@ -8,12 +8,9 @@
 import SwiftUI
 
 struct FolderItemView: View {
+    @StateObject var ViewModel: FolderViewModel
     var Folder: FolderModel
     let ItemWidth: CGFloat
-    @StateObject var ViewModel: FolderViewModel
-    @State private var IsRenameShowAlert = false
-    @State private var IsDeleteShowAlert = false
-    @State private var NewName = ""
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -25,29 +22,27 @@ struct FolderItemView: View {
                 .font(.system(size: 15))
         }
         .onAppear {
-            NewName = Folder.Name
+            ViewModel.NewName = Folder.Name
         }
-        .alert("Rename Folder", isPresented: $IsRenameShowAlert) {
-            TextField("Folder Name", text: $NewName)
+        .alert("Rename Folder", isPresented: $ViewModel.ShowRenameAlert) {
+            TextField("Folder Name", text: $ViewModel.NewName)
             Button("Save", role: .destructive) {
-                if !NewName.isEmpty {
-                    ViewModel.RenameFolder(for: Folder, NewName: NewName)
+                if !ViewModel.NewName.isEmpty {
+                    ViewModel.RenameFolder(For: Folder, NewName: ViewModel.NewName)
                 }
             }
             Button("Cancel", role: .cancel) {
-                NewName = Folder.Name
+                ViewModel.NewName = Folder.Name
                 print("Cancel Tapped")
             }
         }
-        .alert(isPresented: $IsDeleteShowAlert) {
-            Alert(
-                title: Text("Deleting!"),
-                message: Text("Are you sure you want to delete the selected folders?"),
-                primaryButton: .destructive(Text("Delete"), action: {
-                    ViewModel.RemoveFolder(for: Folder)
-                }),
-                secondaryButton: .cancel()
-            )
+        .alert(isPresented: $ViewModel.ShowDeleteAlert) {
+            Alert(title: Text("Deleting!"),
+                  message: Text("Are you sure you want to delete the selected folders?"),
+                  primaryButton: .destructive(Text("Delete")) {
+                ViewModel.RemoveFolder(For: Folder)
+            },
+                  secondaryButton: .cancel())
         }
     }
     
@@ -57,48 +52,44 @@ struct FolderItemView: View {
                 .fill(Color.gray.opacity(0.15))
                 .frame(width: ItemWidth, height: ItemWidth * 1.5)
                 .cornerRadius(10)
-            
             Image(systemName: "rectangle.stack.badge.play")
                 .resizable()
                 .scaledToFit()
                 .frame(width: ItemWidth * 0.3, height: ItemWidth * 0.3)
-                .foregroundColor(Color.gray)
+                .foregroundColor(.gray)
         }
     }
     
     private var FolderContextMenu: some View {
         VStack {
-            Button(action: {
-                ViewModel.PinFolder(for: Folder)
-            }, label: {
+            Button {
+                ViewModel.PinFolder(For: Folder)
+            } label: {
                 Label(ViewModel.PinActionLabel(For: Folder.Name), systemImage: Folder.IsPinned ? "pin.slash" : "pin")
-            })
-            
-            Button(action: {
+            }
+            Button {
                 // TODO: - Add Favorite
-            }, label: {
+            } label: {
                 Label("Add Favorite", systemImage: "heart")
-            })
-            
+            }
             Divider()
-            
-            Button(action: {
-                IsRenameShowAlert = true
-            }, label: {
+            Button {
+                ViewModel.ShowRenameAlert = true
+            } label: {
                 Label("Rename", systemImage: "pencil")
-            })
+            }
             
-            Button(role: .destructive, action: {
-                IsDeleteShowAlert = true
-            }, label: {
+            Button(role: .destructive) {
+                ViewModel.ShowDeleteAlert = true
+            } label: {
                 Label("Delete", systemImage: "trash")
-            })
+            }
         }
     }
 }
 
 struct FolderItemView_Previews: PreviewProvider {
     static var previews: some View {
-        FolderItemView(Folder: FolderModel(Name: "LVS"), ItemWidth: 100, ViewModel: FolderViewModel())
+        FolderItemView(ViewModel: FolderViewModel(), Folder: FolderModel(Name: "LVS"), ItemWidth: 100)
     }
 }

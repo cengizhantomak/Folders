@@ -9,12 +9,6 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var ViewModel = FolderViewModel()
-    @State private var BottomBarDeleteShowAlert = false
-    
-    let Columns = [
-        GridItem(.flexible()),
-        GridItem(.flexible())
-    ]
     
     var body: some View {
         NavigationView {
@@ -31,9 +25,9 @@ struct ContentView: View {
                 }
                 .navigationTitle("Videos")
                 .toolbar {
-                    if !ViewModel.isSelecting {
+                    if !ViewModel.IsSelecting {
                         ToolbarItem(placement: .navigationBarLeading) {
-                            Button(action: AddButtonAction) {
+                            Button(action: ViewModel.AddButtonAction) {
                                 Image(systemName: "plus")
                                     .foregroundColor(.black)
                                     .padding(8)
@@ -42,39 +36,23 @@ struct ContentView: View {
                             }
                         }
                         ToolbarItemGroup(placement: .navigationBarTrailing) {
-                            Button(action: FavoritesButtonAction) {
+                            Button(action: ViewModel.FavoritesButtonAction) {
                                 Image(systemName: "heart")
                                     .foregroundColor(.black)
                                     .padding(8)
                                     .background(Color.gray.opacity(0.25))
                                     .clipShape(Circle())
                             }
-                            Button(action: SelectCancelButtonAction) {
-                                Text(ViewModel.isSelecting ? "Cancel" : "Select")
-                                    .foregroundColor(.black)
-                                    .padding(8)
-                                    .background(Color.gray.opacity(0.25))
-                                    .clipShape(Capsule())
-                            }
                         }
                     } else {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: SelectCancelButtonAction) {
-                                Text("Cancel")
-                                    .foregroundColor(.black)
-                                    .padding(8)
-                                    .background(Color.gray.opacity(0.25))
-                                    .clipShape(Capsule())
-                            }
-                        }
                         ToolbarItemGroup(placement: .bottomBar) {
                             Spacer()
                             Text("Select Items")
                                 .foregroundColor(.gray)
                             Spacer()
                             Button(action: {
-                                if !ViewModel.selectedFolders.isEmpty {
-                                    BottomBarDeleteShowAlert = true
+                                if !ViewModel.SelectedFolders.isEmpty {
+                                    ViewModel.ShowBottomBarDeleteAlert = true
                                 }
                             }) {
                                 Image(systemName: "trash")
@@ -82,8 +60,17 @@ struct ContentView: View {
                             }
                         }
                     }
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        Button(action: ViewModel.SelectCancelButtonAction) {
+                            Text(ViewModel.IsSelecting ? "Cancel" : "Select")
+                                .foregroundColor(.black)
+                                .padding(8)
+                                .background(Color.gray.opacity(0.25))
+                                .clipShape(Capsule())
+                        }
+                    }
                 }
-                .alert("Create Folder", isPresented: $ViewModel.ShowAlert) {
+                .alert("Create Folder", isPresented: $ViewModel.ShowCreatedAlert) {
                     TextField("name", text: $ViewModel.InputName)
                     Button("Save", role: .destructive) {
                         ViewModel.AddFolder()
@@ -92,16 +79,16 @@ struct ContentView: View {
                         print("Cancel Tapped")
                     }
                 }
-                .alert(isPresented: $BottomBarDeleteShowAlert) {
+                .alert(isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
                     Alert(
                         title: Text("Deleting!"),
                         message: Text("Are you sure you want to delete the selected folders?"),
                         primaryButton: .destructive(Text("Delete"), action: {
-                            for folder in ViewModel.selectedFolders {
-                                ViewModel.RemoveFolder(for: folder)
+                            for Folder in ViewModel.SelectedFolders {
+                                ViewModel.RemoveFolder(For: Folder)
                             }
-                            ViewModel.selectedFolders.removeAll()
-                            ViewModel.isSelecting.toggle()
+                            ViewModel.SelectedFolders.removeAll()
+                            ViewModel.IsSelecting.toggle()
                         }),
                         secondaryButton: .cancel()
                     )
@@ -116,46 +103,29 @@ struct ContentView: View {
                 VStack(alignment: .leading) {
                     Divider()
                     Section(header: Text(Title).font(.headline)) {
-                        LazyVGrid(columns: Columns, spacing: 10) {
+                        LazyVGrid(columns: ViewModel.Columns, spacing: 10) {
                             ForEach(Folders) { Folder in
-                                FolderItemView(Folder: Folder, ItemWidth: ItemWidth, ViewModel: ViewModel)
+                                FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
                                     .onTapGesture {
-                                        if ViewModel.isSelecting {
-                                            if ViewModel.selectedFolders.contains(where: { $0.id == Folder.id }) {
-                                                if let index = ViewModel.selectedFolders.firstIndex(where: { $0.id == Folder.id }) {
-                                                    ViewModel.selectedFolders.remove(at: index)
+                                        if ViewModel.IsSelecting {
+                                            if ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) {
+                                                if let Index = ViewModel.SelectedFolders.firstIndex(where: { $0.id == Folder.id }) {
+                                                    ViewModel.SelectedFolders.remove(at: Index)
                                                 }
                                             } else {
-                                                ViewModel.selectedFolders.append(Folder)
+                                                ViewModel.SelectedFolders.append(Folder)
                                             }
                                         } else {
-                                            ViewModel.RemoveFolder(for: Folder)
+                                            ViewModel.RemoveFolder(For: Folder)
                                         }
                                     }
-                                    .opacity(ViewModel.isSelecting && !ViewModel.selectedFolders.contains(where: { $0.id == Folder.id }) ? 0.5 : 1.0)
+                                    .opacity(ViewModel.IsSelecting && !ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) ? 0.5 : 1.0)
                             }
                         }
                     }
                 }
             }
         }
-    }
-    
-    private func AddButtonAction() {
-        ViewModel.InputName = DateHelper.CurrentDateTime()
-        ViewModel.ShowAlert = true
-    }
-    
-    private func SelectCancelButtonAction() {
-        ViewModel.isSelecting.toggle()
-        if !ViewModel.isSelecting {
-            ViewModel.selectedFolders.removeAll()
-        }
-    }
-    
-    private func FavoritesButtonAction() {
-        // TODO: Favorites Button
-        print("Favorites Tapped")
     }
 }
 
