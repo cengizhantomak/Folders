@@ -105,11 +105,18 @@ struct ContentView: View {
                                 FolderItemView(Folder: Folder, ItemWidth: ItemWidth, ViewModel: ViewModel)
                                     .onTapGesture {
                                         if ViewModel.isSelecting {
-                                            
+                                            if ViewModel.selectedFolders.contains(where: { $0.id == Folder.id }) {
+                                                if let index = ViewModel.selectedFolders.firstIndex(where: { $0.id == Folder.id }) {
+                                                    ViewModel.selectedFolders.remove(at: index)
+                                                }
+                                            } else {
+                                                ViewModel.selectedFolders.append(Folder)
+                                            }
                                         } else {
                                             ViewModel.RemoveFolder(for: Folder)
                                         }
                                     }
+                                    .opacity(ViewModel.isSelecting && !ViewModel.selectedFolders.contains(where: { $0.id == Folder.id }) ? 0.5 : 1.0)
                             }
                         }
                     }
