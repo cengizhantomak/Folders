@@ -101,28 +101,8 @@ struct ContentView: View {
         Group {
             if !Folders.isEmpty {
                 VStack(alignment: .leading) {
-                    Divider()
-                    Section(header: Text(Title).font(.headline)) {
-                        LazyVGrid(columns: ViewModel.Columns, spacing: 10) {
-                            ForEach(Folders) { Folder in
-                                FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
-                                    .onTapGesture {
-                                        if ViewModel.IsSelecting {
-                                            if ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) {
-                                                if let Index = ViewModel.SelectedFolders.firstIndex(where: { $0.id == Folder.id }) {
-                                                    ViewModel.SelectedFolders.remove(at: Index)
-                                                }
-                                            } else {
-                                                ViewModel.SelectedFolders.append(Folder)
-                                            }
-                                        } else {
-                                            ViewModel.RemoveFolder(For: Folder)
-                                        }
-                                    }
-                                    .opacity(ViewModel.IsSelecting && !ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) ? 0.5 : 1.0)
-                            }
-                        }
-                    }
+                    SectionTitleView(Title: Title)
+                    FolderGridView(ViewModel: ViewModel, Folders: Folders, ItemWidth: ItemWidth)
                 }
             }
         }

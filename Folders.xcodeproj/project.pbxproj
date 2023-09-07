@@ -15,6 +15,8 @@
 		CB2FBD822AA5B190007C46F3 /* FolderItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD812AA5B190007C46F3 /* FolderItemView.swift */; };
 		CB2FBD842AA5F669007C46F3 /* FolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD832AA5F669007C46F3 /* FolderViewModel.swift */; };
 		CB2FBD862AA5FD70007C46F3 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD852AA5FD70007C46F3 /* DateHelper.swift */; };
+		CBF281542AAA0009008DD30E /* SectionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF281532AAA0009008DD30E /* SectionTitleView.swift */; };
+		CBF281562AAA005B008DD30E /* FolderGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF281552AAA005B008DD30E /* FolderGridView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -27,6 +29,8 @@
 		CB2FBD812AA5B190007C46F3 /* FolderItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderItemView.swift; sourceTree = "<group>"; };
 		CB2FBD832AA5F669007C46F3 /* FolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewModel.swift; sourceTree = "<group>"; };
 		CB2FBD852AA5FD70007C46F3 /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
+		CBF281532AAA0009008DD30E /* SectionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionTitleView.swift; sourceTree = "<group>"; };
+		CBF281552AAA005B008DD30E /* FolderGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderGridView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +68,8 @@
 				CB2FBD7F2AA5B146007C46F3 /* FolderModel.swift */,
 				CB2FBD832AA5F669007C46F3 /* FolderViewModel.swift */,
 				CB2FBD812AA5B190007C46F3 /* FolderItemView.swift */,
+				CBF281532AAA0009008DD30E /* SectionTitleView.swift */,
+				CBF281552AAA005B008DD30E /* FolderGridView.swift */,
 				CB2FBD732AA5B03C007C46F3 /* ContentView.swift */,
 				CB2FBD752AA5B03D007C46F3 /* Assets.xcassets */,
 				CB2FBD772AA5B03D007C46F3 /* Preview Content */,
@@ -153,8 +159,10 @@
 				CB2FBD842AA5F669007C46F3 /* FolderViewModel.swift in Sources */,
 				CB2FBD822AA5B190007C46F3 /* FolderItemView.swift in Sources */,
 				CB2FBD862AA5FD70007C46F3 /* DateHelper.swift in Sources */,
+				CBF281562AAA005B008DD30E /* FolderGridView.swift in Sources */,
 				CB2FBD802AA5B146007C46F3 /* FolderModel.swift in Sources */,
 				CB2FBD722AA5B03C007C46F3 /* FoldersApp.swift in Sources */,
+				CBF281542AAA0009008DD30E /* SectionTitleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
