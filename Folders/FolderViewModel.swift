@@ -11,6 +11,7 @@ class FolderViewModel: ObservableObject {
     @Published var Folders: [FolderModel] = []
     @Published var ShowAlert: Bool = false
     @Published var InputName: String = ""
+    @Published var isSelecting = false
     
     init() {
         LoadFolders()

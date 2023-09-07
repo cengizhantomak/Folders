@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var ViewModel = FolderViewModel()
+    @State private var showDeleteConfirmation = false
     
     let Columns = [
         GridItem(.flexible()),
@@ -30,29 +31,53 @@ struct ContentView: View {
                 }
                 .navigationTitle("Videos")
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: AddButtonAction) {
-                            Image(systemName: "plus")
-                                .foregroundColor(.black)
-                                .padding(8)
-                                .background(Color.gray.opacity(0.25))
-                                .clipShape(Circle())
+                    if !ViewModel.isSelecting {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(action: AddButtonAction) {
+                                Image(systemName: "plus")
+                                    .foregroundColor(.black)
+                                    .padding(8)
+                                    .background(Color.gray.opacity(0.25))
+                                    .clipShape(Circle())
+                            }
                         }
-                    }
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        Button(action: FavoritesButtonAction) {
-                            Image(systemName: "heart")
-                                .foregroundColor(.black)
-                                .padding(8)
-                                .background(Color.gray.opacity(0.25))
-                                .clipShape(Circle())
+                        ToolbarItemGroup(placement: .navigationBarTrailing) {
+                            Button(action: FavoritesButtonAction) {
+                                Image(systemName: "heart")
+                                    .foregroundColor(.black)
+                                    .padding(8)
+                                    .background(Color.gray.opacity(0.25))
+                                    .clipShape(Circle())
+                            }
+                            Button(action: SelectButtonAction) {
+                                Text(ViewModel.isSelecting ? "Cancel" : "Select")
+                                    .foregroundColor(.black)
+                                    .padding(8)
+                                    .background(Color.gray.opacity(0.25))
+                                    .clipShape(Capsule())
+                            }
                         }
-                        Button(action: SelectButtonAction) {
-                            Text("Select")
-                                .foregroundColor(.black)
-                                .padding(8)
-                                .background(Color.gray.opacity(0.25))
-                                .clipShape(Capsule())
+                    } else {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button(action: SelectButtonAction) {
+                                Text("Cancel")
+                                    .foregroundColor(.black)
+                                    .padding(8)
+                                    .background(Color.gray.opacity(0.25))
+                                    .clipShape(Capsule())
+                            }
+                        }
+                        ToolbarItemGroup(placement: .bottomBar) {
+                            Spacer()
+                            Text("Select Items")
+                                .foregroundColor(.gray)
+                            Spacer()
+                            Button(action: {
+                                print("BottomBar Delete Tapped")
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundColor(.gray)
+                            }
                         }
                     }
                 }
@@ -79,7 +104,11 @@ struct ContentView: View {
                             ForEach(Folders) { Folder in
                                 FolderItemView(Folder: Folder, ItemWidth: ItemWidth, ViewModel: ViewModel)
                                     .onTapGesture {
-                                        ViewModel.RemoveFolder(for: Folder)
+                                        if ViewModel.isSelecting {
+                                            
+                                        } else {
+                                            ViewModel.RemoveFolder(for: Folder)
+                                        }
                                     }
                             }
                         }
@@ -95,8 +124,7 @@ struct ContentView: View {
     }
     
     private func SelectButtonAction() {
-        // TODO: Select Button
-        print("Select Tapped")
+        ViewModel.isSelecting.toggle()
     }
     
     private func FavoritesButtonAction() {
