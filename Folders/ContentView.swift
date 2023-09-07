@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var ViewModel = FolderViewModel()
-    @State private var showDeleteConfirmation = false
+    @State private var BottomBarDeleteShowAlert = false
     
     let Columns = [
         GridItem(.flexible()),
@@ -49,7 +49,7 @@ struct ContentView: View {
                                     .background(Color.gray.opacity(0.25))
                                     .clipShape(Circle())
                             }
-                            Button(action: SelectButtonAction) {
+                            Button(action: SelectCancelButtonAction) {
                                 Text(ViewModel.isSelecting ? "Cancel" : "Select")
                                     .foregroundColor(.black)
                                     .padding(8)
@@ -59,7 +59,7 @@ struct ContentView: View {
                         }
                     } else {
                         ToolbarItem(placement: .navigationBarTrailing) {
-                            Button(action: SelectButtonAction) {
+                            Button(action: SelectCancelButtonAction) {
                                 Text("Cancel")
                                     .foregroundColor(.black)
                                     .padding(8)
@@ -73,7 +73,9 @@ struct ContentView: View {
                                 .foregroundColor(.gray)
                             Spacer()
                             Button(action: {
-                                print("BottomBar Delete Tapped")
+                                if !ViewModel.selectedFolders.isEmpty {
+                                    BottomBarDeleteShowAlert = true
+                                }
                             }) {
                                 Image(systemName: "trash")
                                     .foregroundColor(.gray)
@@ -89,6 +91,20 @@ struct ContentView: View {
                     Button("Cancel", role: .cancel) {
                         print("Cancel Tapped")
                     }
+                }
+                .alert(isPresented: $BottomBarDeleteShowAlert) {
+                    Alert(
+                        title: Text("Deleting!"),
+                        message: Text("Are you sure you want to delete the selected folders?"),
+                        primaryButton: .destructive(Text("Delete"), action: {
+                            for folder in ViewModel.selectedFolders {
+                                ViewModel.RemoveFolder(for: folder)
+                            }
+                            ViewModel.selectedFolders.removeAll()
+                            ViewModel.isSelecting.toggle()
+                        }),
+                        secondaryButton: .cancel()
+                    )
                 }
             }
         }
@@ -130,8 +146,11 @@ struct ContentView: View {
         ViewModel.ShowAlert = true
     }
     
-    private func SelectButtonAction() {
+    private func SelectCancelButtonAction() {
         ViewModel.isSelecting.toggle()
+        if !ViewModel.isSelecting {
+            ViewModel.selectedFolders.removeAll()
+        }
     }
     
     private func FavoritesButtonAction() {
