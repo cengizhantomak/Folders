@@ -57,6 +57,14 @@ struct FolderItemView: View {
                 .scaledToFit()
                 .frame(width: ItemWidth * 0.3, height: ItemWidth * 0.3)
                 .foregroundColor(.gray)
+            
+            if ViewModel.IsSelecting {
+                Circle()
+                    .stroke(.gray, lineWidth: 2)
+                    .background(ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) ? Circle().fill(.gray).frame(width: 12, height: 12) : nil)
+                    .frame(width: 20, height: 20)
+                    .offset(x: (ItemWidth/2) - 20, y: -(ItemWidth * 1.5 / 2) + 20)
+            }
         }
     }
     
