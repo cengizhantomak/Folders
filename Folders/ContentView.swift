@@ -72,7 +72,7 @@ struct ContentView: View {
                         }
                         ToolbarItemGroup(placement: .bottomBar) {
                             Spacer()
-                            Text(StringConstants.SelectItems)
+                            Text(ViewModel.SelectionCountText(For: ViewModel.SelectedFolders.count))
                                 .foregroundColor(ViewModel.SelectedFolders.isEmpty ? .gray : .primary)
                             Spacer()
                             Button {

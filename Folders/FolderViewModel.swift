@@ -84,6 +84,17 @@ class FolderViewModel: ObservableObject {
         }
     }
     
+    func SelectionCountText(For Count: Int) -> String {
+        switch Count {
+        case 0:
+            return StringConstants.SelectItems
+        case 1:
+            return StringConstants.OneFolderSelected
+        default:
+            return String(format: StringConstants.MultipleFoldersSelected, Count)
+        }
+    }
+    
     var PinnedFolders: [FolderModel] {
         return Folders.filter { $0.IsPinned }
     }
