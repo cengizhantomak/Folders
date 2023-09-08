@@ -15,7 +15,6 @@ class FolderViewModel: ObservableObject {
     @Published var IsSelecting = false
     @Published var ShowBottomBarDeleteAlert = false
     @Published var ShowCreatedAlert = false
-    
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
     @Published var NewName = ""
@@ -32,22 +31,18 @@ class FolderViewModel: ObservableObject {
         return Folders.filter { !$0.Name.hasPrefix(DateHelper.CurrentDate()) && !$0.IsPinned }
     }
     
-    var PinnedFolders: [FolderModel] {
-        return Folders.filter { $0.IsPinned }
-    }
-    
     func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
         return (ScreenWidth - Padding) / Amount
     }
     
     func SaveFolders() {
         if let Encoded = try? JSONEncoder().encode(Folders) {
-            UserDefaults.standard.setValue(Encoded, forKey: "Folders")
+            UserDefaults.standard.setValue(Encoded, forKey: StringConstants.Folders)
         }
     }
     
     func LoadFolders() {
-        if let Data = UserDefaults.standard.data(forKey: "Folders"),
+        if let Data = UserDefaults.standard.data(forKey: StringConstants.Folders),
            let Decoded = try? JSONDecoder().decode([FolderModel].self, from: Data) {
             Folders = Decoded
         }
@@ -77,8 +72,12 @@ class FolderViewModel: ObservableObject {
         print("Favorites Tapped")
     }
     
+    var PinnedFolders: [FolderModel] {
+        return Folders.filter { $0.IsPinned }
+    }
+    
     func PinActionLabel(For Name: String) -> String {
-        return Folders.contains { $0.Name == Name && $0.IsPinned } ? "Unpin" : "Pin"
+        return Folders.contains { $0.Name == Name && $0.IsPinned } ? StringConstants.ContextMenu.Unpin.Text : StringConstants.ContextMenu.Pin.Text
     }
     
     func PinFolder(For Folder: FolderModel) {
@@ -106,5 +105,11 @@ class FolderViewModel: ObservableObject {
                 SaveFolders()
             }
         }
+    }
+    
+    func circleOffset(for itemWidth: CGFloat, xOffsetValue: CGFloat = 20, yOffsetValue: CGFloat = 20) -> (x: CGFloat, y: CGFloat) {
+        let x = (itemWidth / 2) - xOffsetValue
+        let y = -(itemWidth * 1.5 / 2) + yOffsetValue
+        return (x, y)
     }
 }

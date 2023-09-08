@@ -16,81 +16,96 @@ struct ContentView: View {
                 let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 30, Amount: 2)
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
-                        CreateSection(WithTitle: "Pinned", Folders: ViewModel.PinnedFolders, ItemWidth: ItemWidth)
-                        CreateSection(WithTitle: "Todays", Folders: ViewModel.TodayFolders, ItemWidth: ItemWidth)
-                        CreateSection(WithTitle: "Session", Folders: ViewModel.SessionFolders, ItemWidth: ItemWidth)
+                        CreateSection(WithTitle: StringConstants.SectionTitle.Todays, Folders: ViewModel.TodayFolders, ItemWidth: ItemWidth)
+                        CreateSection(WithTitle: StringConstants.SectionTitle.Pinned, Folders: ViewModel.PinnedFolders, ItemWidth: ItemWidth)
+                        CreateSection(WithTitle: StringConstants.SectionTitle.Session, Folders: ViewModel.SessionFolders, ItemWidth: ItemWidth)
                     }
                     .padding(10)
                 }
-                .navigationTitle("Videos")
+                .navigationTitle(StringConstants.Videos)
                 .toolbar {
                     if !ViewModel.IsSelecting {
                         ToolbarItem(placement: .navigationBarLeading) {
-                            Button(action: ViewModel.AddButtonAction) {
-                                Image(systemName: "plus")
-                                    .foregroundColor(.black)
+                            Button {
+                                ViewModel.AddButtonAction()
+                            } label: {
+                                Image(systemName: StringConstants.SystemImage.Plus)
+                                    .foregroundColor(.primary)
                                     .padding(8)
                                     .background(Color.gray.opacity(0.25))
                                     .clipShape(Circle())
                             }
                         }
                         ToolbarItemGroup(placement: .navigationBarTrailing) {
-                            Button(action: ViewModel.FavoritesButtonAction) {
-                                Image(systemName: "heart")
-                                    .foregroundColor(.black)
-                                    .padding(8)
-                                    .background(Color.gray.opacity(0.25))
-                                    .clipShape(Circle())
+                            HStack(spacing: 0) {
+                                Button {
+                                    ViewModel.FavoritesButtonAction()
+                                } label: {
+                                    Image(systemName: StringConstants.SystemImage.Heart)
+                                        .foregroundColor(.primary)
+                                        .padding(8)
+                                        .background(Color.gray.opacity(0.25))
+                                        .clipShape(Circle())
+                                }
+                                Button {
+                                    ViewModel.SelectCancelButtonAction()
+                                } label: {
+                                    Text(StringConstants.Select)
+                                        .foregroundColor(.primary)
+                                        .padding(8)
+                                        .background(Color.gray.opacity(0.25))
+                                        .clipShape(Capsule())
+                                }
                             }
                         }
                     } else {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                ViewModel.SelectCancelButtonAction()
+                            } label: {
+                                Text(StringConstants.Cancel)
+                                    .foregroundColor(.primary)
+                                    .padding(8)
+                                    .background(Color.gray.opacity(0.25))
+                                    .clipShape(Capsule())
+                            }
+                        }
                         ToolbarItemGroup(placement: .bottomBar) {
                             Spacer()
-                            Text("Select Items")
+                            Text(StringConstants.SelectItems)
                                 .foregroundColor(ViewModel.SelectedFolders.isEmpty ? .gray : .primary)
                             Spacer()
-                            Button(action: {
+                            Button {
                                 if !ViewModel.SelectedFolders.isEmpty {
                                     ViewModel.ShowBottomBarDeleteAlert = true
                                 }
-                            }) {
-                                Image(systemName: "trash")
+                            } label: {
+                                Image(systemName: StringConstants.SystemImage.Trash)
                                     .foregroundColor(ViewModel.SelectedFolders.isEmpty ? .gray : .primary)
                             }
                         }
                     }
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        Button(action: ViewModel.SelectCancelButtonAction) {
-                            Text(ViewModel.IsSelecting ? "Cancel" : "Select")
-                                .foregroundColor(.black)
-                                .padding(8)
-                                .background(Color.gray.opacity(0.25))
-                                .clipShape(Capsule())
-                        }
-                    }
                 }
-                .alert("Create Folder", isPresented: $ViewModel.ShowCreatedAlert) {
-                    TextField("name", text: $ViewModel.InputName)
-                    Button("Save", role: .destructive) {
+                .alert(StringConstants.Alert.Title.CreateFolder, isPresented: $ViewModel.ShowCreatedAlert) {
+                    TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.InputName)
+                    Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
                         ViewModel.AddFolder()
                     }
-                    Button("Cancel", role: .cancel) {
+                    Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
                         print("Cancel Tapped")
                     }
                 }
                 .alert(isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
-                    Alert(
-                        title: Text("Deleting!"),
-                        message: Text("Are you sure you want to delete the selected folders?"),
-                        primaryButton: .destructive(Text("Delete"), action: {
-                            for Folder in ViewModel.SelectedFolders {
-                                ViewModel.RemoveFolder(For: Folder)
-                            }
-                            ViewModel.SelectedFolders.removeAll()
-                            ViewModel.IsSelecting.toggle()
-                        }),
-                        secondaryButton: .cancel()
-                    )
+                    Alert(title: Text(StringConstants.Alert.Title.Deleting),
+                          message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
+                          primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
+                        for Folder in ViewModel.SelectedFolders {
+                            ViewModel.RemoveFolder(For: Folder)
+                        }
+                        ViewModel.SelectedFolders.removeAll()
+                        ViewModel.IsSelecting.toggle()
+                    },
+                          secondaryButton: .cancel())
                 }
             }
         }

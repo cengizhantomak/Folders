@@ -37,6 +37,6 @@ struct FolderGridView: View {
 
 struct FolderGridView_Previews: PreviewProvider {
     static var previews: some View {
-        FolderGridView(ViewModel: FolderViewModel(), Folders: [FolderModel.init(Name: "Okan Tel"), FolderModel.init(Name: "Muhittin ")], ItemWidth: 150)
+        FolderGridView(ViewModel: FolderViewModel(), Folders: [FolderModel.init(Name: "LVS"), FolderModel.init(Name: "RnD")], ItemWidth: 150)
     }
 }

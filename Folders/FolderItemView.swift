@@ -24,30 +24,34 @@ struct FolderItemView: View {
         .onAppear {
             ViewModel.NewName = Folder.Name
         }
-        .alert("Rename Folder", isPresented: $ViewModel.ShowRenameAlert) {
-            TextField("Folder Name", text: $ViewModel.NewName)
-            Button("Save", role: .destructive) {
+        .alert(StringConstants.Alert.Title.RenameFolder, isPresented: $ViewModel.ShowRenameAlert) {
+            TextField(StringConstants.Alert.Title.RenameFolder, text: $ViewModel.NewName)
+            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
                 if !ViewModel.NewName.isEmpty {
                     ViewModel.RenameFolder(For: Folder, NewName: ViewModel.NewName)
                 }
             }
-            Button("Cancel", role: .cancel) {
+            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
                 ViewModel.NewName = Folder.Name
                 print("Cancel Tapped")
             }
         }
         .alert(isPresented: $ViewModel.ShowDeleteAlert) {
-            Alert(title: Text("Deleting!"),
-                  message: Text("Are you sure you want to delete the selected folders?"),
-                  primaryButton: .destructive(Text("Delete")) {
-                ViewModel.RemoveFolder(For: Folder)
-            },
-                  secondaryButton: .cancel())
+            Alert(
+                title: Text(StringConstants.Alert.Title.Deleting),
+                message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
+                primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
+                    ViewModel.RemoveFolder(For: Folder)
+                },
+                secondaryButton: .cancel()
+            )
         }
     }
     
     private var FolderIcon: some View {
-        ZStack {
+        let CircleOffset = ViewModel.circleOffset(for: ItemWidth, xOffsetValue: 20, yOffsetValue: 20)
+        
+        return ZStack {
             Rectangle()
                 .fill(Color.gray.opacity(0.15))
                 .frame(width: ItemWidth, height: ItemWidth * 1.5)
@@ -61,9 +65,13 @@ struct FolderItemView: View {
             if ViewModel.IsSelecting {
                 Circle()
                     .stroke(.gray, lineWidth: 2)
-                    .background(ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) ? Circle().fill(.gray).frame(width: 12, height: 12) : nil)
+                    .background(Circle().fill(Color.white))
+                    .overlay(
+                        ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) ?
+                        Circle().stroke(.gray, lineWidth: 2).frame(width: 10, height: 10) : nil
+                    )
                     .frame(width: 20, height: 20)
-                    .offset(x: (ItemWidth/2) - 20, y: -(ItemWidth * 1.5 / 2) + 20)
+                    .offset(x: CircleOffset.x, y: CircleOffset.y)
             }
         }
     }
@@ -73,24 +81,35 @@ struct FolderItemView: View {
             Button {
                 ViewModel.PinFolder(For: Folder)
             } label: {
-                Label(ViewModel.PinActionLabel(For: Folder.Name), systemImage: Folder.IsPinned ? "pin.slash" : "pin")
+                Label(
+                    ViewModel.Folders.contains { $0.Name == Folder.Name && $0.IsPinned } ? StringConstants.ContextMenu.Unpin.Text : StringConstants.ContextMenu.Pin.Text,
+                    systemImage: Folder.IsPinned ? StringConstants.ContextMenu.Unpin.SystemImage : StringConstants.ContextMenu.Pin.SystemImage
+                )
             }
             Button {
                 // TODO: - Add Favorite
             } label: {
-                Label("Add Favorite", systemImage: "heart")
+                Label(
+                    StringConstants.ContextMenu.AddFavorite.Text,
+                    systemImage: StringConstants.ContextMenu.AddFavorite.SystemImage
+                )
             }
             Divider()
             Button {
                 ViewModel.ShowRenameAlert = true
             } label: {
-                Label("Rename", systemImage: "pencil")
+                Label(
+                    StringConstants.ContextMenu.Rename.Text,
+                    systemImage: StringConstants.ContextMenu.Rename.SystemImage
+                )
             }
-            
             Button(role: .destructive) {
                 ViewModel.ShowDeleteAlert = true
             } label: {
-                Label("Delete", systemImage: "trash")
+                Label(
+                    StringConstants.ContextMenu.Delete.Text,
+                    systemImage: StringConstants.ContextMenu.Delete.SystemImage
+                )
             }
         }
     }
