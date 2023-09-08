@@ -11,4 +11,5 @@ struct FolderModel: Identifiable, Codable {
     var id = UUID()
     var Name: String
     var IsPinned: Bool = false
+    var IsFavorite: Bool = false
 }

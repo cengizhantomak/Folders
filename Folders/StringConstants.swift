@@ -27,7 +27,7 @@ enum StringConstants {
         static let Plus = "plus"
         static let Heart = "heart"
         static let Trash = "trash"
-        
+        static let HeartFill = "heart.fill"
     }
     
     
@@ -52,6 +52,7 @@ enum StringConstants {
         case Pin
         case Unpin
         case AddFavorite
+        case RemoveFavorite
         case Rename
         case Delete
         
@@ -63,6 +64,8 @@ enum StringConstants {
                 return "pin.slash"
             case .AddFavorite:
                 return "heart"
+            case .RemoveFavorite:
+                return "heart.fill"
             case .Rename:
                 return "pencil"
             case .Delete:
@@ -78,6 +81,8 @@ enum StringConstants {
                 return "Unpin"
             case .AddFavorite:
                 return "Add Favorite"
+            case .RemoveFavorite:
+                return "Remove Favorite"
             case .Rename:
                 return "Rename"
             case .Delete:

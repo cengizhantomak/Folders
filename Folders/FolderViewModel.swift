@@ -13,6 +13,7 @@ class FolderViewModel: ObservableObject {
     @Published var Columns = [GridItem(.flexible()), GridItem(.flexible())]
     @Published var InputName = ""
     @Published var IsSelecting = false
+    @Published var OnlyShowFavorites = false
     @Published var ShowBottomBarDeleteAlert = false
     @Published var ShowCreatedAlert = false
     @Published var ShowRenameAlert = false
@@ -29,6 +30,10 @@ class FolderViewModel: ObservableObject {
     
     var SessionFolders: [FolderModel] {
         return Folders.filter { !$0.Name.hasPrefix(DateHelper.CurrentDate()) && !$0.IsPinned }
+    }
+    
+    var FavoriteFolders: [FolderModel] {
+        return Folders.filter { $0.IsFavorite }
     }
     
     func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
@@ -68,8 +73,15 @@ class FolderViewModel: ObservableObject {
     }
     
     func FavoritesButtonAction() {
-        // TODO: Favorites Button
-        print("Favorites Tapped")
+        withAnimation(Animation.easeInOut(duration: 0.2)) {
+            if OnlyShowFavorites {
+                OnlyShowFavorites.toggle()
+                LoadFolders()
+            } else {
+                Folders = FavoriteFolders
+                OnlyShowFavorites.toggle()
+            }
+        }
     }
     
     var PinnedFolders: [FolderModel] {
@@ -84,6 +96,15 @@ class FolderViewModel: ObservableObject {
         withAnimation(Animation.easeInOut(duration: 0.2)) {
             if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
                 Folders[Index].IsPinned.toggle()
+                SaveFolders()
+            }
+        }
+    }
+    
+    func ToggleFavorite(For Folder: FolderModel) {
+        withAnimation(Animation.easeInOut(duration: 0.2)) {
+            if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
+                Folders[Index].IsFavorite.toggle()
                 SaveFolders()
             }
         }

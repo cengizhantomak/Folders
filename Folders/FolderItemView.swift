@@ -61,7 +61,14 @@ struct FolderItemView: View {
                 .scaledToFit()
                 .frame(width: ItemWidth * 0.3, height: ItemWidth * 0.3)
                 .foregroundColor(.gray)
-            
+            if Folder.IsFavorite && !ViewModel.IsSelecting {
+                Image(systemName: "heart.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: ItemWidth * 0.08, height: ItemWidth * 0.08)
+                    .foregroundColor(.red)
+                    .offset(x: CircleOffset.x, y: CircleOffset.y)
+            }
             if ViewModel.IsSelecting {
                 Circle()
                     .stroke(.gray, lineWidth: 2)
@@ -87,11 +94,11 @@ struct FolderItemView: View {
                 )
             }
             Button {
-                // TODO: - Add Favorite
+                ViewModel.ToggleFavorite(For: Folder)
             } label: {
                 Label(
-                    StringConstants.ContextMenu.AddFavorite.Text,
-                    systemImage: StringConstants.ContextMenu.AddFavorite.SystemImage
+                    Folder.IsFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
+                    systemImage: Folder.IsFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage
                 )
             }
             Divider()

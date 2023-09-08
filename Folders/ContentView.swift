@@ -41,7 +41,7 @@ struct ContentView: View {
                                 Button {
                                     ViewModel.FavoritesButtonAction()
                                 } label: {
-                                    Image(systemName: StringConstants.SystemImage.Heart)
+                                    Image(systemName: ViewModel.OnlyShowFavorites ? StringConstants.SystemImage.HeartFill : StringConstants.SystemImage.Heart)
                                         .foregroundColor(.primary)
                                         .padding(8)
                                         .background(Color.gray.opacity(0.25))
