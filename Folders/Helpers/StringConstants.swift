@@ -16,6 +16,8 @@ enum StringConstants {
     static let SelectItems = "Select Items"
     static let OneFolderSelected = "1 Folder Selected"
     static let MultipleFoldersSelected = "%d Folders Selected"
+    static let OneVideoSelected = "1 Video Selected"
+    static let MultipleVideosSelected = "%d Videos Selected"
     static let Select = "Select"
     static let Cancel = "Cancel"
     
