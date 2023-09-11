@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  FolderView.swift
 //  Folders
 //
 //  Created by Cengizhan Tomak on 4.09.2023.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct FolderView: View {
     @StateObject var ViewModel = FolderViewModel()
     
     var body: some View {
@@ -115,7 +115,7 @@ struct ContentView: View {
         Group {
             if !Folders.isEmpty {
                 VStack(alignment: .leading) {
-                    SectionTitleView(Title: Title)
+                    FolderSectionView(Title: Title)
                     FolderGridView(ViewModel: ViewModel, Folders: Folders, ItemWidth: ItemWidth)
                 }
             }
@@ -125,6 +125,6 @@ struct ContentView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        FolderView()
     }
 }

@@ -1,5 +1,5 @@
 //
-//  SectionTitleView.swift
+//  FolderSectionView.swift
 //  Folders
 //
 //  Created by Cengizhan Tomak on 7.09.2023.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct SectionTitleView: View {
+struct FolderSectionView: View {
     var Title: String
     
     var body: some View {
@@ -20,6 +20,6 @@ struct SectionTitleView: View {
 
 struct SectionTitleView_Previews: PreviewProvider {
     static var previews: some View {
-        SectionTitleView(Title: "LVS")
+        FolderSectionView(Title: "LVS")
     }
 }
