@@ -16,7 +16,7 @@ struct VideoView: View {
             let ItemWidth = (ScreenWidth - 20) / 3
             ScrollView {
                 LazyVGrid(columns: ViewModel.Columns, spacing: 5) {
-                    ForEach(ViewModel.Videos) { Video in
+                    ForEach(ViewModel.Videos.sorted(by: { $0.CreationDate > $1.CreationDate })) { Video in
                         VideoItemView(Video: Video, ItemWidth: ItemWidth)
                             .onTapGesture {
                                 ViewModel.RemoveVideo(WithId: Video.id)

@@ -15,7 +15,7 @@ struct VideoItemView: View {
         ZStack {
             Rectangle()
                 .fill(Color.gray.opacity(0.15))
-                .frame(width: ItemWidth, height: ItemWidth * 1.5)
+                .frame(width: ItemWidth, height: ItemWidth * 16/9)
                 .cornerRadius(2)
             Image(systemName: "play")
                 .resizable()
@@ -34,6 +34,6 @@ struct VideoItemView: View {
 
 struct VideoItemView_Previews: PreviewProvider {
     static var previews: some View {
-        VideoItemView(Video: VideoModel(Name: "LVS"), ItemWidth: 100)
+        VideoItemView(Video: VideoModel(), ItemWidth: 100)
     }
 }

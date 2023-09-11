@@ -9,5 +9,13 @@ import Foundation
 
 struct VideoModel: Identifiable, Codable {
     var id = UUID()
-    var Name: String
+    var CreationDate: Date
+    var Name: String {
+        return DateHelper.CurrentDateTime(from: CreationDate)
+    }
+    var IsFavorite: Bool = false
+    
+    init() {
+        self.CreationDate = Date()
+    }
 }

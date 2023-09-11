@@ -19,8 +19,7 @@ class VideoViewModel: ObservableObject {
     
     func AddVideo() {
         withAnimation(Animation.easeInOut(duration: 0.2)) {
-            InputName = DateHelper.CurrentDateTime()
-            Videos.insert(VideoModel(Name: InputName), at: 0)
+            Videos.insert(VideoModel(), at: 0)
         }
     }
     
