@@ -15,9 +15,9 @@ struct FolderGridView: View {
     var body: some View {
         LazyVGrid(columns: ViewModel.Columns, spacing: 10) {
             ForEach(Folders) { Folder in
-                FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
-                    .onTapGesture {
-                        if ViewModel.IsSelecting {
+                if ViewModel.IsSelecting {
+                    FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
+                        .onTapGesture {
                             if ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) {
                                 if let Index = ViewModel.SelectedFolders.firstIndex(where: { $0.id == Folder.id }) {
                                     ViewModel.SelectedFolders.remove(at: Index)
@@ -25,11 +25,14 @@ struct FolderGridView: View {
                             } else {
                                 ViewModel.SelectedFolders.append(Folder)
                             }
-                        } else {
-                            ViewModel.RemoveFolder(For: Folder)
                         }
+                        .opacity(ViewModel.IsSelecting && !ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) ? 0.5 : 1.0)
+                } else {
+                    NavigationLink(destination: FolderContentView(ViewModel: FolderContentViewModel(Folder: Folder))) {
+                        FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
                     }
-                    .opacity(ViewModel.IsSelecting && !ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) ? 0.5 : 1.0)
+                    .foregroundColor(.primary)
+                }
             }
         }
     }
