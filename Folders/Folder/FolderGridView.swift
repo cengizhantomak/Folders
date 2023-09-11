@@ -28,7 +28,7 @@ struct FolderGridView: View {
                         }
                         .opacity(ViewModel.IsSelecting && !ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) ? 0.5 : 1.0)
                 } else {
-                    NavigationLink(destination: FolderContentView(ViewModel: FolderContentViewModel(Folder: Folder))) {
+                    NavigationLink(destination: VideoView(ViewModel: VideoViewModel(Folder: Folder))) {
                         FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
                     }
                     .foregroundColor(.primary)
