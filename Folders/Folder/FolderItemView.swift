@@ -14,10 +14,14 @@ struct FolderItemView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            FolderIcon
-                .contextMenu {
-                    FolderContextMenu
-                }
+            if !ViewModel.IsSelecting {
+                FolderIcon
+                    .contextMenu {
+                        FolderContextMenu
+                    }
+            } else {
+                FolderIcon
+            }
             Text(Folder.Name)
                 .font(.system(size: 15))
         }

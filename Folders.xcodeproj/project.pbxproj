@@ -18,6 +18,7 @@
 		CB2FBD822AA5B190007C46F3 /* FolderItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD812AA5B190007C46F3 /* FolderItemView.swift */; };
 		CB2FBD842AA5F669007C46F3 /* FolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD832AA5F669007C46F3 /* FolderViewModel.swift */; };
 		CB2FBD862AA5FD70007C46F3 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD852AA5FD70007C46F3 /* DateHelper.swift */; };
+		CB77D7952AB0A2080063EA99 /* VideoGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB77D7942AB0A2080063EA99 /* VideoGridView.swift */; };
 		CBE2B79C2AAF09EF004B37A5 /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE2B79B2AAF09EF004B37A5 /* VideoModel.swift */; };
 		CBE2B79E2AAF106A004B37A5 /* VideoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE2B79D2AAF106A004B37A5 /* VideoItemView.swift */; };
 		CBF281542AAA0009008DD30E /* FolderSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF281532AAA0009008DD30E /* FolderSectionView.swift */; };
@@ -37,6 +38,7 @@
 		CB2FBD812AA5B190007C46F3 /* FolderItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderItemView.swift; sourceTree = "<group>"; };
 		CB2FBD832AA5F669007C46F3 /* FolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewModel.swift; sourceTree = "<group>"; };
 		CB2FBD852AA5FD70007C46F3 /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
+		CB77D7942AB0A2080063EA99 /* VideoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoGridView.swift; sourceTree = "<group>"; };
 		CBE2B79B2AAF09EF004B37A5 /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		CBE2B79D2AAF106A004B37A5 /* VideoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoItemView.swift; sourceTree = "<group>"; };
 		CBF281532AAA0009008DD30E /* FolderSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSectionView.swift; sourceTree = "<group>"; };
@@ -82,6 +84,7 @@
 				CBE2B79B2AAF09EF004B37A5 /* VideoModel.swift */,
 				CB020CCC2AAEE75200C30EE0 /* VideoViewModel.swift */,
 				CBE2B79D2AAF106A004B37A5 /* VideoItemView.swift */,
+				CB77D7942AB0A2080063EA99 /* VideoGridView.swift */,
 				CB020CCA2AAEE72100C30EE0 /* VideoView.swift */,
 			);
 			path = Video;
@@ -206,6 +209,7 @@
 				CB020CCD2AAEE75200C30EE0 /* VideoViewModel.swift in Sources */,
 				CB2FBD722AA5B03C007C46F3 /* FoldersApp.swift in Sources */,
 				CBF281542AAA0009008DD30E /* FolderSectionView.swift in Sources */,
+				CB77D7952AB0A2080063EA99 /* VideoGridView.swift in Sources */,
 				CBE2B79C2AAF09EF004B37A5 /* VideoModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

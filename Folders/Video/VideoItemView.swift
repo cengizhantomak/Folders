@@ -13,41 +13,45 @@ struct VideoItemView: View {
     let ItemWidth: CGFloat
     
     var body: some View {
-        VideoItem
-            .contextMenu {
-                VideoContextMenu
-            }
-//            .alert(isPresented: $ViewModel.ShowDeleteAlert) {
-//                Alert(
-//                    title: Text(StringConstants.Alert.Title.Deleting),
-//                    message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
-//                    primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
-//                        ViewModel.RemoveVideo(For: Video)
-//                    },
-//                    secondaryButton: .cancel()
-//                )
-//            }
-            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
-                Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
-                Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-                    ViewModel.RemoveVideo(For: Video)
+        if !ViewModel.IsSelecting {
+            VideoItem
+                .contextMenu {
+                    VideoContextMenu
                 }
-                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                    print("Cancel Tapped")
-                }
-            }
-            .alert(StringConstants.Alert.Title.RenameVideo, isPresented: $ViewModel.ShowRenameAlert) {
-                TextField(StringConstants.Alert.Title.VideoName, text: $ViewModel.NewName)
-                Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-                    if !ViewModel.NewName.isEmpty {
-                        ViewModel.RenameVideo(NewName: ViewModel.NewName)
+//                .alert(isPresented: $ViewModel.ShowDeleteAlert) {
+//                    Alert(
+//                        title: Text(StringConstants.Alert.Title.Deleting),
+//                        message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
+//                        primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
+//                            ViewModel.RemoveVideo(For: Video)
+//                        },
+//                        secondaryButton: .cancel()
+//                    )
+//                }
+                .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
+                    Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
+                    Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                        ViewModel.RemoveVideo(For: Video)
+                    }
+                    Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                        print("Cancel Tapped")
                     }
                 }
-                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                    ViewModel.NewName = Video.Name
-                    print("Cancel Tapped")
+                .alert(StringConstants.Alert.Title.RenameVideo, isPresented: $ViewModel.ShowRenameAlert) {
+                    TextField(StringConstants.Alert.Title.VideoName, text: $ViewModel.NewName)
+                    Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
+                        if !ViewModel.NewName.isEmpty {
+                            ViewModel.RenameVideo(NewName: ViewModel.NewName)
+                        }
+                    }
+                    Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                        ViewModel.NewName = Video.Name
+                        print("Cancel Tapped")
+                    }
                 }
-            }
+        } else {
+            VideoItem
+        }
     }
     
     private var VideoItem: some View {
@@ -64,11 +68,14 @@ struct VideoItemView: View {
                 .scaledToFit()
                 .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
                 .foregroundColor(Color.gray)
-            VStack(alignment: .leading) {
+            VStack {
                 Spacer()
-                Text(Video.Name)
-                    .font(.system(size: 7))
-                    .padding(10)
+                HStack {
+                    Text(Video.Name)
+                        .font(.system(size: 9))
+                        .padding(5)
+                    Spacer()
+                }
             }
             if Video.IsFavorite && !ViewModel.IsSelecting {
                 Image(systemName: StringConstants.SystemImage.HeartFill)
