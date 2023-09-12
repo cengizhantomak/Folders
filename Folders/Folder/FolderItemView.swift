@@ -21,21 +21,17 @@ struct FolderItemView: View {
             Text(Folder.Name)
                 .font(.system(size: 15))
         }
-        .onAppear {
-            ViewModel.NewName = Folder.Name
+        .alert(StringConstants.Alert.Title.RenameFolder, isPresented: $ViewModel.ShowRenameAlert) {
+            TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.NewName)
+            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
+                if !ViewModel.NewName.isEmpty {
+                    ViewModel.RenameFolder(NewName: ViewModel.NewName)
+                }
+            }
+            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                print("Cancel Tapped")
+            }
         }
-//        .alert(StringConstants.Alert.Title.RenameFolder, isPresented: $ViewModel.ShowRenameAlert) {
-//            TextField(StringConstants.Alert.Title.RenameFolder, text: $ViewModel.NewName)
-//            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-//                if !ViewModel.NewName.isEmpty {
-//                    ViewModel.RenameFolder(For: Folder, NewName: ViewModel.NewName)
-//                }
-//            }
-//            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-//                ViewModel.NewName = Folder.Name
-//                print("Cancel Tapped")
-//            }
-//        }
         .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
             Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
             Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
@@ -45,16 +41,16 @@ struct FolderItemView: View {
                 print("Cancel Tapped")
             }
         }
-        .alert(isPresented: $ViewModel.ShowDeleteAlert) {
-            Alert(
-                title: Text(StringConstants.Alert.Title.Deleting),
-                message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
-                primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
-                    ViewModel.RemoveFolder(For: Folder)
-                },
-                secondaryButton: .cancel()
-            )
-        }
+//        .alert(isPresented: $ViewModel.ShowDeleteAlert) {
+//            Alert(
+//                title: Text(StringConstants.Alert.Title.Deleting),
+//                message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
+//                primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
+//                    ViewModel.RemoveFolder(For: Folder)
+//                },
+//                secondaryButton: .cancel()
+//            )
+//        }
     }
     
     private var FolderIcon: some View {
@@ -112,6 +108,8 @@ struct FolderItemView: View {
             }
             Divider()
             Button {
+                ViewModel.FolderToRename = Folder
+                ViewModel.NewName = Folder.Name
                 ViewModel.ShowRenameAlert = true
             } label: {
                 Label(

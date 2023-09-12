@@ -19,6 +19,7 @@ class FolderViewModel: ObservableObject {
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
     @Published var NewName = ""
+    @Published var FolderToRename: FolderModel?
     
     init() {
         LoadFolders()
@@ -121,11 +122,12 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-    func RenameFolder(For Folder: FolderModel, NewName: String) {
+    func RenameFolder(NewName: String) {
         withAnimation(Animation.easeInOut(duration: 0.2)) {
-            if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
+            if let Folder = FolderToRename, let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
                 Folders[Index].Name = NewName
                 SaveFolders()
+                FolderToRename = nil
             }
         }
     }
