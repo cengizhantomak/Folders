@@ -16,6 +16,8 @@ enum StringConstants {
     static let SelectItems = "Select Items"
     static let OneFolderSelected = "1 Folder Selected"
     static let MultipleFoldersSelected = "%d Folders Selected"
+    static let OneVideoSelected = "1 Video Selected"
+    static let MultipleVideosSelected = "%d Videos Selected"
     static let Select = "Select"
     static let Cancel = "Cancel"
     
@@ -30,6 +32,7 @@ enum StringConstants {
         static let Heart = "heart"
         static let Trash = "trash"
         static let HeartFill = "heart.fill"
+        static let Play = "play"
     }
     
     
@@ -43,6 +46,8 @@ enum StringConstants {
             static let CreateFolder = "Create Folder"
             static let FolderName = "Folder Name"
             static let RenameFolder = "Rename Folder"
+            static let VideoName = "Video Name"
+            static let RenameVideo = "Rename Video"
             static let Deleting = "Deleting!"
         }
         enum Message {
@@ -57,6 +62,7 @@ enum StringConstants {
         case RemoveFavorite
         case Rename
         case Delete
+        case SaveToPhone
         
         var SystemImage: String {
             switch self {
@@ -72,6 +78,8 @@ enum StringConstants {
                 return "pencil"
             case .Delete:
                 return "trash"
+            case .SaveToPhone:
+                return "square.and.arrow.down"
             }
         }
         
@@ -89,6 +97,8 @@ enum StringConstants {
                 return "Rename"
             case .Delete:
                 return "Delete"
+            case .SaveToPhone:
+                return "Save to Phone"
             }
         }
     }
