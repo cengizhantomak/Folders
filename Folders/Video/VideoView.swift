@@ -28,35 +28,12 @@ struct VideoView: View {
                 }
                 ScrollView {
                     LazyVStack {
-                        Section(header: Text(DateHelper.CurrentDate(from: ViewModel.Folder.CreationDate))
-                            .foregroundColor(.gray)
-                            .frame(maxWidth: .infinity, alignment: .trailing)
-                            .background(.clear)
-                            .padding(.top)) {
-                                LazyVGrid(columns: ViewModel.Columns, spacing: 5) {
-                                    ForEach(ViewModel.Videos.sorted(by: { $0.CreationDate > $1.CreationDate })) { Video in
-                                        VideoItemView(ViewModel: ViewModel, Video: Video, ItemWidth: ItemWidth)
-                                            .onTapGesture {
-                                                if ViewModel.IsSelecting {
-                                                    if ViewModel.SelectedVideos.contains(where: { $0.id == Video.id }) {
-                                                        if let Index = ViewModel.SelectedVideos.firstIndex(where: { $0.id == Video.id }) {
-                                                            ViewModel.SelectedVideos.remove(at: Index)
-                                                        }
-                                                    } else {
-                                                        ViewModel.SelectedVideos.append(Video)
-                                                    }
-                                                } else {
-                                                    ViewModel.RemoveVideo(For: Video)
-                                                }
-                                            }
-                                            .opacity(ViewModel.IsSelecting && !ViewModel.SelectedVideos.contains(where: { $0.id == Video.id }) ? 0.5 : 1.0)
-                                    }
-                                }
-                            }
+                        if !ViewModel.Videos.isEmpty {
+                            VideoGridView(ViewModel: ViewModel, ItemWidth: ItemWidth)
+                        }
                     }
                     .padding(5)
                 }
-                //                }
                 .toolbar {
                     if !ViewModel.IsSelecting {
                         ToolbarItemGroup(placement: .navigationBarTrailing) {
