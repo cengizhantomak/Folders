@@ -9,7 +9,7 @@ import Foundation
 
 enum StringConstants {
     static let DateTimeFormat = "yyyyMMdd-HHmmssSSS"
-    static let DateFormat = "yyyyMMdd"
+    static let DateFormat = "yyyy.MM.dd"
     static let Folders = "Folders"
     static let FolderName = "Folder Name"
     static let Videos = "Videos"
