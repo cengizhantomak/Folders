@@ -14,7 +14,7 @@ struct FolderGridView: View {
     
     var body: some View {
         LazyVGrid(columns: ViewModel.Columns, spacing: 10) {
-            ForEach(Folders) { Folder in
+            ForEach(Folders.sorted(by: { $0.CreationDate > $1.CreationDate })) { Folder in
                 if ViewModel.IsSelecting {
                     FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
                         .onTapGesture {

@@ -26,11 +26,18 @@ class FolderViewModel: ObservableObject {
     }
     
     var TodayFolders: [FolderModel] {
-        return Folders.filter { $0.Name.hasPrefix(DateHelper.CurrentDate()) && !$0.IsPinned }
+        let Today = Date()
+        return Folders.filter {
+            Calendar.current.isDate($0.CreationDate, inSameDayAs: Today) && !$0.IsPinned
+        }
     }
+
     
     var SessionFolders: [FolderModel] {
-        return Folders.filter { !$0.Name.hasPrefix(DateHelper.CurrentDate()) && !$0.IsPinned }
+        let Session = Date()
+        return Folders.filter {
+            !Calendar.current.isDate($0.CreationDate, inSameDayAs: Session) && !$0.IsPinned
+        }
     }
     
     var FavoriteFolders: [FolderModel] {
@@ -56,13 +63,16 @@ class FolderViewModel: ObservableObject {
     
     func AddFolder() {
         withAnimation(Animation.easeInOut(duration: 0.2)) {
-            Folders.insert(FolderModel(Name: InputName), at: 0)
+            var Folder = FolderModel()
+            Folder.CustomName = InputName
+            Folders.insert(Folder, at: 0)
             SaveFolders()
         }
     }
     
     func AddButtonAction() {
-        InputName = DateHelper.CurrentDateTime()
+        var Folder = FolderModel()
+        InputName = Folder.Name
         ShowCreatedAlert = true
     }
     
@@ -125,7 +135,7 @@ class FolderViewModel: ObservableObject {
     func RenameFolder(NewName: String) {
         withAnimation(Animation.easeInOut(duration: 0.2)) {
             if let Folder = FolderToRename, let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
-                Folders[Index].Name = NewName
+                Folders[Index].CustomName = NewName
                 SaveFolders()
                 FolderToRename = nil
             }

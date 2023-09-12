@@ -9,7 +9,20 @@ import Foundation
 
 struct FolderModel: Identifiable, Codable {
     var id = UUID()
-    var Name: String
     var IsPinned: Bool = false
     var IsFavorite: Bool = false
+    var CreationDate: Date
+    var CustomName: String?
+    var Name: String {
+        return CustomName ?? DateHelper.CurrentDateTime(from: CreationDate)
+    }
+    init() {
+        self.CreationDate = Date()
+    }
+    
+    // For Previews
+    init(Name: String) {
+        self.init()
+        self.CustomName = Name
+    }
 }
