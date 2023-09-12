@@ -24,15 +24,24 @@ struct FolderItemView: View {
         .onAppear {
             ViewModel.NewName = Folder.Name
         }
-        .alert(StringConstants.Alert.Title.RenameFolder, isPresented: $ViewModel.ShowRenameAlert) {
-            TextField(StringConstants.Alert.Title.RenameFolder, text: $ViewModel.NewName)
-            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-                if !ViewModel.NewName.isEmpty {
-                    ViewModel.RenameFolder(For: Folder, NewName: ViewModel.NewName)
-                }
+//        .alert(StringConstants.Alert.Title.RenameFolder, isPresented: $ViewModel.ShowRenameAlert) {
+//            TextField(StringConstants.Alert.Title.RenameFolder, text: $ViewModel.NewName)
+//            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
+//                if !ViewModel.NewName.isEmpty {
+//                    ViewModel.RenameFolder(For: Folder, NewName: ViewModel.NewName)
+//                }
+//            }
+//            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+//                ViewModel.NewName = Folder.Name
+//                print("Cancel Tapped")
+//            }
+//        }
+        .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
+            Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
+            Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                ViewModel.RemoveFolder(For: Folder)
             }
             Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                ViewModel.NewName = Folder.Name
                 print("Cancel Tapped")
             }
         }

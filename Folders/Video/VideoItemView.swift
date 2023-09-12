@@ -17,15 +17,24 @@ struct VideoItemView: View {
             .contextMenu {
                 VideoContextMenu
             }
-            .alert(isPresented: $ViewModel.ShowDeleteAlert) {
-                Alert(
-                    title: Text(StringConstants.Alert.Title.Deleting),
-                    message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
-                    primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
-                        ViewModel.RemoveVideo(For: Video)
-                    },
-                    secondaryButton: .cancel()
-                )
+//            .alert(isPresented: $ViewModel.ShowDeleteAlert) {
+//                Alert(
+//                    title: Text(StringConstants.Alert.Title.Deleting),
+//                    message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
+//                    primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
+//                        ViewModel.RemoveVideo(For: Video)
+//                    },
+//                    secondaryButton: .cancel()
+//                )
+//            }
+            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
+                Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
+                Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                    ViewModel.RemoveVideo(For: Video)
+                }
+                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                    print("Cancel Tapped")
+                }
             }
             .alert(StringConstants.Alert.Title.RenameVideo, isPresented: $ViewModel.ShowRenameAlert) {
                 TextField(StringConstants.Alert.Title.VideoName, text: $ViewModel.NewName)
