@@ -51,6 +51,15 @@ struct VideoView: View {
                                     .clipShape(Circle())
                             }
                             Button {
+                                ViewModel.FavoritesButtonAction()
+                            } label: {
+                                Image(systemName: ViewModel.OnlyShowFavorites ? StringConstants.SystemImage.HeartFill : StringConstants.SystemImage.Heart)
+                                    .foregroundColor(.primary)
+                                    .padding(8)
+                                    .background(Color.gray.opacity(0.25))
+                                    .clipShape(Circle())
+                            }
+                            Button {
                                 ViewModel.SelectCancelButtonAction()
                             } label: {
                                 Text(StringConstants.Select)
@@ -90,16 +99,18 @@ struct VideoView: View {
                 }
             }
             .alert(isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
-                Alert(title: Text(StringConstants.Alert.Title.Deleting),
-                      message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
-                      primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
-                    for Video in ViewModel.SelectedVideos {
-                        ViewModel.RemoveVideo(For: Video)
-                    }
-                    ViewModel.SelectedVideos.removeAll()
-                    ViewModel.IsSelecting.toggle()
-                },
-                      secondaryButton: .cancel())
+                Alert(
+                    title: Text(StringConstants.Alert.Title.Deleting),
+                    message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
+                    primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
+                        for Video in ViewModel.SelectedVideos {
+                            ViewModel.RemoveVideo(For: Video)
+                        }
+                        ViewModel.SelectedVideos.removeAll()
+                        ViewModel.IsSelecting.toggle()
+                    },
+                    secondaryButton: .cancel()
+                )
             }
         }
     }

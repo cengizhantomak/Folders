@@ -15,10 +15,19 @@ class VideoViewModel: ObservableObject {
     @Published var IsSelecting = false
     @Published var ShowBottomBarDeleteAlert = false
     @Published var InputName: String = ""
+    @Published var OnlyShowFavorites = false
+    @Published var ShowRenameAlert = false
+    @Published var ShowDeleteAlert = false
+    @Published var NewName = ""
+    @Published var VideoToRename: VideoModel?
     
     init(Folder: FolderModel) {
         self.Folder = Folder
         LoadVideos()
+    }
+    
+    var FavoriteVideos: [VideoModel] {
+        return Videos.filter { $0.IsFavorite }
     }
     
     func SaveVideos() {
@@ -31,6 +40,27 @@ class VideoViewModel: ObservableObject {
         if let Data = UserDefaults.standard.data(forKey: StringConstants.Videos),
            let Decoded = try? JSONDecoder().decode([VideoModel].self, from: Data) {
             Videos = Decoded
+        }
+    }
+    
+    func FavoritesButtonAction() {
+        withAnimation(Animation.easeInOut(duration: 0.2)) {
+            if OnlyShowFavorites {
+                OnlyShowFavorites.toggle()
+                LoadVideos()
+            } else {
+                Videos = FavoriteVideos
+                OnlyShowFavorites.toggle()
+            }
+        }
+    }
+    
+    func ToggleFavorite(For Video: VideoModel) {
+        withAnimation(Animation.easeInOut(duration: 0.2)) {
+            if let Index = Videos.firstIndex(where: { $0.id == Video.id }) {
+                Videos[Index].IsFavorite.toggle()
+                SaveVideos()
+            }
         }
     }
     
@@ -68,9 +98,20 @@ class VideoViewModel: ObservableObject {
         }
     }
     
+    func RenameVideo(NewName: String) {
+        withAnimation(Animation.easeInOut(duration: 0.2)) {
+            if let video = VideoToRename,
+               let Index = Videos.firstIndex(where: { $0.id == video.id }) {
+                Videos[Index].CustomName = NewName
+                SaveVideos()
+                VideoToRename = nil
+            }
+        }
+    }
+    
     func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat = 20, YOffsetValue: CGFloat = 20) -> (X: CGFloat, Y: CGFloat) {
         let X = (ItemWidth / 2) - XOffsetValue
-        let Y = -(ItemWidth * 1.5 / 2) + YOffsetValue
+        let Y = -(ItemWidth * 16/9 / 2) + YOffsetValue
         return (X, Y)
     }
 }

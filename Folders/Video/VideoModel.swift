@@ -10,8 +10,9 @@ import Foundation
 struct VideoModel: Identifiable, Codable {
     var id = UUID()
     var CreationDate: Date
+    var CustomName: String?
     var Name: String {
-        return DateHelper.CurrentDateTime(from: CreationDate)
+        return CustomName ?? DateHelper.CurrentDateTime(from: CreationDate)
     }
     var IsFavorite: Bool = false
     
