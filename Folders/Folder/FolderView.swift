@@ -11,7 +11,7 @@ struct FolderView: View {
     @StateObject var ViewModel = FolderViewModel()
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             GeometryReader { Geometry in
                 let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 30, Amount: 2)
                 ScrollView {
