@@ -29,7 +29,7 @@ class FolderViewModel: ObservableObject {
         let Today = Date()
         return Folders.filter {
             Calendar.current.isDate($0.CreationDate, inSameDayAs: Today) && !$0.IsPinned
-        }
+        }.sorted(by: { $0.CreationDate > $1.CreationDate })
     }
 
     
@@ -158,12 +158,27 @@ class FolderViewModel: ObservableObject {
     }
     
     func AddFolderWithAssetVideo() {
-        var Folder = FolderModel()
-        var NewVideo = VideoModel()
-        NewVideo.AssetVideoName = "LVS"
-        Folder.Videos = [NewVideo]
-        Folders.insert(Folder, at: 0)
+        let TodayFolders = TodayFolders
+
+        if let LatestFolder = TodayFolders.first {
+            var UpdatedFolder = LatestFolder
+            var NewVideo = VideoModel()
+            NewVideo.AssetVideoName = "LVS"
+            if UpdatedFolder.Videos != nil {
+                UpdatedFolder.Videos?.append(NewVideo)
+            } else {
+                UpdatedFolder.Videos = [NewVideo]
+            }
+            if let Index = Folders.firstIndex(where: { $0.id == UpdatedFolder.id }) {
+                Folders[Index] = UpdatedFolder
+            }
+        } else {
+            var NewFolder = FolderModel()
+            var NewVideo = VideoModel()
+            NewVideo.AssetVideoName = "LVS"
+            NewFolder.Videos = [NewVideo]
+            Folders.insert(NewFolder, at: 0)
+        }
         SaveFolders()
     }
-    
 }
