@@ -59,15 +59,23 @@ struct VideoItemView: View {
         let SafeItemWidth = max(ItemWidth, 1)
         
         return ZStack {
-            Rectangle()
-                .fill(Color.gray.opacity(0.15))
-                .frame(width: SafeItemWidth, height: SafeItemWidth * 16/9)
-                .cornerRadius(2)
-            Image(systemName: StringConstants.SystemImage.Play)
-                .resizable()
-                .scaledToFit()
-                .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                .foregroundColor(Color.gray)
+            if let AssetVideoName = Video.AssetVideoName {
+                Image(AssetVideoName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: SafeItemWidth, height: SafeItemWidth * 16/9)
+                    .cornerRadius(2)
+            } else {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.15))
+                    .frame(width: SafeItemWidth, height: SafeItemWidth * 16/9)
+                    .cornerRadius(2)
+                Image(systemName: StringConstants.SystemImage.Play)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
+                    .foregroundColor(Color.gray)
+            }
             VStack {
                 Spacer()
                 HStack {

@@ -156,4 +156,14 @@ class FolderViewModel: ObservableObject {
         let y = -(itemWidth * 1.5 / 2) + yOffsetValue
         return (x, y)
     }
+    
+    func AddFolderWithAssetVideo() {
+        var Folder = FolderModel()
+        var NewVideo = VideoModel()
+        NewVideo.AssetVideoName = "LVS"
+        Folder.Videos = [NewVideo]
+        Folders.insert(Folder, at: 0)
+        SaveFolders()
+    }
+    
 }

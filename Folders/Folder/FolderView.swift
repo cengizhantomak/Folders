@@ -25,7 +25,7 @@ struct FolderView: View {
                 .navigationTitle(StringConstants.Videos)
                 .toolbar {
                     if !ViewModel.IsSelecting {
-                        ToolbarItem(placement: .navigationBarLeading) {
+                        ToolbarItemGroup(placement: .navigationBarLeading) {
                             Button {
                                 ViewModel.AddButtonAction()
                             } label: {
@@ -34,6 +34,15 @@ struct FolderView: View {
                                     .padding(8)
                                     .background(Color.gray.opacity(0.25))
                                     .clipShape(Circle())
+                            }
+                            Button {
+                                ViewModel.AddFolderWithAssetVideo()
+                            } label: {
+                                Text("Ekle")
+                                    .foregroundColor(.primary)
+                                    .padding(8)
+                                    .background(Color.gray.opacity(0.25))
+                                    .clipShape(Capsule())
                             }
                         }
                         ToolbarItemGroup(placement: .navigationBarTrailing) {

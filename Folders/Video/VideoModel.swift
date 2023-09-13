@@ -15,6 +15,7 @@ struct VideoModel: Identifiable, Codable {
         return CustomName ?? DateHelper.CurrentDateTime(from: CreationDate)
     }
     var IsFavorite: Bool = false
+    var AssetVideoName: String?
     
     init() {
         self.CreationDate = Date()

@@ -13,9 +13,11 @@ struct FolderModel: Identifiable, Codable {
     var IsFavorite: Bool = false
     var CreationDate: Date
     var CustomName: String?
+    var Videos: [VideoModel]?
     var Name: String {
         return CustomName ?? DateHelper.CurrentDateTime(from: CreationDate)
     }
+    
     init() {
         self.CreationDate = Date()
     }

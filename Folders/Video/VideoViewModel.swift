@@ -37,8 +37,10 @@ class VideoViewModel: ObservableObject {
     }
     
     func LoadVideos() {
-        if let Data = UserDefaults.standard.data(forKey: StringConstants.Videos),
-           let Decoded = try? JSONDecoder().decode([VideoModel].self, from: Data) {
+        if let VideosFromFolder = Folder.Videos {
+            Videos = VideosFromFolder
+        } else if let Data = UserDefaults.standard.data(forKey: StringConstants.Videos),
+                  let Decoded = try? JSONDecoder().decode([VideoModel].self, from: Data) {
             Videos = Decoded
         }
     }
