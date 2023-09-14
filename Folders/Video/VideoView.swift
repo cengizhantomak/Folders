@@ -39,15 +39,6 @@ struct VideoView: View {
                         ToolbarItemGroup(placement: .navigationBarTrailing) {
                             HStack(spacing: 0) {
                                 Button {
-                                    ViewModel.AddVideo()
-                                } label: {
-                                    Image(systemName: StringConstants.SystemImage.Plus)
-                                        .foregroundColor(.primary)
-                                        .padding(8)
-                                        .background(Color.gray.opacity(0.25))
-                                        .clipShape(Circle())
-                                }
-                                Button {
                                     ViewModel.FavoritesButtonAction()
                                 } label: {
                                     Image(systemName: ViewModel.OnlyShowFavorites ? StringConstants.SystemImage.HeartFill : StringConstants.SystemImage.Heart)

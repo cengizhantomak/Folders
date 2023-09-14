@@ -49,16 +49,11 @@ class FolderViewModel: ObservableObject {
     }
     
     func SaveFolders() {
-        if let Encoded = try? JSONEncoder().encode(Folders) {
-            UserDefaults.standard.setValue(Encoded, forKey: StringConstants.Folders)
-        }
+        UserDefaultsManager.Shared.Save(Folders, ForKey: StringConstants.Folders)
     }
     
     func LoadFolders() {
-        if let Data = UserDefaults.standard.data(forKey: StringConstants.Folders),
-           let Decoded = try? JSONDecoder().decode([FolderModel].self, from: Data) {
-            Folders = Decoded
-        }
+        Folders = UserDefaultsManager.Shared.Load(ForKey: StringConstants.Folders) ?? []
     }
     
     func AddFolder() {
@@ -71,7 +66,7 @@ class FolderViewModel: ObservableObject {
     }
     
     func AddButtonAction() {
-        var Folder = FolderModel()
+        let Folder = FolderModel()
         InputName = Folder.Name
         ShowCreatedAlert = true
     }

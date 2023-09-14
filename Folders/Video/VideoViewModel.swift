@@ -30,19 +30,22 @@ class VideoViewModel: ObservableObject {
         return Videos.filter { $0.IsFavorite }
     }
     
-    func SaveVideos() {
-        if let Encoded = try? JSONEncoder().encode(Videos) {
-            UserDefaults.standard.setValue(Encoded, forKey: StringConstants.Videos)
+    func SaveUpdatedFolder() {
+        var savedFolders: [FolderModel] = UserDefaultsManager.Shared.Load(ForKey: StringConstants.Folders) ?? []
+        
+        guard let folderIndex = savedFolders.firstIndex(where: { $0.id == Folder.id }) else {
+            return
         }
+        
+        savedFolders[folderIndex] = Folder
+        UserDefaultsManager.Shared.Save(savedFolders, ForKey: StringConstants.Folders)
     }
     
     func LoadVideos() {
-        if let VideosFromFolder = Folder.Videos {
-            Videos = VideosFromFolder
-        } else if let Data = UserDefaults.standard.data(forKey: StringConstants.Videos),
-                  let Decoded = try? JSONDecoder().decode([VideoModel].self, from: Data) {
-            Videos = Decoded
+        guard let VideosFromFolder = Folder.Videos else {
+            return
         }
+        Videos = VideosFromFolder
     }
     
     func FavoritesButtonAction() {
@@ -59,10 +62,18 @@ class VideoViewModel: ObservableObject {
     
     func ToggleFavorite(For Video: VideoModel) {
         withAnimation(Animation.easeInOut(duration: 0.2)) {
-            if let Index = Videos.firstIndex(where: { $0.id == Video.id }) {
-                Videos[Index].IsFavorite.toggle()
-                SaveVideos()
+            guard let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
+                return
             }
+            
+            Videos[VideoIndex].IsFavorite.toggle()
+            
+            guard let FolderVideoIndex = Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
+                return
+            }
+            
+            Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
+            SaveUpdatedFolder()
         }
     }
     
@@ -84,30 +95,37 @@ class VideoViewModel: ObservableObject {
         }
     }
     
-    func AddVideo() {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
-            Videos.insert(VideoModel(), at: 0)
-            SaveVideos()
-        }
-    }
-    
     func RemoveVideo(For Video: VideoModel) {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
-            if let Index = Videos.firstIndex(where: { $0.id == Video.id }) {
-                Videos.remove(at: Index)
-                SaveVideos()
-            }
+        guard let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
+            return
         }
+        
+        Videos.remove(at: VideoIndex)
+        
+        guard let FolderVideoIndex = Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
+            return
+        }
+        
+        Folder.Videos?.remove(at: FolderVideoIndex)
+        SaveUpdatedFolder()
     }
     
     func RenameVideo(NewName: String) {
         withAnimation(Animation.easeInOut(duration: 0.2)) {
-            if let video = VideoToRename,
-               let Index = Videos.firstIndex(where: { $0.id == video.id }) {
-                Videos[Index].CustomName = NewName
-                SaveVideos()
-                VideoToRename = nil
+            guard let Video = VideoToRename,
+                  let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
+                return
             }
+            
+            Videos[VideoIndex].CustomName = NewName
+            
+            guard let FolderVideoIndex = Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
+                return
+            }
+            
+            Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
+            SaveUpdatedFolder()
+            VideoToRename = nil
         }
     }
     
