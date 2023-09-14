@@ -53,11 +53,13 @@ class FolderViewModel: ObservableObject {
     }
     
     func LoadFolders() {
-        Folders = UserDefaultsManager.Shared.Load(ForKey: StringConstants.Folders) ?? []
+        withAnimation(.spring()) {
+            Folders = UserDefaultsManager.Shared.Load(ForKey: StringConstants.Folders) ?? []
+        }
     }
     
     func AddFolder() {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
+        withAnimation(.spring()) {
             var Folder = FolderModel()
             Folder.CustomName = InputName
             Folders.insert(Folder, at: 0)
@@ -72,14 +74,16 @@ class FolderViewModel: ObservableObject {
     }
     
     func SelectCancelButtonAction() {
-        IsSelecting.toggle()
-        if !IsSelecting {
-            SelectedFolders.removeAll()
+        withAnimation(.spring()) {
+            IsSelecting.toggle()
+            if !IsSelecting {
+                SelectedFolders.removeAll()
+            }
         }
     }
     
     func FavoritesButtonAction() {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
+        withAnimation(.spring()) {
             if OnlyShowFavorites {
                 OnlyShowFavorites.toggle()
                 LoadFolders()
@@ -110,7 +114,7 @@ class FolderViewModel: ObservableObject {
     }
     
     func PinFolder(For Folder: FolderModel) {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
+        withAnimation(.spring()) {
             if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
                 Folders[Index].IsPinned.toggle()
                 SaveFolders()
@@ -119,7 +123,7 @@ class FolderViewModel: ObservableObject {
     }
     
     func ToggleFavorite(For Folder: FolderModel) {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
+        withAnimation(.spring()) {
             if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
                 Folders[Index].IsFavorite.toggle()
                 SaveFolders()
@@ -128,7 +132,7 @@ class FolderViewModel: ObservableObject {
     }
     
     func RenameFolder(NewName: String) {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
+        withAnimation(.spring()) {
             if let Folder = FolderToRename, let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
                 Folders[Index].CustomName = NewName
                 SaveFolders()
@@ -138,7 +142,7 @@ class FolderViewModel: ObservableObject {
     }
     
     func RemoveFolder(For Folder: FolderModel) {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
+        withAnimation(.spring()) {
             if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
                 Folders.remove(at: Index)
                 SaveFolders()

@@ -49,7 +49,7 @@ class VideoViewModel: ObservableObject {
     }
     
     func FavoritesButtonAction() {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
+        withAnimation(.spring()) {
             if OnlyShowFavorites {
                 OnlyShowFavorites.toggle()
                 LoadVideos()
@@ -61,7 +61,7 @@ class VideoViewModel: ObservableObject {
     }
     
     func ToggleFavorite(For Video: VideoModel) {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
+        withAnimation(.spring()) {
             guard let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
                 return
             }
@@ -78,9 +78,11 @@ class VideoViewModel: ObservableObject {
     }
     
     func SelectCancelButtonAction() {
-        IsSelecting.toggle()
-        if !IsSelecting {
-            SelectedVideos.removeAll()
+        withAnimation(.spring()) {
+            IsSelecting.toggle()
+            if !IsSelecting {
+                SelectedVideos.removeAll()
+            }
         }
     }
     
@@ -96,22 +98,24 @@ class VideoViewModel: ObservableObject {
     }
     
     func RemoveVideo(For Video: VideoModel) {
-        guard let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
-            return
+        withAnimation(.spring()) {
+            guard let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
+                return
+            }
+            
+            Videos.remove(at: VideoIndex)
+            
+            guard let FolderVideoIndex = Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
+                return
+            }
+            
+            Folder.Videos?.remove(at: FolderVideoIndex)
+            SaveUpdatedFolder()
         }
-        
-        Videos.remove(at: VideoIndex)
-        
-        guard let FolderVideoIndex = Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
-            return
-        }
-        
-        Folder.Videos?.remove(at: FolderVideoIndex)
-        SaveUpdatedFolder()
     }
     
     func RenameVideo(NewName: String) {
-        withAnimation(Animation.easeInOut(duration: 0.2)) {
+        withAnimation(.spring()) {
             guard let Video = VideoToRename,
                   let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
                 return

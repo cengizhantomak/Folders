@@ -117,6 +117,9 @@ struct FolderView: View {
                           secondaryButton: .cancel())
                 }
             }
+            .onAppear(perform: {
+                ViewModel.LoadFolders()
+            })
         }
     }
     
