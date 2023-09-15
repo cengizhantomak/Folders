@@ -20,6 +20,7 @@ class VideoViewModel: ObservableObject {
     @Published var ShowDeleteAlert = false
     @Published var NewName = ""
     @Published var VideoToRename: VideoModel?
+    @Published var IsTTProgressHUDVisible = false
     
     init(Folder: FolderModel) {
         self.Folder = Folder
@@ -74,6 +75,16 @@ class VideoViewModel: ObservableObject {
             
             Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
             SaveUpdatedFolder()
+            
+            IsTTProgressHUDVisible = true
+            
+            DispatchQueue.global().async {
+                sleep(1)
+                
+                DispatchQueue.main.async {
+                    self.IsTTProgressHUDVisible = false
+                }
+            }
         }
     }
     
@@ -109,6 +120,30 @@ class VideoViewModel: ObservableObject {
             
             Folder.Videos?.remove(at: FolderVideoIndex)
             SaveUpdatedFolder()
+            
+            IsTTProgressHUDVisible = true
+            
+            DispatchQueue.global().async {
+                sleep(1)
+                
+                DispatchQueue.main.async {
+                    self.IsTTProgressHUDVisible = false
+                }
+            }
+        }
+    }
+    
+    func SaveToPhone() {
+        print("Save to Phone Tapped")
+        
+        IsTTProgressHUDVisible = true
+        
+        DispatchQueue.global().async {
+            sleep(1)
+            
+            DispatchQueue.main.async {
+                self.IsTTProgressHUDVisible = false
+            }
         }
     }
     
@@ -128,6 +163,16 @@ class VideoViewModel: ObservableObject {
             Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
             SaveUpdatedFolder()
             VideoToRename = nil
+            
+            IsTTProgressHUDVisible = true
+            
+            DispatchQueue.global().async {
+                sleep(1)
+                
+                DispatchQueue.main.async {
+                    self.IsTTProgressHUDVisible = false
+                }
+            }
         }
     }
     

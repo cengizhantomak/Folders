@@ -6,11 +6,13 @@
 //
 
 import SwiftUI
+import TTProgressHUD
 
 struct FolderView: View {
     @StateObject var ViewModel = FolderViewModel()
     
     var body: some View {
+        ZStack {
         NavigationStack {
             VStack {
                 if ViewModel.Folders.isEmpty {
@@ -137,6 +139,9 @@ struct FolderView: View {
             .onAppear(perform: {
                 ViewModel.LoadFolders()
             })
+        }
+            TTProgressHUD($ViewModel.IsTTProgressHUDVisible, type: .success)
+                .scaleEffect(0.5)
         }
     }
     

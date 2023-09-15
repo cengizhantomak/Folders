@@ -118,7 +118,7 @@ struct VideoItemView: View {
                 )
             }
             Button {
-                print("Save to Phone Tapped")
+                ViewModel.SaveToPhone()
             } label: {
                 Label(
                     StringConstants.ContextMenu.SaveToPhone.Text,
