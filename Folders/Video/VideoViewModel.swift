@@ -78,11 +78,9 @@ class VideoViewModel: ObservableObject {
     }
     
     func SelectCancelButtonAction() {
-        withAnimation(.spring()) {
-            IsSelecting.toggle()
-            if !IsSelecting {
-                SelectedVideos.removeAll()
-            }
+        IsSelecting.toggle()
+        if !IsSelecting {
+            SelectedVideos.removeAll()
         }
     }
     

@@ -53,9 +53,7 @@ class FolderViewModel: ObservableObject {
     }
     
     func LoadFolders() {
-        withAnimation(.spring()) {
-            Folders = UserDefaultsManager.Shared.Load(ForKey: StringConstants.Folders) ?? []
-        }
+        Folders = UserDefaultsManager.Shared.Load(ForKey: StringConstants.Folders) ?? []
     }
     
     func AddFolder() {
@@ -74,11 +72,9 @@ class FolderViewModel: ObservableObject {
     }
     
     func SelectCancelButtonAction() {
-        withAnimation(.spring()) {
-            IsSelecting.toggle()
-            if !IsSelecting {
-                SelectedFolders.removeAll()
-            }
+        IsSelecting.toggle()
+        if !IsSelecting {
+            SelectedFolders.removeAll()
         }
     }
     
