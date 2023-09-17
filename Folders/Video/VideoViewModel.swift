@@ -14,7 +14,7 @@ class VideoViewModel: ObservableObject {
     @Published var Columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
     @Published var ShowBottomBarDeleteAlert = false
-    @Published var InputName: String = ""
+    @Published var InputName = ""
     @Published var OnlyShowFavorites = false
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
@@ -32,14 +32,14 @@ class VideoViewModel: ObservableObject {
     }
     
     func SaveUpdatedFolder() {
-        var savedFolders: [FolderModel] = UserDefaultsManager.Shared.Load(ForKey: StringConstants.Folders) ?? []
+        var SavedFolders: [FolderModel] = UserDefaultsManager.Shared.Load(ForKey: StringConstants.Folders) ?? []
         
-        guard let folderIndex = savedFolders.firstIndex(where: { $0.id == Folder.id }) else {
+        guard let FolderIndex = SavedFolders.firstIndex(where: { $0.id == Folder.id }) else {
             return
         }
         
-        savedFolders[folderIndex] = Folder
-        UserDefaultsManager.Shared.Save(savedFolders, ForKey: StringConstants.Folders)
+        SavedFolders[FolderIndex] = Folder
+        UserDefaultsManager.Shared.Save(SavedFolders, ForKey: StringConstants.Folders)
     }
     
     func LoadVideos() {
@@ -75,16 +75,7 @@ class VideoViewModel: ObservableObject {
             
             Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
             SaveUpdatedFolder()
-            
-            IsTTProgressHUDVisible = true
-            
-            DispatchQueue.global().async {
-                sleep(1)
-                
-                DispatchQueue.main.async { [weak self] in
-                    self?.IsTTProgressHUDVisible = false
-                }
-            }
+            ShowTTProgressHUD()
         }
     }
     
@@ -120,31 +111,13 @@ class VideoViewModel: ObservableObject {
             
             Folder.Videos?.remove(at: FolderVideoIndex)
             SaveUpdatedFolder()
-            
-            IsTTProgressHUDVisible = true
-            
-            DispatchQueue.global().async {
-                sleep(1)
-                
-                DispatchQueue.main.async { [weak self] in
-                    self?.IsTTProgressHUDVisible = false
-                }
-            }
+            ShowTTProgressHUD()
         }
     }
     
     func SaveToPhone() {
         print("Save to Phone Tapped")
-        
-        IsTTProgressHUDVisible = true
-        
-        DispatchQueue.global().async {
-            sleep(1)
-            
-            DispatchQueue.main.async { [weak self] in
-                self?.IsTTProgressHUDVisible = false
-            }
-        }
+        ShowTTProgressHUD()
     }
     
     func RenameVideo(NewName: String) {
@@ -163,22 +136,29 @@ class VideoViewModel: ObservableObject {
             Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
             SaveUpdatedFolder()
             VideoToRename = nil
-            
-            IsTTProgressHUDVisible = true
-            
-            DispatchQueue.global().async {
-                sleep(1)
-                
-                DispatchQueue.main.async { [weak self] in
-                    self?.IsTTProgressHUDVisible = false
-                }
-            }
+            ShowTTProgressHUD()
         }
     }
     
     func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat = 20, YOffsetValue: CGFloat = 20) -> (X: CGFloat, Y: CGFloat) {
         let X = (ItemWidth / 2) - XOffsetValue
-        let Y = -(ItemWidth * 16/9 / 2) + YOffsetValue
+        let Y = -(ItemWidth * (16 / 9) / 2) + YOffsetValue
         return (X, Y)
+    }
+    
+    func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
+        return (ScreenWidth - Padding) / Amount
+    }
+    
+    func ShowTTProgressHUD() {
+        IsTTProgressHUDVisible = true
+        
+        DispatchQueue.global().async {
+            sleep(1)
+            
+            DispatchQueue.main.async { [weak self] in
+                self?.IsTTProgressHUDVisible = false
+            }
+        }
     }
 }

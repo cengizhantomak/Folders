@@ -62,16 +62,7 @@ class FolderViewModel: ObservableObject {
             Folder.CustomName = InputName
             Folders.insert(Folder, at: 0)
             SaveFolders()
-            
-            IsTTProgressHUDVisible = true
-            
-            DispatchQueue.global().async {
-                sleep(1)
-                
-                DispatchQueue.main.async { [weak self] in
-                    self?.IsTTProgressHUDVisible = false
-                }
-            }
+            ShowTTProgressHUD()
         }
     }
     
@@ -126,15 +117,7 @@ class FolderViewModel: ObservableObject {
                 SaveFolders()
             }
             
-            IsTTProgressHUDVisible = true
-            
-            DispatchQueue.global().async {
-                sleep(1)
-                
-                DispatchQueue.main.async { [weak self] in
-                    self?.IsTTProgressHUDVisible = false
-                }
-            }
+            ShowTTProgressHUD()
         }
     }
     
@@ -145,15 +128,7 @@ class FolderViewModel: ObservableObject {
                 SaveFolders()
             }
             
-            IsTTProgressHUDVisible = true
-            
-            DispatchQueue.global().async {
-                sleep(1)
-                
-                DispatchQueue.main.async { [weak self] in
-                    self?.IsTTProgressHUDVisible = false
-                }
-            }
+            ShowTTProgressHUD()
         }
     }
     
@@ -165,15 +140,7 @@ class FolderViewModel: ObservableObject {
                 FolderToRename = nil
             }
             
-            IsTTProgressHUDVisible = true
-            
-            DispatchQueue.global().async {
-                sleep(1)
-                
-                DispatchQueue.main.async { [weak self] in
-                    self?.IsTTProgressHUDVisible = false
-                }
-            }
+            ShowTTProgressHUD()
         }
     }
     
@@ -184,15 +151,7 @@ class FolderViewModel: ObservableObject {
                 self.SaveFolders()
             }
             
-            IsTTProgressHUDVisible = true
-            
-            DispatchQueue.global().async {
-                sleep(1)
-                
-                DispatchQueue.main.async { [weak self] in
-                    self?.IsTTProgressHUDVisible = false
-                }
-            }
+            ShowTTProgressHUD()
         }
     }
     
@@ -209,11 +168,13 @@ class FolderViewModel: ObservableObject {
             var UpdatedFolder = LatestFolder
             var NewVideo = VideoModel()
             NewVideo.AssetVideoName = "LVS"
+            
             if UpdatedFolder.Videos != nil {
                 UpdatedFolder.Videos?.append(NewVideo)
             } else {
                 UpdatedFolder.Videos = [NewVideo]
             }
+            
             if let Index = Folders.firstIndex(where: { $0.id == UpdatedFolder.id }) {
                 Folders[Index] = UpdatedFolder
             }
@@ -224,8 +185,12 @@ class FolderViewModel: ObservableObject {
             NewFolder.Videos = [NewVideo]
             Folders.insert(NewFolder, at: 0)
         }
-        SaveFolders()
         
+        SaveFolders()
+        ShowTTProgressHUD()
+    }
+    
+    func ShowTTProgressHUD() {
         IsTTProgressHUDVisible = true
         
         DispatchQueue.global().async {

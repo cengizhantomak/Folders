@@ -30,8 +30,7 @@ struct VideoView: View {
                     .ignoresSafeArea(.all)
                 } else {
                     GeometryReader { Geometry in
-                        let ScreenWidth = Geometry.size.width
-                        let ItemWidth = (ScreenWidth - 20) / 3
+                        let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 20, Amount: 3)
                         ZStack {
                             ScrollView {
                                 VStack {
