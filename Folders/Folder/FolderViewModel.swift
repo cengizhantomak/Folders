@@ -32,7 +32,6 @@ class FolderViewModel: ObservableObject {
             Calendar.current.isDate($0.CreationDate, inSameDayAs: Today) && !$0.IsPinned
         }.sorted(by: { $0.CreationDate > $1.CreationDate })
     }
-
     
     var SessionFolders: [FolderModel] {
         let Session = Date()

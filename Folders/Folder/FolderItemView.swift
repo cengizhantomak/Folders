@@ -15,12 +15,12 @@ struct FolderItemView: View {
     var body: some View {
         VStack(alignment: .leading) {
             if !ViewModel.IsSelecting {
-                FolderIcon
+                FolderItem
                     .contextMenu {
                         FolderContextMenu
                     }
             } else {
-                FolderIcon
+                FolderItem
             }
             Text(Folder.Name)
                 .font(.system(size: 15))
@@ -35,8 +35,8 @@ struct FolderItemView: View {
         }
     }
     
-    // MARK: - FolderIcon
-    private var FolderIcon: some View {
+    // MARK: - FolderItem
+    private var FolderItem: some View {
         let CircleOffset = ViewModel.CircleOffset(For: ItemWidth, XOffsetValue: 20, YOffsetValue: 20)
         let SafeItemWidth = max(ItemWidth, 1)
         
@@ -89,7 +89,7 @@ struct FolderItemView: View {
         }
     }
     
-    // MARK: - Context Menu
+    // MARK: - Context Menu and Actions
     private var FolderContextMenu: some View {
         VStack {
             PinUnpinButton
@@ -99,7 +99,7 @@ struct FolderItemView: View {
             DeleteVideoButton
         }
     }
-    // MARK: Context Menu Actions
+    
     private var PinUnpinButton: some View {
         Button {
             ViewModel.PinFolder(For: Folder)
