@@ -23,7 +23,6 @@
 		CB77D7952AB0A2080063EA99 /* VideoGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB77D7942AB0A2080063EA99 /* VideoGridView.swift */; };
 		CBE2B79C2AAF09EF004B37A5 /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE2B79B2AAF09EF004B37A5 /* VideoModel.swift */; };
 		CBE2B79E2AAF106A004B37A5 /* VideoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE2B79D2AAF106A004B37A5 /* VideoItemView.swift */; };
-		CBF281542AAA0009008DD30E /* FolderSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF281532AAA0009008DD30E /* FolderSectionView.swift */; };
 		CBF281562AAA005B008DD30E /* FolderGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF281552AAA005B008DD30E /* FolderGridView.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,7 +43,6 @@
 		CB77D7942AB0A2080063EA99 /* VideoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoGridView.swift; sourceTree = "<group>"; };
 		CBE2B79B2AAF09EF004B37A5 /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		CBE2B79D2AAF106A004B37A5 /* VideoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoItemView.swift; sourceTree = "<group>"; };
-		CBF281532AAA0009008DD30E /* FolderSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderSectionView.swift; sourceTree = "<group>"; };
 		CBF281552AAA005B008DD30E /* FolderGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderGridView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -66,7 +64,6 @@
 				CB2FBD7F2AA5B146007C46F3 /* FolderModel.swift */,
 				CB2FBD832AA5F669007C46F3 /* FolderViewModel.swift */,
 				CB2FBD812AA5B190007C46F3 /* FolderItemView.swift */,
-				CBF281532AAA0009008DD30E /* FolderSectionView.swift */,
 				CBF281552AAA005B008DD30E /* FolderGridView.swift */,
 				CB2FBD732AA5B03C007C46F3 /* FolderView.swift */,
 			);
@@ -220,7 +217,6 @@
 				CB020CCD2AAEE75200C30EE0 /* VideoViewModel.swift in Sources */,
 				CB2FBD722AA5B03C007C46F3 /* FoldersApp.swift in Sources */,
 				CB4AF0BC2AB1D3E8000EB35D /* UserDefaultsManager.swift in Sources */,
-				CBF281542AAA0009008DD30E /* FolderSectionView.swift in Sources */,
 				CB77D7952AB0A2080063EA99 /* VideoGridView.swift in Sources */,
 				CBE2B79C2AAF09EF004B37A5 /* VideoModel.swift in Sources */,
 			);

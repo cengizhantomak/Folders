@@ -197,10 +197,10 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-    func circleOffset(for itemWidth: CGFloat, xOffsetValue: CGFloat = 20, yOffsetValue: CGFloat = 20) -> (x: CGFloat, y: CGFloat) {
-        let x = (itemWidth / 2) - xOffsetValue
-        let y = -(itemWidth * 1.5 / 2) + yOffsetValue
-        return (x, y)
+    func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat = 20, YOffsetValue: CGFloat = 20) -> (X: CGFloat, Y: CGFloat) {
+        let X = (ItemWidth / 2) - XOffsetValue
+        let Y = -(ItemWidth * 1.5 / 2) + YOffsetValue
+        return (X, Y)
     }
     
     func AddFolderWithAssetVideo() {

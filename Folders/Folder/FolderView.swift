@@ -150,8 +150,10 @@ struct FolderView: View {
         Group {
             if !Folders.isEmpty {
                 VStack(alignment: .leading) {
-                    FolderSectionView(Title: Title)
-                    FolderGridView(ViewModel: ViewModel, Folders: Folders, ItemWidth: ItemWidth)
+                    Divider()
+                    Section(header: Text(Title).font(.headline)) {
+                        FolderGridView(ViewModel: ViewModel, Folders: Folders, ItemWidth: ItemWidth)
+                    }
                 }
             }
         }
