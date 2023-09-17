@@ -8,15 +8,15 @@
 import Foundation
 
 struct DateHelper {
-    static func CurrentDateTime(from date: Date = Date()) -> String {
+    static func CurrentDateTime(From Date: Date = Date()) -> String {
         let Formatter = DateFormatter()
         Formatter.dateFormat = StringConstants.DateTimeFormat
-        return Formatter.string(from: date)
+        return Formatter.string(from: Date)
     }
     
-    static func CurrentDate(from date: Date = Date()) -> String {
+    static func CurrentDate(From Date: Date = Date()) -> String {
         let Formatter = DateFormatter()
         Formatter.dateFormat = StringConstants.DateFormat
-        return Formatter.string(from: date)
+        return Formatter.string(from: Date)
     }
 }

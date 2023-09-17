@@ -18,11 +18,11 @@ struct FolderView: View {
                 if ViewModel.Folders.isEmpty {
                     VStack {
                         Spacer()
-                        Image(systemName: "video.slash")
+                        Image(systemName: StringConstants.SystemImage.NoVideo)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 50, height: 50)
-                        Text("No Video")
+                        Text(StringConstants.NoVideo)
                             .font(.system(size: 15))
                         Spacer()
                     }
@@ -105,13 +105,12 @@ struct FolderView: View {
                             .foregroundColor(ViewModel.SelectedFolders.isEmpty ? .gray : .primary)
                         Spacer()
                         Button {
-                            if !ViewModel.SelectedFolders.isEmpty {
-                                ViewModel.ShowBottomBarDeleteAlert = true
-                            }
+                            ViewModel.ShowBottomBarDeleteAlert = true
                         } label: {
                             Image(systemName: StringConstants.SystemImage.Trash)
                                 .foregroundColor(ViewModel.SelectedFolders.isEmpty ? .gray : .primary)
                         }
+                        .disabled(ViewModel.SelectedFolders.isEmpty)
                     }
                 }
             }
@@ -124,17 +123,19 @@ struct FolderView: View {
                     print("Cancel Tapped")
                 }
             }
-            .alert(isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
-                Alert(title: Text(StringConstants.Alert.Title.Deleting),
-                      message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
-                      primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
+            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
+                Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
                     for Folder in ViewModel.SelectedFolders {
                         ViewModel.RemoveFolder(For: Folder)
                     }
                     ViewModel.SelectedFolders.removeAll()
                     ViewModel.IsSelecting.toggle()
-                },
-                      secondaryButton: .cancel())
+                }
+                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                    print("Cancel Tapped")
+                }
+            } message: {
+                Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
             }
             .onAppear(perform: {
                 ViewModel.LoadFolders()

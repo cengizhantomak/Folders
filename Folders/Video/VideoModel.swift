@@ -12,7 +12,7 @@ struct VideoModel: Identifiable, Codable {
     var CreationDate: Date
     var CustomName: String?
     var Name: String {
-        return CustomName ?? DateHelper.CurrentDateTime(from: CreationDate)
+        return CustomName ?? DateHelper.CurrentDateTime(From: CreationDate)
     }
     var IsFavorite: Bool = false
     var AssetVideoName: String?

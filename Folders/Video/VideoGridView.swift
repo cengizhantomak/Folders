@@ -12,7 +12,7 @@ struct VideoGridView: View {
     let ItemWidth: CGFloat
 
     var body: some View {
-        Section(header: Text(DateHelper.CurrentDate(from: ViewModel.Folder.CreationDate))
+        Section(header: Text(DateHelper.CurrentDate(From: ViewModel.Folder.CreationDate))
                     .foregroundColor(.gray)
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .background(.clear)

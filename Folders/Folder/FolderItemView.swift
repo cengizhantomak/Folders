@@ -44,17 +44,9 @@ struct FolderItemView: View {
             Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
                 print("Cancel Tapped")
             }
+        } message: {
+            Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
         }
-//        .alert(isPresented: $ViewModel.ShowDeleteAlert) {
-//            Alert(
-//                title: Text(StringConstants.Alert.Title.Deleting),
-//                message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
-//                primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
-//                    ViewModel.RemoveFolder(For: Folder)
-//                },
-//                secondaryButton: .cancel()
-//            )
-//        }
     }
     
     private var FolderIcon: some View {
@@ -65,13 +57,13 @@ struct FolderItemView: View {
                 .fill(Color.gray.opacity(0.15))
                 .frame(width: ItemWidth, height: ItemWidth * 1.5)
                 .cornerRadius(10)
-            Image(systemName: "rectangle.stack.badge.play")
+            Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
                 .resizable()
                 .scaledToFit()
                 .frame(width: ItemWidth * 0.3, height: ItemWidth * 0.3)
                 .foregroundColor(.gray)
             if Folder.IsFavorite && !ViewModel.IsSelecting {
-                Image(systemName: "heart.fill")
+                Image(systemName: StringConstants.SystemImage.HeartFill)
                     .resizable()
                     .scaledToFit()
                     .frame(width: ItemWidth * 0.08, height: ItemWidth * 0.08)

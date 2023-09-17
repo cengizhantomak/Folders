@@ -17,12 +17,12 @@ struct VideoView: View {
                 if ViewModel.Videos.isEmpty {
                     VStack {
                         Spacer()
-                        Image(systemName: "video.slash")
+                        Image(systemName: StringConstants.SystemImage.NoVideo)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 50, height: 50)
                         
-                        Text("No Video")
+                        Text(StringConstants.NoVideo)
                             .font(.system(size: 15))
                         Spacer()
                     }
@@ -34,7 +34,7 @@ struct VideoView: View {
                         let ItemWidth = (ScreenWidth - 20) / 3
                         ZStack {
                             ScrollView {
-                                LazyVStack {
+                                VStack {
                                     VideoGridView(ViewModel: ViewModel, ItemWidth: ItemWidth)
                                 }
                                 .padding(5)
@@ -97,29 +97,28 @@ struct VideoView: View {
                             .foregroundColor(ViewModel.SelectedVideos.isEmpty ? .gray : .primary)
                         Spacer()
                         Button {
-                            if !ViewModel.SelectedVideos.isEmpty {
-                                ViewModel.ShowBottomBarDeleteAlert = true
-                            }
+                            ViewModel.ShowBottomBarDeleteAlert = true
                         } label: {
                             Image(systemName: StringConstants.SystemImage.Trash)
                                 .foregroundColor(ViewModel.SelectedVideos.isEmpty ? .gray : .primary)
                         }
+                        .disabled(ViewModel.SelectedVideos.isEmpty)
                     }
                 }
             }
-            .alert(isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
-                Alert(
-                    title: Text(StringConstants.Alert.Title.Deleting),
-                    message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
-                    primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
-                        for Video in ViewModel.SelectedVideos {
-                            ViewModel.RemoveVideo(For: Video)
-                        }
-                        ViewModel.SelectedVideos.removeAll()
-                        ViewModel.IsSelecting.toggle()
-                    },
-                    secondaryButton: .cancel()
-                )
+            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
+                Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                    for Video in ViewModel.SelectedVideos {
+                        ViewModel.RemoveVideo(For: Video)
+                    }
+                    ViewModel.SelectedVideos.removeAll()
+                    ViewModel.IsSelecting.toggle()
+                }
+                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                    print("Cancel Tapped")
+                }
+            } message: {
+                Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
             }
             TTProgressHUD($ViewModel.IsTTProgressHUDVisible, type: .success)
                 .scaleEffect(0.5)

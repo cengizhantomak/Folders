@@ -15,7 +15,7 @@ struct FolderModel: Identifiable, Codable {
     var CustomName: String?
     var Videos: [VideoModel]?
     var Name: String {
-        return CustomName ?? DateHelper.CurrentDateTime(from: CreationDate)
+        return CustomName ?? DateHelper.CurrentDateTime(From: CreationDate)
     }
     
     init() {

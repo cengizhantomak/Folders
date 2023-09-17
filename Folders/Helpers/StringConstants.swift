@@ -20,6 +20,7 @@ enum StringConstants {
     static let MultipleVideosSelected = "%d Videos Selected"
     static let Select = "Select"
     static let Cancel = "Cancel"
+    static let NoVideo = "No Video"
     
     enum SectionTitle {
         static let Pinned = "Pinned"
@@ -32,7 +33,8 @@ enum StringConstants {
         static let Heart = "heart"
         static let Trash = "trash"
         static let HeartFill = "heart.fill"
-        static let Play = "play"
+        static let RectangleStackBadgePlay = "rectangle.stack.badge.play"
+        static let NoVideo = "video.slash"
     }
     
     

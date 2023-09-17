@@ -18,25 +18,6 @@ struct VideoItemView: View {
                 .contextMenu {
                     VideoContextMenu
                 }
-//                .alert(isPresented: $ViewModel.ShowDeleteAlert) {
-//                    Alert(
-//                        title: Text(StringConstants.Alert.Title.Deleting),
-//                        message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
-//                        primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
-//                            ViewModel.RemoveVideo(For: Video)
-//                        },
-//                        secondaryButton: .cancel()
-//                    )
-//                }
-                .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
-                    Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
-                    Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-                        ViewModel.RemoveVideo(For: Video)
-                    }
-                    Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                        print("Cancel Tapped")
-                    }
-                }
                 .alert(StringConstants.Alert.Title.RenameVideo, isPresented: $ViewModel.ShowRenameAlert) {
                     TextField(StringConstants.Alert.Title.VideoName, text: $ViewModel.NewName)
                     Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
@@ -45,9 +26,18 @@ struct VideoItemView: View {
                         }
                     }
                     Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                        ViewModel.NewName = Video.Name
                         print("Cancel Tapped")
                     }
+                }
+                .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
+                    Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                        ViewModel.RemoveVideo(For: Video)
+                    }
+                    Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                        print("Cancel Tapped")
+                    }
+                } message: {
+                    Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
                 }
         } else {
             VideoItem
@@ -59,23 +49,11 @@ struct VideoItemView: View {
         let SafeItemWidth = max(ItemWidth, 1)
         
         return ZStack {
-            if let AssetVideoName = Video.AssetVideoName {
-                Image(AssetVideoName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: SafeItemWidth, height: SafeItemWidth * 16/9)
-                    .cornerRadius(2)
-            } else {
-                Rectangle()
-                    .fill(Color.gray.opacity(0.15))
-                    .frame(width: SafeItemWidth, height: SafeItemWidth * 16/9)
-                    .cornerRadius(2)
-                Image(systemName: StringConstants.SystemImage.Play)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                    .foregroundColor(Color.gray)
-            }
+            Image(Video.AssetVideoName ?? StringConstants.SystemImage.RectangleStackBadgePlay)
+                .resizable()
+                .scaledToFit()
+                .frame(width: SafeItemWidth, height: SafeItemWidth * 16/9)
+                .cornerRadius(2)
             VStack {
                 Spacer()
                 HStack {

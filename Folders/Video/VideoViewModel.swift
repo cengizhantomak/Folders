@@ -81,8 +81,8 @@ class VideoViewModel: ObservableObject {
             DispatchQueue.global().async {
                 sleep(1)
                 
-                DispatchQueue.main.async {
-                    self.IsTTProgressHUDVisible = false
+                DispatchQueue.main.async { [weak self] in
+                    self?.IsTTProgressHUDVisible = false
                 }
             }
         }
@@ -126,8 +126,8 @@ class VideoViewModel: ObservableObject {
             DispatchQueue.global().async {
                 sleep(1)
                 
-                DispatchQueue.main.async {
-                    self.IsTTProgressHUDVisible = false
+                DispatchQueue.main.async { [weak self] in
+                    self?.IsTTProgressHUDVisible = false
                 }
             }
         }
@@ -141,8 +141,8 @@ class VideoViewModel: ObservableObject {
         DispatchQueue.global().async {
             sleep(1)
             
-            DispatchQueue.main.async {
-                self.IsTTProgressHUDVisible = false
+            DispatchQueue.main.async { [weak self] in
+                self?.IsTTProgressHUDVisible = false
             }
         }
     }
@@ -169,8 +169,8 @@ class VideoViewModel: ObservableObject {
             DispatchQueue.global().async {
                 sleep(1)
                 
-                DispatchQueue.main.async {
-                    self.IsTTProgressHUDVisible = false
+                DispatchQueue.main.async { [weak self] in
+                    self?.IsTTProgressHUDVisible = false
                 }
             }
         }
