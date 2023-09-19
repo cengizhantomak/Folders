@@ -62,7 +62,7 @@ class FolderViewModel: ObservableObject {
             Folder.CustomName = InputName
             Folders.insert(Folder, at: 0)
             SaveFolders()
-            ShowTTProgressHUD()
+            IsTTProgressHUDVisible = true
         }
     }
     
@@ -117,7 +117,7 @@ class FolderViewModel: ObservableObject {
                 SaveFolders()
             }
             
-            ShowTTProgressHUD()
+            IsTTProgressHUDVisible = true
         }
     }
     
@@ -128,7 +128,7 @@ class FolderViewModel: ObservableObject {
                 SaveFolders()
             }
             
-            ShowTTProgressHUD()
+            IsTTProgressHUDVisible = true
         }
     }
     
@@ -140,7 +140,7 @@ class FolderViewModel: ObservableObject {
                 FolderToRename = nil
             }
             
-            ShowTTProgressHUD()
+            IsTTProgressHUDVisible = true
         }
     }
     
@@ -151,7 +151,7 @@ class FolderViewModel: ObservableObject {
                 self.SaveFolders()
             }
             
-            ShowTTProgressHUD()
+            IsTTProgressHUDVisible = true
         }
     }
     
@@ -187,18 +187,6 @@ class FolderViewModel: ObservableObject {
         }
         
         SaveFolders()
-        ShowTTProgressHUD()
-    }
-    
-    func ShowTTProgressHUD() {
         IsTTProgressHUDVisible = true
-        
-        DispatchQueue.global().async {
-            sleep(1)
-            
-            DispatchQueue.main.async { [weak self] in
-                self?.IsTTProgressHUDVisible = false
-            }
-        }
     }
 }

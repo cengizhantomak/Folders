@@ -10,6 +10,7 @@ import TTProgressHUD
 
 struct FolderView: View {
     @StateObject var ViewModel = FolderViewModel()
+    @State var HudConfig = TTProgressHUDConfig(type: .success ,shouldAutoHide: true, autoHideInterval: 0.5)
     
     var body: some View {
         ZStack {
@@ -141,7 +142,7 @@ struct FolderView: View {
                 ViewModel.LoadFolders()
             })
         }
-            TTProgressHUD($ViewModel.IsTTProgressHUDVisible, type: .success)
+            TTProgressHUD($ViewModel.IsTTProgressHUDVisible, config: HudConfig)
                 .scaleEffect(0.5)
         }
     }

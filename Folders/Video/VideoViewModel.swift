@@ -75,7 +75,7 @@ class VideoViewModel: ObservableObject {
             
             Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
             SaveUpdatedFolder()
-            ShowTTProgressHUD()
+            IsTTProgressHUDVisible = true
         }
     }
     
@@ -111,13 +111,13 @@ class VideoViewModel: ObservableObject {
             
             Folder.Videos?.remove(at: FolderVideoIndex)
             SaveUpdatedFolder()
-            ShowTTProgressHUD()
+            IsTTProgressHUDVisible = true
         }
     }
     
     func SaveToPhone() {
         print("Save to Phone Tapped")
-        ShowTTProgressHUD()
+        IsTTProgressHUDVisible = true
     }
     
     func RenameVideo(NewName: String) {
@@ -136,7 +136,7 @@ class VideoViewModel: ObservableObject {
             Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
             SaveUpdatedFolder()
             VideoToRename = nil
-            ShowTTProgressHUD()
+            IsTTProgressHUDVisible = true
         }
     }
     
@@ -148,17 +148,5 @@ class VideoViewModel: ObservableObject {
     
     func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
         return (ScreenWidth - Padding) / Amount
-    }
-    
-    func ShowTTProgressHUD() {
-        IsTTProgressHUDVisible = true
-        
-        DispatchQueue.global().async {
-            sleep(1)
-            
-            DispatchQueue.main.async { [weak self] in
-                self?.IsTTProgressHUDVisible = false
-            }
-        }
     }
 }

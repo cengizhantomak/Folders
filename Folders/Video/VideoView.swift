@@ -10,6 +10,7 @@ import TTProgressHUD
 
 struct VideoView: View {
     @StateObject var ViewModel: VideoViewModel
+    @State var HudConfig = TTProgressHUDConfig(type: .success ,shouldAutoHide: true, autoHideInterval: 0.5)
     
     var body: some View {
         ZStack {
@@ -119,7 +120,7 @@ struct VideoView: View {
             } message: {
                 Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
             }
-            TTProgressHUD($ViewModel.IsTTProgressHUDVisible, type: .success)
+            TTProgressHUD($ViewModel.IsTTProgressHUDVisible, config: HudConfig)
                 .scaleEffect(0.5)
         }
     }
