@@ -20,7 +20,8 @@ class VideoViewModel: ObservableObject {
     @Published var ShowDeleteAlert = false
     @Published var NewName = ""
     @Published var VideoToRename: VideoModel?
-    @Published var IsTTProgressHUDVisible = false
+    @Published var IsSuccessTTProgressHUDVisible = false
+    @Published var IsErrorTTProgressHUDVisible = false
     
     init(Folder: FolderModel) {
         self.Folder = Folder
@@ -75,7 +76,7 @@ class VideoViewModel: ObservableObject {
             
             Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
             SaveUpdatedFolder()
-            IsTTProgressHUDVisible = true
+            IsSuccessTTProgressHUDVisible = true
         }
     }
     
@@ -111,13 +112,13 @@ class VideoViewModel: ObservableObject {
             
             Folder.Videos?.remove(at: FolderVideoIndex)
             SaveUpdatedFolder()
-            IsTTProgressHUDVisible = true
+            IsSuccessTTProgressHUDVisible = true
         }
     }
     
     func SaveToPhone() {
         print("Save to Phone Tapped")
-        IsTTProgressHUDVisible = true
+        IsSuccessTTProgressHUDVisible = true
     }
     
     func RenameVideo(NewName: String) {
@@ -136,7 +137,7 @@ class VideoViewModel: ObservableObject {
             Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
             SaveUpdatedFolder()
             VideoToRename = nil
-            IsTTProgressHUDVisible = true
+            IsSuccessTTProgressHUDVisible = true
         }
     }
     

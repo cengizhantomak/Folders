@@ -158,6 +158,8 @@ struct FolderItemView: View {
             Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
                 if !ViewModel.NewName.isEmpty {
                     ViewModel.RenameFolder(NewName: ViewModel.NewName)
+                } else {
+                    ViewModel.IsErrorTTProgressHUDVisible = true
                 }
             }
             Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {

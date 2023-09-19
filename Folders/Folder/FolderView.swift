@@ -10,7 +10,8 @@ import TTProgressHUD
 
 struct FolderView: View {
     @StateObject var ViewModel = FolderViewModel()
-    @State var HudConfig = TTProgressHUDConfig(type: .success ,shouldAutoHide: true, autoHideInterval: 0.5)
+    @State var HudConfigSuccess = TTProgressHUDConfig(type: .success ,shouldAutoHide: true, autoHideInterval: 0.7)
+    @State var HudConfigError = TTProgressHUDConfig(type: .error, shouldAutoHide: true, autoHideInterval: 0.7)
     
     var body: some View {
         ZStack {
@@ -118,7 +119,11 @@ struct FolderView: View {
             .alert(StringConstants.Alert.Title.CreateFolder, isPresented: $ViewModel.ShowCreatedAlert) {
                 TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.InputName)
                 Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-                    ViewModel.AddFolder()
+                    if !ViewModel.InputName.isEmpty {
+                        ViewModel.AddFolder()
+                    } else {
+                        ViewModel.IsErrorTTProgressHUDVisible = true
+                    }
                 }
                 Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
                     print("Cancel Tapped")
@@ -142,7 +147,9 @@ struct FolderView: View {
                 ViewModel.LoadFolders()
             })
         }
-            TTProgressHUD($ViewModel.IsTTProgressHUDVisible, config: HudConfig)
+            TTProgressHUD($ViewModel.IsSuccessTTProgressHUDVisible, config: HudConfigSuccess)
+                .scaleEffect(0.5)
+            TTProgressHUD($ViewModel.IsErrorTTProgressHUDVisible, config: HudConfigError)
                 .scaleEffect(0.5)
         }
     }

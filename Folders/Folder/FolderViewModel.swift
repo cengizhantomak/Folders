@@ -20,7 +20,8 @@ class FolderViewModel: ObservableObject {
     @Published var ShowDeleteAlert = false
     @Published var NewName = ""
     @Published var FolderToRename: FolderModel?
-    @Published var IsTTProgressHUDVisible = false
+    @Published var IsSuccessTTProgressHUDVisible = false
+    @Published var IsErrorTTProgressHUDVisible = false
     
     init() {
         LoadFolders()
@@ -62,7 +63,7 @@ class FolderViewModel: ObservableObject {
             Folder.CustomName = InputName
             Folders.insert(Folder, at: 0)
             SaveFolders()
-            IsTTProgressHUDVisible = true
+            IsSuccessTTProgressHUDVisible = true
         }
     }
     
@@ -117,7 +118,7 @@ class FolderViewModel: ObservableObject {
                 SaveFolders()
             }
             
-            IsTTProgressHUDVisible = true
+            IsSuccessTTProgressHUDVisible = true
         }
     }
     
@@ -128,7 +129,7 @@ class FolderViewModel: ObservableObject {
                 SaveFolders()
             }
             
-            IsTTProgressHUDVisible = true
+            IsSuccessTTProgressHUDVisible = true
         }
     }
     
@@ -140,7 +141,7 @@ class FolderViewModel: ObservableObject {
                 FolderToRename = nil
             }
             
-            IsTTProgressHUDVisible = true
+            IsSuccessTTProgressHUDVisible = true
         }
     }
     
@@ -151,13 +152,13 @@ class FolderViewModel: ObservableObject {
                 self.SaveFolders()
             }
             
-            IsTTProgressHUDVisible = true
+            IsSuccessTTProgressHUDVisible = true
         }
     }
     
     func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat = 20, YOffsetValue: CGFloat = 20) -> (X: CGFloat, Y: CGFloat) {
         let X = (ItemWidth / 2) - XOffsetValue
-        let Y = -(ItemWidth * 1.5 / 2) + YOffsetValue
+        let Y = -(ItemWidth * (16 / 9) / 2) + YOffsetValue
         return (X, Y)
     }
     
@@ -187,6 +188,6 @@ class FolderViewModel: ObservableObject {
         }
         
         SaveFolders()
-        IsTTProgressHUDVisible = true
+        IsSuccessTTProgressHUDVisible = true
     }
 }

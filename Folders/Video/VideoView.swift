@@ -10,7 +10,8 @@ import TTProgressHUD
 
 struct VideoView: View {
     @StateObject var ViewModel: VideoViewModel
-    @State var HudConfig = TTProgressHUDConfig(type: .success ,shouldAutoHide: true, autoHideInterval: 0.5)
+    @State var HudConfigSuccess = TTProgressHUDConfig(type: .success ,shouldAutoHide: true, autoHideInterval: 0.7)
+    @State var HudConfigError = TTProgressHUDConfig(type: .error, shouldAutoHide: true, autoHideInterval: 0.7)
     
     var body: some View {
         ZStack {
@@ -122,7 +123,9 @@ struct VideoView: View {
             } message: {
                 Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
             }
-            TTProgressHUD($ViewModel.IsTTProgressHUDVisible, config: HudConfig)
+            TTProgressHUD($ViewModel.IsSuccessTTProgressHUDVisible, config: HudConfigSuccess)
+                .scaleEffect(0.5)
+            TTProgressHUD($ViewModel.IsErrorTTProgressHUDVisible, config: HudConfigError)
                 .scaleEffect(0.5)
         }
     }
