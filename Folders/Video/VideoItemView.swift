@@ -39,12 +39,14 @@ struct VideoItemView: View {
         return ZStack {
             Image(Video.AssetVideoName ?? StringConstants.SystemImage.RectangleStackBadgePlay)
                 .resizable()
+                .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
                 .scaledToFit()
-                .frame(width: SafeItemWidth, height: SafeItemWidth * 16/9)
-                .cornerRadius(2)
+            VStack {
+                Spacer()
+                LinearGradient(colors: [Color.black, Color.clear], startPoint: .bottom, endPoint: .top)
+                    .frame(height: 150)
+            }
             VideoNameAtBottom
-                .font(.system(size: 9))
-                .padding(5)
             FavoriteIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
             SelectionIcon(CircleOffset: CircleOffset)
         }
@@ -53,10 +55,17 @@ struct VideoItemView: View {
     private var VideoNameAtBottom: some View {
         VStack {
             Spacer()
-            HStack {
+            VStack(alignment: .leading) {
                 Text(Video.Name)
-                Spacer()
+                    .truncationMode(.tail)
+                    .lineLimit(1)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundColor(.white)
+                Text(DateHelper.CurrentTime(From: Video.CreationDate))
+                    .font(.system(size: 8))
+                    .foregroundColor(.gray)
             }
+            .padding(5)
         }
     }
     

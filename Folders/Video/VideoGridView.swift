@@ -13,7 +13,7 @@ struct VideoGridView: View {
     
     var body: some View {
         Section(header: DateHeader) {
-            LazyVGrid(columns: ViewModel.Columns, spacing: 5) {
+            LazyVGrid(columns: ViewModel.Columns, spacing: 2) {
                 ForEach(SortedVideos) { Video in
                     if !ViewModel.IsSelecting {
                         VideoItemView(ViewModel: ViewModel, Video: Video, ItemWidth: ItemWidth)

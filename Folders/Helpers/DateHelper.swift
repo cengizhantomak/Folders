@@ -19,4 +19,10 @@ struct DateHelper {
         Formatter.dateFormat = StringConstants.DateFormat
         return Formatter.string(from: Date)
     }
+    
+    static func CurrentTime(From Date: Date = Date()) -> String {
+        let Formatter = DateFormatter()
+        Formatter.dateFormat = StringConstants.TimeFormat
+        return Formatter.string(from: Date)
+    }
 }

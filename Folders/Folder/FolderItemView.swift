@@ -23,7 +23,12 @@ struct FolderItemView: View {
                 FolderItem
             }
             Text(Folder.Name)
+                .truncationMode(.tail)
+                .lineLimit(1)
                 .font(.system(size: 15))
+            Text(String(Folder.Videos?.count ?? 0))
+                .font(.system(size: 14))
+                .foregroundColor(.gray)
         }
         .alert(StringConstants.Alert.Title.RenameFolder, isPresented: $ViewModel.ShowRenameAlert) {
             RenameVideoAlert
@@ -43,12 +48,12 @@ struct FolderItemView: View {
         return ZStack {
             Rectangle()
                 .fill(Color.gray.opacity(0.15))
-                .frame(width: ItemWidth, height: ItemWidth * 1.5)
+                .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
                 .cornerRadius(10)
             Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
                 .resizable()
                 .scaledToFit()
-                .frame(width: ItemWidth * 0.3, height: ItemWidth * 0.3)
+                .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
                 .foregroundColor(.gray)
             FavoriteIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
             SelectionIcon(CircleOffset: CircleOffset)

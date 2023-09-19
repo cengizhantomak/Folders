@@ -31,7 +31,7 @@ struct VideoView: View {
                     .ignoresSafeArea(.all)
                 } else {
                     GeometryReader { Geometry in
-                        let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 20, Amount: 3)
+                        let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 8, Amount: 3)
                         ZStack {
                             ScrollView {
                                 VStack {
@@ -42,11 +42,13 @@ struct VideoView: View {
                             VStack {
                                 HStack {
                                     Text(ViewModel.Folder.Name)
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.5)
                                         .font(.title2)
                                         .background(Color.clear)
                                         .padding(16)
                                         .frame(alignment: .leading)
-                                    Spacer()
+                                    Spacer(minLength: 100)
                                 }
                                 Spacer()
                             }
