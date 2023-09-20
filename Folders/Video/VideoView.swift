@@ -17,45 +17,43 @@ struct VideoView: View {
         ZStack {
             VStack {
                 if ViewModel.Videos.isEmpty {
-                    VStack {
-                        Spacer()
-                        Image(systemName: StringConstants.SystemImage.NoVideo)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50, height: 50)
-                        
-                        Text(StringConstants.NoVideo)
-                            .font(.system(size: 15))
-                        Spacer()
+                    ZStack {
+                        VStack {
+                            Spacer()
+                            Image(systemName: StringConstants.SystemImage.NoVideo)
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 50, height: 50)
+                            
+                            Text(StringConstants.NoVideo)
+                                .font(.system(size: 15))
+                            Spacer()
+                        }
+                        .foregroundColor(.gray)
+                        .ignoresSafeArea(.all)
                     }
-                    .foregroundColor(.gray)
-                    .ignoresSafeArea(.all)
                 } else {
                     GeometryReader { Geometry in
-                        let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 8, Amount: 3)
-                        ZStack {
-                            ScrollView {
-                                VStack {
-                                    VideoGridView(ViewModel: ViewModel, ItemWidth: ItemWidth)
-                                }
+                        let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 1, Amount: 3)
+                        ScrollView {
+                            VideoGridView(ViewModel: ViewModel, ItemWidth: ItemWidth)
                                 .padding(5)
-                            }
-                            VStack {
-                                HStack {
-                                    Text(ViewModel.Folder.Name)
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.5)
-                                        .font(.title2)
-                                        .background(Color.clear)
-                                        .padding(16)
-                                        .frame(alignment: .leading)
-                                    Spacer(minLength: 100)
-                                }
-                                Spacer()
-                            }
                         }
                     }
                 }
+            }
+            VStack {
+                HStack {
+                    Text(ViewModel.Folder.Name)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.5)
+                        .font(.title2)
+                        .background(Color.clear)
+                        .padding(10)
+                        .frame(alignment: .leading)
+                    Spacer(minLength: 100)
+                }
+                Spacer()
             }
             .navigationBarTitle("", displayMode: .inline)
             .toolbar {

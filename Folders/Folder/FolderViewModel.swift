@@ -46,7 +46,7 @@ class FolderViewModel: ObservableObject {
     }
     
     func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
-        return (ScreenWidth - Padding) / Amount
+        return (ScreenWidth - (Padding * (Amount + 1))) / Amount
     }
     
     func SaveFolders() {
@@ -158,7 +158,7 @@ class FolderViewModel: ObservableObject {
     
     func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat = 20, YOffsetValue: CGFloat = 20) -> (X: CGFloat, Y: CGFloat) {
         let X = (ItemWidth / 2) - XOffsetValue
-        let Y = -(ItemWidth * (16 / 9) / 2) + YOffsetValue
+        let Y = -(ItemWidth * (1970 / 1080) / 2) + YOffsetValue
         return (X, Y)
     }
     

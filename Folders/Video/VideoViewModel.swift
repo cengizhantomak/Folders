@@ -148,6 +148,6 @@ class VideoViewModel: ObservableObject {
     }
     
     func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
-        return (ScreenWidth - Padding) / Amount
+        return (ScreenWidth - (Padding * (Amount + 1))) / Amount
     }
 }

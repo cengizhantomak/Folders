@@ -48,7 +48,7 @@ struct FolderItemView: View {
         return ZStack {
             Rectangle()
                 .fill(Color.gray.opacity(0.15))
-                .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
+                .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
                 .cornerRadius(10)
             Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
                 .resizable()
