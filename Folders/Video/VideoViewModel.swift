@@ -128,7 +128,7 @@ class VideoViewModel: ObservableObject {
                 return
             }
             
-            Videos[VideoIndex].CustomName = NewName
+            Videos[VideoIndex].Name = NewName
             
             guard let FolderVideoIndex = Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
                 return

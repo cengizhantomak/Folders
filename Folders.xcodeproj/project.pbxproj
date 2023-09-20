@@ -18,7 +18,7 @@
 		CB2FBD802AA5B146007C46F3 /* FolderModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD7F2AA5B146007C46F3 /* FolderModel.swift */; };
 		CB2FBD822AA5B190007C46F3 /* FolderItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD812AA5B190007C46F3 /* FolderItemView.swift */; };
 		CB2FBD842AA5F669007C46F3 /* FolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD832AA5F669007C46F3 /* FolderViewModel.swift */; };
-		CB2FBD862AA5FD70007C46F3 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD852AA5FD70007C46F3 /* DateHelper.swift */; };
+		CB2FBD862AA5FD70007C46F3 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD852AA5FD70007C46F3 /* Date+Extension.swift */; };
 		CB4AF0BC2AB1D3E8000EB35D /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4AF0BB2AB1D3E8000EB35D /* UserDefaultsManager.swift */; };
 		CB77D7952AB0A2080063EA99 /* VideoGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB77D7942AB0A2080063EA99 /* VideoGridView.swift */; };
 		CBBF11072ABAD41000B7A864 /* CustomTTProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBBF11062ABAD41000B7A864 /* CustomTTProgressHUD.swift */; };
@@ -39,7 +39,7 @@
 		CB2FBD7F2AA5B146007C46F3 /* FolderModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderModel.swift; sourceTree = "<group>"; };
 		CB2FBD812AA5B190007C46F3 /* FolderItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderItemView.swift; sourceTree = "<group>"; };
 		CB2FBD832AA5F669007C46F3 /* FolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderViewModel.swift; sourceTree = "<group>"; };
-		CB2FBD852AA5FD70007C46F3 /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
+		CB2FBD852AA5FD70007C46F3 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		CB4AF0BB2AB1D3E8000EB35D /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		CB77D7942AB0A2080063EA99 /* VideoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoGridView.swift; sourceTree = "<group>"; };
 		CBBF11062ABAD41000B7A864 /* CustomTTProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTTProgressHUD.swift; sourceTree = "<group>"; };
@@ -75,7 +75,7 @@
 		CB020CC82AAEE5F400C30EE0 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				CB2FBD852AA5FD70007C46F3 /* DateHelper.swift */,
+				CB2FBD852AA5FD70007C46F3 /* Date+Extension.swift */,
 				478A82CB2AAB0E7F00106389 /* StringConstants.swift */,
 				CB4AF0BB2AB1D3E8000EB35D /* UserDefaultsManager.swift */,
 				CBBF11062ABAD41000B7A864 /* CustomTTProgressHUD.swift */,
@@ -213,7 +213,7 @@
 				CB020CCB2AAEE72100C30EE0 /* VideoView.swift in Sources */,
 				478A82CC2AAB0E7F00106389 /* StringConstants.swift in Sources */,
 				CB2FBD822AA5B190007C46F3 /* FolderItemView.swift in Sources */,
-				CB2FBD862AA5FD70007C46F3 /* DateHelper.swift in Sources */,
+				CB2FBD862AA5FD70007C46F3 /* Date+Extension.swift in Sources */,
 				CBF281562AAA005B008DD30E /* FolderGridView.swift in Sources */,
 				CB2FBD802AA5B146007C46F3 /* FolderModel.swift in Sources */,
 				CBBF11072ABAD41000B7A864 /* CustomTTProgressHUD.swift in Sources */,

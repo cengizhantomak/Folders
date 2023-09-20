@@ -61,7 +61,7 @@ struct VideoItemView: View {
                     .lineLimit(1)
                     .font(.system(size: 9, weight: .bold))
                     .foregroundColor(.white)
-                Text(DateHelper.CurrentTime(From: Video.CreationDate))
+                Text(Date.CurrentTime(From: Video.CreationDate))
                     .font(.system(size: 8))
                     .foregroundColor(.gray)
             }

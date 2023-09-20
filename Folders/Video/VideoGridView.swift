@@ -27,7 +27,7 @@ struct VideoGridView: View {
     
     // MARK: Date Header
     private var DateHeader: some View {
-        Text(DateHelper.CurrentDate(From: ViewModel.Folder.CreationDate))
+        Text(Date.CurrentDate(From: ViewModel.Folder.CreationDate))
             .foregroundColor(.gray)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .background(.clear)

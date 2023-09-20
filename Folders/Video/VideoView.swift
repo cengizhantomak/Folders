@@ -119,9 +119,9 @@ struct VideoView: View {
                 Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
             }
         }
-        .overlay {
-            CustomTTProgressHUD(IsSuccessVisible: $ViewModel.IsSuccessTTProgressHUDVisible, IsErrorVisible: $ViewModel.IsErrorTTProgressHUDVisible)
-        }
+//        .overlay {
+//            CustomTTProgressHUD(IsSuccessVisible: $ViewModel.IsSuccessTTProgressHUDVisible, IsErrorVisible: $ViewModel.IsErrorTTProgressHUDVisible)
+//        }
     }
 }
 

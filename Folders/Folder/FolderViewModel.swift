@@ -60,7 +60,7 @@ class FolderViewModel: ObservableObject {
     func AddFolder() {
         withAnimation(.spring()) {
             var Folder = FolderModel()
-            Folder.CustomName = InputName
+            Folder.Name = InputName
             Folders.insert(Folder, at: 0)
             SaveFolders()
             IsSuccessTTProgressHUDVisible = true
@@ -136,7 +136,7 @@ class FolderViewModel: ObservableObject {
     func RenameFolder(NewName: String) {
         withAnimation(.spring()) {
             if let Folder = FolderToRename, let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
-                Folders[Index].CustomName = NewName
+                Folders[Index].Name = NewName
                 SaveFolders()
                 FolderToRename = nil
             }

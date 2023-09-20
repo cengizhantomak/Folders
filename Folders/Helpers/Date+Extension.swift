@@ -1,5 +1,5 @@
 //
-//  DateHelper.swift
+//  Date+Extension.swift
 //  Folders
 //
 //  Created by Cengizhan Tomak on 4.09.2023.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DateHelper {
+extension Date {
     static func CurrentDateTime(From Date: Date = Date()) -> String {
         let Formatter = DateFormatter()
         Formatter.dateFormat = StringConstants.DateTimeFormat
