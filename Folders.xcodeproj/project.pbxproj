@@ -21,6 +21,7 @@
 		CB2FBD862AA5FD70007C46F3 /* DateHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD852AA5FD70007C46F3 /* DateHelper.swift */; };
 		CB4AF0BC2AB1D3E8000EB35D /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB4AF0BB2AB1D3E8000EB35D /* UserDefaultsManager.swift */; };
 		CB77D7952AB0A2080063EA99 /* VideoGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB77D7942AB0A2080063EA99 /* VideoGridView.swift */; };
+		CBBF11072ABAD41000B7A864 /* CustomTTProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBBF11062ABAD41000B7A864 /* CustomTTProgressHUD.swift */; };
 		CBE2B79C2AAF09EF004B37A5 /* VideoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE2B79B2AAF09EF004B37A5 /* VideoModel.swift */; };
 		CBE2B79E2AAF106A004B37A5 /* VideoItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBE2B79D2AAF106A004B37A5 /* VideoItemView.swift */; };
 		CBF281562AAA005B008DD30E /* FolderGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBF281552AAA005B008DD30E /* FolderGridView.swift */; };
@@ -41,6 +42,7 @@
 		CB2FBD852AA5FD70007C46F3 /* DateHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateHelper.swift; sourceTree = "<group>"; };
 		CB4AF0BB2AB1D3E8000EB35D /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		CB77D7942AB0A2080063EA99 /* VideoGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoGridView.swift; sourceTree = "<group>"; };
+		CBBF11062ABAD41000B7A864 /* CustomTTProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTTProgressHUD.swift; sourceTree = "<group>"; };
 		CBE2B79B2AAF09EF004B37A5 /* VideoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoModel.swift; sourceTree = "<group>"; };
 		CBE2B79D2AAF106A004B37A5 /* VideoItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoItemView.swift; sourceTree = "<group>"; };
 		CBF281552AAA005B008DD30E /* FolderGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderGridView.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 				CB2FBD852AA5FD70007C46F3 /* DateHelper.swift */,
 				478A82CB2AAB0E7F00106389 /* StringConstants.swift */,
 				CB4AF0BB2AB1D3E8000EB35D /* UserDefaultsManager.swift */,
+				CBBF11062ABAD41000B7A864 /* CustomTTProgressHUD.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -213,6 +216,7 @@
 				CB2FBD862AA5FD70007C46F3 /* DateHelper.swift in Sources */,
 				CBF281562AAA005B008DD30E /* FolderGridView.swift in Sources */,
 				CB2FBD802AA5B146007C46F3 /* FolderModel.swift in Sources */,
+				CBBF11072ABAD41000B7A864 /* CustomTTProgressHUD.swift in Sources */,
 				CBE2B79E2AAF106A004B37A5 /* VideoItemView.swift in Sources */,
 				CB020CCD2AAEE75200C30EE0 /* VideoViewModel.swift in Sources */,
 				CB2FBD722AA5B03C007C46F3 /* FoldersApp.swift in Sources */,

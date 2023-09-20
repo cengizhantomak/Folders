@@ -6,15 +6,11 @@
 //
 
 import SwiftUI
-import TTProgressHUD
 
 struct FolderView: View {
     @StateObject var ViewModel = FolderViewModel()
-    @State var HudConfigSuccess = TTProgressHUDConfig(type: .success ,shouldAutoHide: true, autoHideInterval: 0.7)
-    @State var HudConfigError = TTProgressHUDConfig(type: .error, shouldAutoHide: true, autoHideInterval: 0.7)
     
     var body: some View {
-        ZStack {
         NavigationStack {
             VStack {
                 if ViewModel.Folders.isEmpty {
@@ -147,10 +143,8 @@ struct FolderView: View {
                 ViewModel.LoadFolders()
             })
         }
-            TTProgressHUD($ViewModel.IsSuccessTTProgressHUDVisible, config: HudConfigSuccess)
-                .scaleEffect(0.5)
-            TTProgressHUD($ViewModel.IsErrorTTProgressHUDVisible, config: HudConfigError)
-                .scaleEffect(0.5)
+        .overlay {
+            CustomTTProgressHUD(IsSuccessVisible: $ViewModel.IsSuccessTTProgressHUDVisible, IsErrorVisible: $ViewModel.IsErrorTTProgressHUDVisible)
         }
     }
     
