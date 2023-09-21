@@ -10,6 +10,7 @@
 		478A82CC2AAB0E7F00106389 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478A82CB2AAB0E7F00106389 /* StringConstants.swift */; };
 		CB020CCB2AAEE72100C30EE0 /* VideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB020CCA2AAEE72100C30EE0 /* VideoView.swift */; };
 		CB020CCD2AAEE75200C30EE0 /* VideoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB020CCC2AAEE75200C30EE0 /* VideoViewModel.swift */; };
+		CB2864492ABC632E0014535E /* LVRealmKit in Frameworks */ = {isa = PBXBuildFile; productRef = CB2864482ABC632E0014535E /* LVRealmKit */; };
 		CB2AA4E92AB4997D0068F54E /* TTProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = CB2AA4E82AB4997D0068F54E /* TTProgressHUD */; };
 		CB2FBD722AA5B03C007C46F3 /* FoldersApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD712AA5B03C007C46F3 /* FoldersApp.swift */; };
 		CB2FBD742AA5B03C007C46F3 /* FolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD732AA5B03C007C46F3 /* FolderView.swift */; };
@@ -54,6 +55,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB2AA4E92AB4997D0068F54E /* TTProgressHUD in Frameworks */,
+				CB2864492ABC632E0014535E /* LVRealmKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,6 +152,7 @@
 			name = Folders;
 			packageProductDependencies = (
 				CB2AA4E82AB4997D0068F54E /* TTProgressHUD */,
+				CB2864482ABC632E0014535E /* LVRealmKit */,
 			);
 			productName = Folders;
 			productReference = CB2FBD6E2AA5B03C007C46F3 /* Folders.app */;
@@ -181,6 +184,7 @@
 			mainGroup = CB2FBD652AA5B03C007C46F3;
 			packageReferences = (
 				CB2AA4E72AB4997D0068F54E /* XCRemoteSwiftPackageReference "TTProgressHUD" */,
+				CB2864472ABC632E0014535E /* XCRemoteSwiftPackageReference "lvrealmkit" */,
 			);
 			productRefGroup = CB2FBD6F2AA5B03C007C46F3 /* Products */;
 			projectDirPath = "";
@@ -427,6 +431,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		CB2864472ABC632E0014535E /* XCRemoteSwiftPackageReference "lvrealmkit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://cengizhan-tomak@bitbucket.org/liveviewsports/lvrealmkit.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		CB2AA4E72AB4997D0068F54E /* XCRemoteSwiftPackageReference "TTProgressHUD" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/honkmaster/TTProgressHUD";
@@ -438,6 +450,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		CB2864482ABC632E0014535E /* LVRealmKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB2864472ABC632E0014535E /* XCRemoteSwiftPackageReference "lvrealmkit" */;
+			productName = LVRealmKit;
+		};
 		CB2AA4E82AB4997D0068F54E /* TTProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CB2AA4E72AB4997D0068F54E /* XCRemoteSwiftPackageReference "TTProgressHUD" */;
