@@ -58,12 +58,13 @@ class FolderViewModel: ObservableObject {
     }
     
     func AddFolder() {
-        withAnimation(.spring()) {
+        withAnimation(.spring()) { [weak self] in
+            guard let self else { return }
             var Folder = FolderModel()
-            Folder.Name = InputName
-            Folders.insert(Folder, at: 0)
-            SaveFolders()
-            IsSuccessTTProgressHUDVisible = true
+            Folder.Name = self.InputName
+            self.Folders.insert(Folder, at: 0)
+            self.SaveFolders()
+            self.IsSuccessTTProgressHUDVisible = true
         }
     }
     
@@ -81,13 +82,14 @@ class FolderViewModel: ObservableObject {
     }
     
     func FavoritesButtonAction() {
-        withAnimation(.spring()) {
-            if OnlyShowFavorites {
-                OnlyShowFavorites.toggle()
-                LoadFolders()
+        withAnimation(.spring()) { [weak self] in
+            guard let self else { return }
+            if self.OnlyShowFavorites {
+                self.OnlyShowFavorites.toggle()
+                self.LoadFolders()
             } else {
-                Folders = FavoriteFolders
-                OnlyShowFavorites.toggle()
+                self.Folders = self.FavoriteFolders
+                self.OnlyShowFavorites.toggle()
             }
         }
     }
@@ -112,47 +114,51 @@ class FolderViewModel: ObservableObject {
     }
     
     func PinFolder(For Folder: FolderModel) {
-        withAnimation(.spring()) {
-            if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
-                Folders[Index].IsPinned.toggle()
-                SaveFolders()
+        withAnimation(.spring()) { [weak self] in
+            guard let self else { return }
+            if let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
+                self.Folders[Index].IsPinned.toggle()
+                self.SaveFolders()
             }
             
-            IsSuccessTTProgressHUDVisible = true
+            self.IsSuccessTTProgressHUDVisible = true
         }
     }
     
     func ToggleFavorite(For Folder: FolderModel) {
-        withAnimation(.spring()) {
-            if let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
-                Folders[Index].IsFavorite.toggle()
-                SaveFolders()
+        withAnimation(.spring()) { [weak self] in
+            guard let self else { return }
+            if let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
+                self.Folders[Index].IsFavorite.toggle()
+                self.SaveFolders()
             }
             
-            IsSuccessTTProgressHUDVisible = true
+            self.IsSuccessTTProgressHUDVisible = true
         }
     }
     
     func RenameFolder(NewName: String) {
-        withAnimation(.spring()) {
-            if let Folder = FolderToRename, let Index = Folders.firstIndex(where: { $0.id == Folder.id }) {
-                Folders[Index].Name = NewName
-                SaveFolders()
-                FolderToRename = nil
+        withAnimation(.spring()) { [weak self] in
+            guard let self else { return }
+            if let Folder = self.FolderToRename, let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
+                self.Folders[Index].Name = NewName
+                self.SaveFolders()
+                self.FolderToRename = nil
             }
             
-            IsSuccessTTProgressHUDVisible = true
+            self.IsSuccessTTProgressHUDVisible = true
         }
     }
     
     func RemoveFolder(For Folder: FolderModel) {
-        withAnimation(.spring()) {
+        withAnimation(.spring()) { [weak self] in
+            guard let self else { return }
             if let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
                 self.Folders.remove(at: Index)
                 self.SaveFolders()
             }
             
-            IsSuccessTTProgressHUDVisible = true
+            self.IsSuccessTTProgressHUDVisible = true
         }
     }
     

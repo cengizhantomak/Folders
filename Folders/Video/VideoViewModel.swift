@@ -51,33 +51,32 @@ class VideoViewModel: ObservableObject {
     }
     
     func FavoritesButtonAction() {
-        withAnimation(.spring()) {
-            if OnlyShowFavorites {
-                OnlyShowFavorites.toggle()
-                LoadVideos()
+        withAnimation(.spring()) { [weak self] in
+            guard let self else { return }
+            if self.OnlyShowFavorites {
+                self.OnlyShowFavorites.toggle()
+                self.LoadVideos()
             } else {
-                Videos = FavoriteVideos
-                OnlyShowFavorites.toggle()
+                self.Videos = self.FavoriteVideos
+                self.OnlyShowFavorites.toggle()
             }
         }
     }
     
     func ToggleFavorite(For Video: VideoModel) {
-        withAnimation(.spring()) {
-            guard let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
-                return
-            }
-            
-            Videos[VideoIndex].IsFavorite.toggle()
-            
-            guard let FolderVideoIndex = Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
-                return
-            }
-            
-            Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
-            SaveUpdatedFolder()
-            IsSuccessTTProgressHUDVisible = true
+        guard let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
+            return
         }
+        
+        Videos[VideoIndex].IsFavorite.toggle()
+        
+        guard let FolderVideoIndex = Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
+            return
+        }
+        
+        Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
+        SaveUpdatedFolder()
+        IsSuccessTTProgressHUDVisible = true
     }
     
     func SelectCancelButtonAction() {
@@ -99,20 +98,21 @@ class VideoViewModel: ObservableObject {
     }
     
     func RemoveVideo(For Video: VideoModel) {
-        withAnimation(.spring()) {
-            guard let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
+        withAnimation(.spring()) { [weak self] in
+            guard let self else { return }
+            guard let VideoIndex = self.Videos.firstIndex(where: { $0.id == Video.id }) else {
                 return
             }
             
-            Videos.remove(at: VideoIndex)
+            self.Videos.remove(at: VideoIndex)
             
-            guard let FolderVideoIndex = Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
+            guard let FolderVideoIndex = self.Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
                 return
             }
             
-            Folder.Videos?.remove(at: FolderVideoIndex)
-            SaveUpdatedFolder()
-            IsSuccessTTProgressHUDVisible = true
+            self.Folder.Videos?.remove(at: FolderVideoIndex)
+            self.SaveUpdatedFolder()
+            self.IsSuccessTTProgressHUDVisible = true
         }
     }
     
@@ -122,22 +122,23 @@ class VideoViewModel: ObservableObject {
     }
     
     func RenameVideo(NewName: String) {
-        withAnimation(.spring()) {
-            guard let Video = VideoToRename,
-                  let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
+        withAnimation(.spring()) { [weak self] in
+            guard let self else { return }
+            guard let Video = self.VideoToRename,
+                  let VideoIndex = self.Videos.firstIndex(where: { $0.id == Video.id }) else {
                 return
             }
             
-            Videos[VideoIndex].Name = NewName
+            self.Videos[VideoIndex].Name = NewName
             
-            guard let FolderVideoIndex = Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
+            guard let FolderVideoIndex = self.Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
                 return
             }
             
-            Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
-            SaveUpdatedFolder()
-            VideoToRename = nil
-            IsSuccessTTProgressHUDVisible = true
+            self.Folder.Videos?[FolderVideoIndex] = self.Videos[VideoIndex]
+            self.SaveUpdatedFolder()
+            self.VideoToRename = nil
+            self.IsSuccessTTProgressHUDVisible = true
         }
     }
     
