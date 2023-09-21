@@ -8,7 +8,7 @@
 import Foundation
 
 extension Date {
-    static func CurrentDateTime(From Date: Date = Date()) -> String {
+    public func CurrentDateTime(From Date: Date = Date()) -> String {
         let Formatter = DateFormatter()
         Formatter.dateFormat = StringConstants.DateTimeFormat
         return Formatter.string(from: Date)

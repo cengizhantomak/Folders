@@ -14,12 +14,11 @@ class VideoViewModel: ObservableObject {
     @Published var Columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
     @Published var ShowBottomBarDeleteAlert = false
-    @Published var InputName = ""
     @Published var OnlyShowFavorites = false
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
     @Published var NewName = ""
-    @Published var VideoToRename: VideoModel?
+    @Published var Video: VideoModel?
     @Published var IsSuccessTTProgressHUDVisible = false
     @Published var IsErrorTTProgressHUDVisible = false
     
@@ -63,8 +62,9 @@ class VideoViewModel: ObservableObject {
         }
     }
     
-    func ToggleFavorite(For Video: VideoModel) {
-        guard let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
+    func ToggleFavorite() {
+        guard let Video = Video,
+              let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
             return
         }
         
@@ -76,6 +76,7 @@ class VideoViewModel: ObservableObject {
         
         Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
         SaveUpdatedFolder()
+        self.Video = nil
         IsSuccessTTProgressHUDVisible = true
     }
     
@@ -97,10 +98,11 @@ class VideoViewModel: ObservableObject {
         }
     }
     
-    func RemoveVideo(For Video: VideoModel) {
+    func RemoveVideo() {
         withAnimation(.spring()) { [weak self] in
             guard let self else { return }
-            guard let VideoIndex = self.Videos.firstIndex(where: { $0.id == Video.id }) else {
+            guard let Video = self.Video,
+                  let VideoIndex = self.Videos.firstIndex(where: { $0.id == Video.id }) else {
                 return
             }
             
@@ -112,6 +114,7 @@ class VideoViewModel: ObservableObject {
             
             self.Folder.Videos?.remove(at: FolderVideoIndex)
             self.SaveUpdatedFolder()
+            self.Video = nil
             self.IsSuccessTTProgressHUDVisible = true
         }
     }
@@ -124,7 +127,7 @@ class VideoViewModel: ObservableObject {
     func RenameVideo(NewName: String) {
         withAnimation(.spring()) { [weak self] in
             guard let self else { return }
-            guard let Video = self.VideoToRename,
+            guard let Video = self.Video,
                   let VideoIndex = self.Videos.firstIndex(where: { $0.id == Video.id }) else {
                 return
             }
@@ -137,7 +140,7 @@ class VideoViewModel: ObservableObject {
             
             self.Folder.Videos?[FolderVideoIndex] = self.Videos[VideoIndex]
             self.SaveUpdatedFolder()
-            self.VideoToRename = nil
+            self.Video = nil
             self.IsSuccessTTProgressHUDVisible = true
         }
     }

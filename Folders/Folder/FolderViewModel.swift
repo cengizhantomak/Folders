@@ -11,7 +11,6 @@ class FolderViewModel: ObservableObject {
     @Published var Folders: [FolderModel] = []
     @Published var SelectedFolders: [FolderModel] = []
     @Published var Columns = [GridItem(.flexible()), GridItem(.flexible())]
-    @Published var InputName = ""
     @Published var IsSelecting = false
     @Published var OnlyShowFavorites = false
     @Published var ShowBottomBarDeleteAlert = false
@@ -19,9 +18,11 @@ class FolderViewModel: ObservableObject {
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
     @Published var NewName = ""
-    @Published var FolderToRename: FolderModel?
+    @Published var Folder: FolderModel?
     @Published var IsSuccessTTProgressHUDVisible = false
     @Published var IsErrorTTProgressHUDVisible = false
+    @Published var FolderName = ""
+    var FolderCreationDate = Date()
     
     init() {
         LoadFolders()
@@ -61,7 +62,8 @@ class FolderViewModel: ObservableObject {
         withAnimation(.spring()) { [weak self] in
             guard let self else { return }
             var Folder = FolderModel()
-            Folder.Name = self.InputName
+            Folder.Name = self.FolderName
+            Folder.CreationDate = self.FolderCreationDate
             self.Folders.insert(Folder, at: 0)
             self.SaveFolders()
             self.IsSuccessTTProgressHUDVisible = true
@@ -69,8 +71,8 @@ class FolderViewModel: ObservableObject {
     }
     
     func AddButtonAction() {
-        let Folder = FolderModel()
-        InputName = Folder.Name
+        FolderCreationDate = Date()
+        FolderName = FolderCreationDate.CurrentDateTime()
         ShowCreatedAlert = true
     }
     
@@ -113,24 +115,28 @@ class FolderViewModel: ObservableObject {
         return Folders.contains { $0.Name == Name && $0.IsPinned } ? StringConstants.ContextMenu.Unpin.Text : StringConstants.ContextMenu.Pin.Text
     }
     
-    func PinFolder(For Folder: FolderModel) {
+    func PinFolder() {
         withAnimation(.spring()) { [weak self] in
             guard let self else { return }
-            if let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
+            if let Folder = self.Folder,
+               let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
                 self.Folders[Index].IsPinned.toggle()
                 self.SaveFolders()
+                self.Folder = nil
             }
             
             self.IsSuccessTTProgressHUDVisible = true
         }
     }
     
-    func ToggleFavorite(For Folder: FolderModel) {
+    func ToggleFavorite() {
         withAnimation(.spring()) { [weak self] in
             guard let self else { return }
-            if let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
+            if let Folder = self.Folder,
+               let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
                 self.Folders[Index].IsFavorite.toggle()
                 self.SaveFolders()
+                self.Folder = nil
             }
             
             self.IsSuccessTTProgressHUDVisible = true
@@ -140,22 +146,25 @@ class FolderViewModel: ObservableObject {
     func RenameFolder(NewName: String) {
         withAnimation(.spring()) { [weak self] in
             guard let self else { return }
-            if let Folder = self.FolderToRename, let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
+            if let Folder = self.Folder,
+               let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
                 self.Folders[Index].Name = NewName
                 self.SaveFolders()
-                self.FolderToRename = nil
+                self.Folder = nil
             }
             
             self.IsSuccessTTProgressHUDVisible = true
         }
     }
     
-    func RemoveFolder(For Folder: FolderModel) {
+    func RemoveFolder() {
         withAnimation(.spring()) { [weak self] in
             guard let self else { return }
-            if let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
+            if let Folder = self.Folder,
+               let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
                 self.Folders.remove(at: Index)
                 self.SaveFolders()
+                self.Folder = nil
             }
             
             self.IsSuccessTTProgressHUDVisible = true

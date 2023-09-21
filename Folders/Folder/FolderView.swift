@@ -113,9 +113,9 @@ struct FolderView: View {
                 }
             }
             .alert(StringConstants.Alert.Title.CreateFolder, isPresented: $ViewModel.ShowCreatedAlert) {
-                TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.InputName)
+                TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.FolderName)
                 Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-                    if !ViewModel.InputName.isEmpty {
+                    if !ViewModel.FolderName.isEmpty {
                         ViewModel.AddFolder()
                     } else {
                         ViewModel.IsErrorTTProgressHUDVisible = true
@@ -128,7 +128,8 @@ struct FolderView: View {
             .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
                 Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
                     for Folder in ViewModel.SelectedFolders {
-                        ViewModel.RemoveFolder(For: Folder)
+                        ViewModel.Folder = Folder
+                        ViewModel.RemoveFolder()
                     }
                     ViewModel.SelectedFolders.removeAll()
                     ViewModel.IsSelecting.toggle()

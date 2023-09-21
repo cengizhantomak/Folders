@@ -107,7 +107,8 @@ struct FolderItemView: View {
     
     private var PinUnpinButton: some View {
         Button {
-            ViewModel.PinFolder(For: Folder)
+            ViewModel.Folder = Folder
+            ViewModel.PinFolder()
         } label: {
             Label(
                 ViewModel.Folders.contains { $0.Name == Folder.Name && $0.IsPinned } ? StringConstants.ContextMenu.Unpin.Text : StringConstants.ContextMenu.Pin.Text,
@@ -118,7 +119,8 @@ struct FolderItemView: View {
     
     private var ToggleFavoriteButton: some View {
         Button {
-            ViewModel.ToggleFavorite(For: Folder)
+            ViewModel.Folder = Folder
+            ViewModel.ToggleFavorite()
         } label: {
             Label(
                 Folder.IsFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
@@ -129,7 +131,7 @@ struct FolderItemView: View {
     
     private var RenameVideoButton: some View {
         Button {
-            ViewModel.FolderToRename = Folder
+            ViewModel.Folder = Folder
             ViewModel.NewName = Folder.Name
             ViewModel.ShowRenameAlert = true
         } label: {
@@ -142,6 +144,7 @@ struct FolderItemView: View {
     
     private var DeleteVideoButton: some View {
         Button(role: .destructive) {
+            ViewModel.Folder = Folder
             ViewModel.ShowDeleteAlert = true
         } label: {
             Label(
@@ -171,7 +174,7 @@ struct FolderItemView: View {
     private var DeleteVideoAlert: some View {
         Group {
             Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-                ViewModel.RemoveFolder(For: Folder)
+                ViewModel.RemoveFolder()
             }
             Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
                 print("Cancel Tapped")

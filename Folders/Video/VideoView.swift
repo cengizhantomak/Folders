@@ -107,7 +107,8 @@ struct VideoView: View {
             .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
                 Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
                     for Video in ViewModel.SelectedVideos {
-                        ViewModel.RemoveVideo(For: Video)
+                        ViewModel.Video = Video
+                        ViewModel.RemoveVideo()
                     }
                     ViewModel.SelectedVideos.removeAll()
                     ViewModel.IsSelecting.toggle()

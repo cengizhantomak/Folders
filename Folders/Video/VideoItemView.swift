@@ -116,7 +116,8 @@ struct VideoItemView: View {
     
     private var ToggleFavoriteButton: some View {
         Button {
-            ViewModel.ToggleFavorite(For: Video)
+            ViewModel.Video = Video
+            ViewModel.ToggleFavorite()
         } label: {
             Label(
                 Video.IsFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
@@ -138,7 +139,7 @@ struct VideoItemView: View {
     
     private var RenameVideoButton: some View {
         Button {
-            ViewModel.VideoToRename = Video
+            ViewModel.Video = Video
             ViewModel.NewName = Video.Name
             ViewModel.ShowRenameAlert = true
         } label: {
@@ -151,6 +152,7 @@ struct VideoItemView: View {
     
     private var DeleteVideoButton: some View {
         Button(role: .destructive) {
+            ViewModel.Video = Video
             ViewModel.ShowDeleteAlert = true
         } label: {
             Label(
@@ -180,7 +182,7 @@ struct VideoItemView: View {
     private var DeleteVideoAlert: some View {
         Group {
             Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-                ViewModel.RemoveVideo(For: Video)
+                ViewModel.RemoveVideo()
             }
             Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
                 print("Cancel Tapped")

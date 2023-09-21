@@ -65,9 +65,9 @@
 			children = (
 				CB2FBD7F2AA5B146007C46F3 /* FolderModel.swift */,
 				CB2FBD832AA5F669007C46F3 /* FolderViewModel.swift */,
-				CB2FBD812AA5B190007C46F3 /* FolderItemView.swift */,
-				CBF281552AAA005B008DD30E /* FolderGridView.swift */,
 				CB2FBD732AA5B03C007C46F3 /* FolderView.swift */,
+				CBF281552AAA005B008DD30E /* FolderGridView.swift */,
+				CB2FBD812AA5B190007C46F3 /* FolderItemView.swift */,
 			);
 			path = Folder;
 			sourceTree = "<group>";
@@ -88,9 +88,9 @@
 			children = (
 				CBE2B79B2AAF09EF004B37A5 /* VideoModel.swift */,
 				CB020CCC2AAEE75200C30EE0 /* VideoViewModel.swift */,
-				CBE2B79D2AAF106A004B37A5 /* VideoItemView.swift */,
-				CB77D7942AB0A2080063EA99 /* VideoGridView.swift */,
 				CB020CCA2AAEE72100C30EE0 /* VideoView.swift */,
+				CB77D7942AB0A2080063EA99 /* VideoGridView.swift */,
+				CBE2B79D2AAF106A004B37A5 /* VideoItemView.swift */,
 			);
 			path = Video;
 			sourceTree = "<group>";

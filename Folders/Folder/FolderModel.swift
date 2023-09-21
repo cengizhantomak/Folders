@@ -17,7 +17,7 @@ struct FolderModel: Identifiable, Codable {
     
     init() {
         self.CreationDate = Date()
-        self.Name = Date.CurrentDateTime()
+        self.Name = Date().CurrentDateTime()
     }
     
     // For Previews
