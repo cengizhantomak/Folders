@@ -151,7 +151,8 @@ struct FolderItemView: View {
     
     private var DeleteVideoButton: some View {
         Button(role: .destructive) {
-            ViewModel.DeleteFolders(Folder)
+            ViewModel.SelectedSessions.append(Folder)
+            ViewModel.DeleteFolders(ViewModel.SelectedSessions)
         } label: {
             Label(
                 StringConstants.ContextMenu.Delete.Text,

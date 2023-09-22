@@ -104,10 +104,7 @@ struct FolderView: View {
                             .foregroundColor(ViewModel.SelectedSessions.isEmpty ? .gray : .primary)
                         Spacer()
                         Button {
-                            for Folder in ViewModel.SelectedSessions {
-                                ViewModel.DeleteFolders(Folder)
-                            }
-                            ViewModel.SelectedSessions.removeAll()
+                            ViewModel.DeleteFolders(ViewModel.SelectedSessions)
                             ViewModel.IsSelecting.toggle()
                         } label: {
                             Image(systemName: StringConstants.SystemImage.Trash)

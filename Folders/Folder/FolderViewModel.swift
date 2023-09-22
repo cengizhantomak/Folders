@@ -26,6 +26,7 @@ class FolderViewModel: ObservableObject {
     //    var FolderCreationDate = Date()
     @Published var Sessions: [SessionModel] = []
     @Published var SelectedSessions: [SessionModel] = []
+    @Published var Session: SessionModel?
     
     init() {
         LoadFolders()
@@ -36,6 +37,7 @@ class FolderViewModel: ObservableObject {
             withAnimation(.spring()) {
                 guard let self else { return }
                 self.Sessions = SessionModel
+                self.Session = nil
             }
         }
     }
@@ -62,15 +64,16 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-    func DeleteFolders(_ Folder: SessionModel) {
+    func DeleteFolders(_ Folder: [SessionModel]) {
         Task {
             do {
-                try await FolderRepository.shared.deleteFolders([Folder])
+                try await FolderRepository.shared.deleteFolders(Folder)
                 LoadFolders()
             } catch {
                 print("Error deleting session: \(error)")
             }
         }
+        SelectedSessions.removeAll()
     }
     
     var TodaySection: [SessionModel] {
