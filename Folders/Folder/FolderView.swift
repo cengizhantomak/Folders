@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import LVRealmKit
 
 struct FolderView: View {
     @StateObject var ViewModel = FolderViewModel()
@@ -13,7 +14,7 @@ struct FolderView: View {
     var body: some View {
         NavigationStack {
             VStack {
-                if ViewModel.Folders.isEmpty {
+                if ViewModel.Sessions.isEmpty {
                     VStack {
                         Spacer()
                         Image(systemName: StringConstants.SystemImage.NoVideo)
@@ -31,9 +32,9 @@ struct FolderView: View {
                         let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 12, Amount: 2)
                         ScrollView {
                             VStack(alignment: .leading, spacing: 44) {
-                                CreateSection(WithTitle: StringConstants.SectionTitle.Todays, Folders: ViewModel.TodayFolders, ItemWidth: ItemWidth)
-                                CreateSection(WithTitle: StringConstants.SectionTitle.Pinned, Folders: ViewModel.PinnedFolders, ItemWidth: ItemWidth)
-                                CreateSection(WithTitle: StringConstants.SectionTitle.Session, Folders: ViewModel.SessionFolders, ItemWidth: ItemWidth)
+                                CreateSection(WithTitle: StringConstants.SectionTitle.Todays, Folders: ViewModel.TodaySection, ItemWidth: ItemWidth)
+//                                CreateSection(WithTitle: StringConstants.SectionTitle.Pinned, Folders: ViewModel.PinnedFolders, ItemWidth: ItemWidth)
+                                CreateSection(WithTitle: StringConstants.SectionTitle.Session, Folders: ViewModel.SessionSection, ItemWidth: ItemWidth)
                             }
                             .padding(10)
                         }
@@ -45,7 +46,7 @@ struct FolderView: View {
                 if !ViewModel.IsSelecting {
                     ToolbarItemGroup(placement: .navigationBarLeading) {
                         Button {
-                            ViewModel.AddButtonAction()
+                            ViewModel.AddFolder(SessionModel())
                         } label: {
                             Image(systemName: StringConstants.SystemImage.Plus)
                                 .foregroundColor(.primary)
@@ -53,27 +54,27 @@ struct FolderView: View {
                                 .background(Color.gray.opacity(0.25))
                                 .clipShape(Circle())
                         }
-                        Button {
-                            ViewModel.AddFolderWithAssetVideo()
-                        } label: {
-                            Text("Ekle")
-                                .foregroundColor(.primary)
-                                .padding(8)
-                                .background(Color.gray.opacity(0.25))
-                                .clipShape(Capsule())
-                        }
+//                        Button {
+//                            ViewModel.AddFolderWithAssetVideo()
+//                        } label: {
+//                            Text("Ekle")
+//                                .foregroundColor(.primary)
+//                                .padding(8)
+//                                .background(Color.gray.opacity(0.25))
+//                                .clipShape(Capsule())
+//                        }
                     }
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         HStack(spacing: 0) {
-                            Button {
-                                ViewModel.FavoritesButtonAction()
-                            } label: {
-                                Image(systemName: ViewModel.OnlyShowFavorites ? StringConstants.SystemImage.HeartFill : StringConstants.SystemImage.Heart)
-                                    .foregroundColor(.primary)
-                                    .padding(8)
-                                    .background(Color.gray.opacity(0.25))
-                                    .clipShape(Circle())
-                            }
+//                            Button {
+//                                ViewModel.FavoritesButtonAction()
+//                            } label: {
+//                                Image(systemName: ViewModel.OnlyShowFavorites ? StringConstants.SystemImage.HeartFill : StringConstants.SystemImage.Heart)
+//                                    .foregroundColor(.primary)
+//                                    .padding(8)
+//                                    .background(Color.gray.opacity(0.25))
+//                                    .clipShape(Circle())
+//                            }
                             Button {
                                 ViewModel.SelectCancelButtonAction()
                             } label: {
@@ -99,57 +100,61 @@ struct FolderView: View {
                     }
                     ToolbarItemGroup(placement: .bottomBar) {
                         Spacer()
-                        Text(ViewModel.SelectionCountText(For: ViewModel.SelectedFolders.count))
-                            .foregroundColor(ViewModel.SelectedFolders.isEmpty ? .gray : .primary)
+                        Text(ViewModel.SelectionCountText(For: ViewModel.SelectedSessions.count))
+                            .foregroundColor(ViewModel.SelectedSessions.isEmpty ? .gray : .primary)
                         Spacer()
                         Button {
-                            ViewModel.ShowBottomBarDeleteAlert = true
+                            for Folder in ViewModel.SelectedSessions {
+                                ViewModel.DeleteFolders(Folder)
+                            }
+                            ViewModel.SelectedSessions.removeAll()
+                            ViewModel.IsSelecting.toggle()
                         } label: {
                             Image(systemName: StringConstants.SystemImage.Trash)
-                                .foregroundColor(ViewModel.SelectedFolders.isEmpty ? .gray : .primary)
+                                .foregroundColor(ViewModel.SelectedSessions.isEmpty ? .gray : .primary)
                         }
-                        .disabled(ViewModel.SelectedFolders.isEmpty)
+                        .disabled(ViewModel.SelectedSessions.isEmpty)
                     }
                 }
             }
-            .alert(StringConstants.Alert.Title.CreateFolder, isPresented: $ViewModel.ShowCreatedAlert) {
-                TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.FolderName)
-                Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-                    if !ViewModel.FolderName.isEmpty {
-                        ViewModel.AddFolder()
-                    } else {
-                        ViewModel.IsErrorTTProgressHUDVisible = true
-                    }
-                }
-                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                    print("Cancel Tapped")
-                }
-            }
-            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
-                Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-                    for Folder in ViewModel.SelectedFolders {
-                        ViewModel.Folder = Folder
-                        ViewModel.RemoveFolder()
-                    }
-                    ViewModel.SelectedFolders.removeAll()
-                    ViewModel.IsSelecting.toggle()
-                }
-                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                    print("Cancel Tapped")
-                }
-            } message: {
-                Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
-            }
-            .onAppear(perform: {
-                ViewModel.LoadFolders()
-            })
+//            .alert(StringConstants.Alert.Title.CreateFolder, isPresented: $ViewModel.ShowCreatedAlert) {
+//                TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.FolderName)
+//                Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
+//                    if !ViewModel.FolderName.isEmpty {
+//                        ViewModel.AddFolder()
+//                    } else {
+//                        ViewModel.IsErrorTTProgressHUDVisible = true
+//                    }
+//                }
+//                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+//                    print("Cancel Tapped")
+//                }
+//            }
+//            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
+//                Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+//                    for Folder in ViewModel.SelectedFolders {
+//                        ViewModel.Folder = Folder
+//                        ViewModel.RemoveFolder()
+//                    }
+//                    ViewModel.SelectedFolders.removeAll()
+//                    ViewModel.IsSelecting.toggle()
+//                }
+//                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+//                    print("Cancel Tapped")
+//                }
+//            } message: {
+//                Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
+//            }
+//            .onAppear(perform: {
+//                ViewModel.LoadFolders()
+//            })
         }
 //        .overlay {
 //            CustomTTProgressHUD(IsSuccessVisible: $ViewModel.IsSuccessTTProgressHUDVisible, IsErrorVisible: $ViewModel.IsErrorTTProgressHUDVisible)
 //        }
     }
     
-    private func CreateSection(WithTitle Title: String, Folders: [FolderModel], ItemWidth: CGFloat) -> some View {
+    private func CreateSection(WithTitle Title: String, Folders: [SessionModel], ItemWidth: CGFloat) -> some View {
         Group {
             if !Folders.isEmpty {
                 VStack(alignment: .leading) {
@@ -163,8 +168,8 @@ struct FolderView: View {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        FolderView()
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FolderView()
+//    }
+//}

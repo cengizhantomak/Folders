@@ -10,9 +10,9 @@ import SwiftUI
 @main
 struct FoldersApp: App {
     
-    init() {
-        setupNavigationBarAppearance()
-    }
+//    init() {
+//        setupNavigationBarAppearance()
+//    }
     
     var body: some Scene {
         WindowGroup {
@@ -20,11 +20,11 @@ struct FoldersApp: App {
         }
     }
     
-    private func setupNavigationBarAppearance() {
-        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
-        UINavigationBar.appearance().shadowImage = UIImage()
-        UINavigationBar.appearance().backgroundColor = UIColor.clear
-        UINavigationBar.appearance().tintColor = .clear
-        UINavigationBar.appearance().isTranslucent = true
-    }
+//    private func setupNavigationBarAppearance() {
+//        UINavigationBar.appearance().setBackgroundImage(UIImage(), for: .default)
+//        UINavigationBar.appearance().shadowImage = UIImage()
+//        UINavigationBar.appearance().backgroundColor = UIColor.clear
+//        UINavigationBar.appearance().tintColor = .clear
+//        UINavigationBar.appearance().isTranslucent = true
+//    }
 }
