@@ -152,7 +152,7 @@ struct FolderItemView: View {
     private var DeleteVideoButton: some View {
         Button(role: .destructive) {
             ViewModel.SelectedSessions.append(Folder)
-            ViewModel.DeleteFolders(ViewModel.SelectedSessions)
+            ViewModel.ShowDeleteAlert = true
         } label: {
             Label(
                 StringConstants.ContextMenu.Delete.Text,
@@ -178,16 +178,16 @@ struct FolderItemView: View {
 //        }
 //    }
 //
-//    private var DeleteVideoAlert: some View {
-//        Group {
-//            Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-//                ViewModel.RemoveFolder()
-//            }
-//            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-//                print("Cancel Tapped")
-//            }
-//        }
-//    }
+    private var DeleteVideoAlert: some View {
+        Group {
+            Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                ViewModel.DeleteFolders(ViewModel.SelectedSessions)
+            }
+            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                print("Cancel Tapped")
+            }
+        }
+    }
 }
 
 //struct FolderItemView_Previews: PreviewProvider {

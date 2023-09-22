@@ -17,7 +17,7 @@ class FolderViewModel: ObservableObject {
     //    @Published var ShowBottomBarDeleteAlert = false
     //    @Published var ShowCreatedAlert = false
     //    @Published var ShowRenameAlert = false
-    //    @Published var ShowDeleteAlert = false
+        @Published var ShowDeleteAlert = false
     //    @Published var NewName = ""
     //    @Published var Folder: FolderModel?
     //    @Published var IsSuccessTTProgressHUDVisible = false

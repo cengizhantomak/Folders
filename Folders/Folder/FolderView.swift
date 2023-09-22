@@ -104,8 +104,7 @@ struct FolderView: View {
                             .foregroundColor(ViewModel.SelectedSessions.isEmpty ? .gray : .primary)
                         Spacer()
                         Button {
-                            ViewModel.DeleteFolders(ViewModel.SelectedSessions)
-                            ViewModel.IsSelecting.toggle()
+                            ViewModel.ShowDeleteAlert = true
                         } label: {
                             Image(systemName: StringConstants.SystemImage.Trash)
                                 .foregroundColor(ViewModel.SelectedSessions.isEmpty ? .gray : .primary)
@@ -127,21 +126,17 @@ struct FolderView: View {
 //                    print("Cancel Tapped")
 //                }
 //            }
-//            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
-//                Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-//                    for Folder in ViewModel.SelectedFolders {
-//                        ViewModel.Folder = Folder
-//                        ViewModel.RemoveFolder()
-//                    }
-//                    ViewModel.SelectedFolders.removeAll()
-//                    ViewModel.IsSelecting.toggle()
-//                }
-//                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-//                    print("Cancel Tapped")
-//                }
-//            } message: {
-//                Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
-//            }
+            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
+                Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                    ViewModel.DeleteFolders(ViewModel.SelectedSessions)
+                    ViewModel.IsSelecting = false
+                }
+                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                    print("Cancel Tapped")
+                }
+            } message: {
+                Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
+            }
 //            .onAppear(perform: {
 //                ViewModel.LoadFolders()
 //            })
