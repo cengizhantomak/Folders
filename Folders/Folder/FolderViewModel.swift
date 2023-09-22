@@ -15,15 +15,15 @@ class FolderViewModel: ObservableObject {
     @Published var IsSelecting = false
     //    @Published var OnlyShowFavorites = false
     //    @Published var ShowBottomBarDeleteAlert = false
-    //    @Published var ShowCreatedAlert = false
+    @Published var ShowCreatedAlert = false
     //    @Published var ShowRenameAlert = false
-        @Published var ShowDeleteAlert = false
+    @Published var ShowDeleteAlert = false
     //    @Published var NewName = ""
     //    @Published var Folder: FolderModel?
     //    @Published var IsSuccessTTProgressHUDVisible = false
     //    @Published var IsErrorTTProgressHUDVisible = false
-    //    @Published var FolderName = ""
-    //    var FolderCreationDate = Date()
+    @Published var FolderName = ""
+    var FolderCreationDate: Date?
     @Published var Sessions: [SessionModel] = []
     @Published var SelectedSessions: [SessionModel] = []
     @Published var Session: SessionModel?
@@ -53,9 +53,18 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-    func AddFolder(_ Folder: SessionModel) {
+    func AddButtonAction() {
+        FolderCreationDate = Date()
+        FolderName = FolderCreationDate?.dateFormat("yyyyMMdd-HHmmssSSS") ?? "lvs"
+        ShowCreatedAlert = true
+    }
+    
+    func AddFolder() {
         Task {
             do {
+                var Folder = SessionModel()
+                Folder.name = FolderName
+                Folder.createdAt = FolderCreationDate ?? Date()
                 try await FolderRepository.shared.addFolder(Folder)
                 LoadFolders()
             } catch {
@@ -102,11 +111,6 @@ class FolderViewModel: ObservableObject {
 //        UserDefaultsManager.Shared.Save(Folders, ForKey: StringConstants.Folders)
 //    }
 //
-//    func AddButtonAction() {
-//        FolderCreationDate = Date()
-//        FolderName = FolderCreationDate.CurrentDateTime()
-//        ShowCreatedAlert = true
-//    }
     
     func SelectCancelButtonAction() {
         IsSelecting.toggle()

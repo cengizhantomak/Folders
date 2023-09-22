@@ -46,7 +46,7 @@ struct FolderView: View {
                 if !ViewModel.IsSelecting {
                     ToolbarItemGroup(placement: .navigationBarLeading) {
                         Button {
-                            ViewModel.AddFolder(SessionModel())
+                            ViewModel.AddButtonAction()
                         } label: {
                             Image(systemName: StringConstants.SystemImage.Plus)
                                 .foregroundColor(.primary)
@@ -113,19 +113,19 @@ struct FolderView: View {
                     }
                 }
             }
-//            .alert(StringConstants.Alert.Title.CreateFolder, isPresented: $ViewModel.ShowCreatedAlert) {
-//                TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.FolderName)
-//                Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-//                    if !ViewModel.FolderName.isEmpty {
-//                        ViewModel.AddFolder()
-//                    } else {
+            .alert(StringConstants.Alert.Title.CreateFolder, isPresented: $ViewModel.ShowCreatedAlert) {
+                TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.FolderName)
+                Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
+                    if !ViewModel.FolderName.isEmpty {
+                        ViewModel.AddFolder()
+                    } else {
 //                        ViewModel.IsErrorTTProgressHUDVisible = true
-//                    }
-//                }
-//                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-//                    print("Cancel Tapped")
-//                }
-//            }
+                    }
+                }
+                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                    print("Cancel Tapped")
+                }
+            }
             .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
                 Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
                     ViewModel.DeleteFolders(ViewModel.SelectedSessions)
