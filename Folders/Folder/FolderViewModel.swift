@@ -99,9 +99,24 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-//    var FavoriteFolders: [SessionModel] {
-//        return
-//    }
+    var PinnedSection: [SessionModel] {
+        return Sessions.filter { $0.isPinned }
+    }
+    
+    func TogglePin() {
+        print("111: ", Sessions)
+        Task {
+            do {
+                if var Folder = Session {
+                    Folder.isPinned.toggle()
+                    try await FolderRepository.shared.edit(Folder)
+                }
+                LoadFolders()
+            } catch {
+                print("Error updating favorite status: \(error)")
+            }
+        }
+    }
     
     func FavoritesButtonAction() {
         if OnlyShowFavorites {
@@ -156,28 +171,6 @@ class FolderViewModel: ObservableObject {
             return String(format: StringConstants.MultipleFoldersSelected, Count)
         }
     }
-    
-//    var PinnedFolders: [FolderModel] {
-//        return Folders.filter { $0.IsPinned }
-//    }
-    
-//    func PinActionLabel(For Name: String) -> String {
-//        return Folders.contains { $0.Name == Name && $0.IsPinned } ? StringConstants.ContextMenu.Unpin.Text : StringConstants.ContextMenu.Pin.Text
-//    }
-    
-//    func PinFolder() {
-//        withAnimation(.spring()) { [weak self] in
-//            guard let self else { return }
-//            if let Folder = self.Folder,
-//               let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
-//                self.Folders[Index].IsPinned.toggle()
-//                self.SaveFolders()
-//                self.Folder = nil
-//            }
-//
-//            self.IsSuccessTTProgressHUDVisible = true
-//        }
-//    }
     
 //    func RenameFolder(NewName: String) {
 //        withAnimation(.spring()) { [weak self] in

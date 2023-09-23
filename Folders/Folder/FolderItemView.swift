@@ -108,15 +108,13 @@ struct FolderItemView: View {
     
     private var PinUnpinButton: some View {
         Button {
-//            ViewModel.Folder = Folder
-//            ViewModel.PinFolder()
+            ViewModel.Session = Folder
+            ViewModel.TogglePin()
         } label: {
             Label(
-//                ViewModel.Folders.contains { $0.Name == Folder.na && $0.IsPinned } ? StringConstants.ContextMenu.Unpin.Text :
-                    StringConstants.ContextMenu.Pin.Text,
+                Folder.isPinned ? StringConstants.ContextMenu.Unpin.Text : StringConstants.ContextMenu.Pin.Text,
                 systemImage:
-//                        Folder.IsPinned ? StringConstants.ContextMenu.Unpin.SystemImage :
-                    StringConstants.ContextMenu.Pin.SystemImage
+                        Folder.isPinned ? StringConstants.ContextMenu.Unpin.SystemImage : StringConstants.ContextMenu.Pin.SystemImage
             )
         }
     }
