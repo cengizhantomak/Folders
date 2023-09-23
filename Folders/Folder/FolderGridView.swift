@@ -27,10 +27,11 @@ struct FolderGridView: View {
     
     // MARK: Navigation Link
     private func NavigatableView(For Folder: SessionModel) -> some View {
-//        NavigationLink(destination: VideoView(ViewModel: VideoViewModel(Folder: Folder))) {
+//        NavigationLink(destination: PracticeListView(session: Folder))
+        NavigationLink(destination: VideoView(ViewModel: VideoViewModel(Folder: Folder))) {
             FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
-//        }
-//        .foregroundColor(.primary)
+        }
+        .foregroundColor(.primary)
     }
     
     // MARK: Selectable Folder Item

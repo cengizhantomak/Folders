@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import LVRealmKit
 
 struct VideoGridView: View {
     @StateObject var ViewModel: VideoViewModel
@@ -14,7 +15,7 @@ struct VideoGridView: View {
     var body: some View {
         Section(header: DateHeader) {
             LazyVGrid(columns: ViewModel.Columns, spacing: 1) {
-                ForEach(SortedVideos) { Video in
+                ForEach(ViewModel.Practices, id: \.self) { Video in
                     if !ViewModel.IsSelecting {
                         VideoItemView(ViewModel: ViewModel, Video: Video, ItemWidth: ItemWidth)
                     } else {
@@ -27,7 +28,7 @@ struct VideoGridView: View {
     
     // MARK: Date Header
     private var DateHeader: some View {
-        Text(Date.CurrentDate(From: ViewModel.Folder.CreationDate))
+        Text(Date.CurrentDate(From: ViewModel.Session.createdAt))
             .foregroundColor(.gray)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .background(.clear)
@@ -35,12 +36,12 @@ struct VideoGridView: View {
     }
     
     // MARK: Video Sorting
-    private var SortedVideos: [VideoModel] {
-        ViewModel.Videos.sorted(by: { $0.CreationDate > $1.CreationDate })
-    }
+//    private var SortedVideos: [VideoModel] {
+//        ViewModel.Videos.sorted(by: { $0.CreationDate > $1.CreationDate })
+//    }
     
     // MARK: Selectable Video Item
-    private func SelectableVideoItem(For Video: VideoModel) -> some View {
+    private func SelectableVideoItem(For Video: PracticeModel) -> some View {
         VideoItemView(ViewModel: ViewModel, Video: Video, ItemWidth: ItemWidth)
             .onTapGesture {
                 HandleVideoSelection(Of: Video)
@@ -49,22 +50,22 @@ struct VideoGridView: View {
     }
     
     // MARK: Selection Handling
-    private func HandleVideoSelection(Of Video: VideoModel) {
-        if let Index = ViewModel.SelectedVideos.firstIndex(where: { $0.id == Video.id }) {
-            ViewModel.SelectedVideos.remove(at: Index)
+    private func HandleVideoSelection(Of Video: PracticeModel) {
+        if let Index = ViewModel.SelectedPractices.firstIndex(where: { $0.id == Video.id }) {
+            ViewModel.SelectedPractices.remove(at: Index)
         } else {
-            ViewModel.SelectedVideos.append(Video)
+            ViewModel.SelectedPractices.append(Video)
         }
     }
     
     // MARK: Video Opacity
-    private func Opacity(For Video: VideoModel) -> Double {
-        return ViewModel.IsSelecting && !ViewModel.SelectedVideos.contains(where: { $0.id == Video.id }) ? 0.5 : 1.0
+    private func Opacity(For Video: PracticeModel) -> Double {
+        return ViewModel.IsSelecting && !ViewModel.SelectedPractices.contains(where: { $0.id == Video.id }) ? 0.5 : 1.0
     }
 }
 
-struct VideoGridView_Previews: PreviewProvider {
-    static var previews: some View {
-        VideoGridView(ViewModel: VideoViewModel(Folder: FolderModel(Name: "LVS")), ItemWidth: 150)
-    }
-}
+//struct VideoGridView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        VideoGridView(ViewModel: VideoViewModel(Folder: FolderModel(Name: "LVS")), ItemWidth: 150)
+//    }
+//}

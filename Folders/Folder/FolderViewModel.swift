@@ -191,32 +191,49 @@ class FolderViewModel: ObservableObject {
         return (X, Y)
     }
     
-//    func AddFolderWithAssetVideo() {
-//        let TodayFolders = TodayFolders
-//        
-//        if let LatestFolder = TodayFolders.first {
-//            var UpdatedFolder = LatestFolder
-//            var NewVideo = VideoModel()
-//            NewVideo.AssetVideoName = "LVS"
-//            
-//            if UpdatedFolder.Videos != nil {
-//                UpdatedFolder.Videos?.append(NewVideo)
-//            } else {
-//                UpdatedFolder.Videos = [NewVideo]
-//            }
-//            
-//            if let Index = Folders.firstIndex(where: { $0.id == UpdatedFolder.id }) {
-//                Folders[Index] = UpdatedFolder
-//            }
-//        } else {
-//            var NewFolder = FolderModel()
-//            var NewVideo = VideoModel()
-//            NewVideo.AssetVideoName = "LVS"
-//            NewFolder.Videos = [NewVideo]
-//            Folders.insert(NewFolder, at: 0)
-//        }
-//        
-//        SaveFolders()
-//        IsSuccessTTProgressHUDVisible = true
-//    }
+    func AddFolderWithAssetVideo() {
+        Task {
+            do {
+                if let lastFolder = try? await FolderRepository.shared.getLastFolder() {
+                    var newPractice = PracticeModel(id: UUID().uuidString, Name: Date().dateFormat("yyyyMMddHHmmssSSS"), VideoPath: "LVS")
+                    newPractice.Session = lastFolder
+                    _ = try await PracticeRepository.shared.addPractice(&newPractice)
+                } else {
+                    print("No folder found.")
+                }
+            } catch {
+                print("Failed to add practice: \(error)")
+            }
+        }
+    }
+    
+    //    func AddFolderWithAssetVideo() {
+    //        let TodayFolders = TodayFolders
+    //
+    //        if let LatestFolder = TodayFolders.first {
+    //            var UpdatedFolder = LatestFolder
+    //            var NewVideo = VideoModel()
+    //            NewVideo.AssetVideoName = "LVS"
+    //
+    //            if UpdatedFolder.Videos != nil {
+    //                UpdatedFolder.Videos?.append(NewVideo)
+    //            } else {
+    //                UpdatedFolder.Videos = [NewVideo]
+    //            }
+    //
+    //            if let Index = Folders.firstIndex(where: { $0.id == UpdatedFolder.id }) {
+    //                Folders[Index] = UpdatedFolder
+    //            }
+    //        } else {
+    //            var NewFolder = FolderModel()
+    //            var NewVideo = VideoModel()
+    //            NewVideo.AssetVideoName = "LVS"
+    //            NewFolder.Videos = [NewVideo]
+    //            Folders.insert(NewFolder, at: 0)
+    //        }
+    //
+    //        SaveFolders()
+    //        IsSuccessTTProgressHUDVisible = true
+    //    }
+
 }

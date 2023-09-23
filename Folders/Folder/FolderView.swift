@@ -54,15 +54,15 @@ struct FolderView: View {
                                 .background(Color.gray.opacity(0.25))
                                 .clipShape(Circle())
                         }
-//                        Button {
-//                            ViewModel.AddFolderWithAssetVideo()
-//                        } label: {
-//                            Text("Ekle")
-//                                .foregroundColor(.primary)
-//                                .padding(8)
-//                                .background(Color.gray.opacity(0.25))
-//                                .clipShape(Capsule())
-//                        }
+                        Button {
+                            ViewModel.AddFolderWithAssetVideo()
+                        } label: {
+                            Text("Ekle")
+                                .foregroundColor(.primary)
+                                .padding(8)
+                                .background(Color.gray.opacity(0.25))
+                                .clipShape(Capsule())
+                        }
                     }
                     ToolbarItemGroup(placement: .navigationBarTrailing) {
                         HStack(spacing: 0) {
@@ -137,9 +137,9 @@ struct FolderView: View {
             } message: {
                 Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
             }
-//            .onAppear(perform: {
-//                ViewModel.LoadFolders()
-//            })
+            .onAppear(perform: {
+                ViewModel.LoadFolders()
+            })
         }
 //        .overlay {
 //            CustomTTProgressHUD(IsSuccessVisible: $ViewModel.IsSuccessTTProgressHUDVisible, IsErrorVisible: $ViewModel.IsErrorTTProgressHUDVisible)
