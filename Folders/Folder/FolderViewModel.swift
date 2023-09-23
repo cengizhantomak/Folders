@@ -13,7 +13,7 @@ class FolderViewModel: ObservableObject {
     //    @Published var SelectedFolders: [FolderModel] = []
     @Published var Columns = [GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
-    //    @Published var OnlyShowFavorites = false
+    @Published var OnlyShowFavorites = false
     //    @Published var ShowBottomBarDeleteAlert = false
     @Published var ShowCreatedAlert = false
     //    @Published var ShowRenameAlert = false
@@ -99,9 +99,36 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-//    var FavoriteFolders: [FolderModel] {
-//        return Folders.filter { $0.IsFavorite }
+//    var FavoriteFolders: [SessionModel] {
+//        return
 //    }
+    
+    func FavoritesButtonAction() {
+        if OnlyShowFavorites {
+            OnlyShowFavorites.toggle()
+            LoadFolders()
+        } else {
+            withAnimation(.spring()) { [weak self] in
+                guard let self else { return }
+                self.Sessions = self.Sessions.filter { $0.isFavorite }
+            }
+            OnlyShowFavorites.toggle()
+        }
+    }
+
+    func ToggleFavorite() {
+        Task {
+            do {
+                if var Folder = Session {
+                    Folder.isFavorite.toggle()
+                    try await FolderRepository.shared.edit(Folder)
+                }
+                LoadFolders()
+            } catch {
+                print("Error updating favorite status: \(error)")
+            }
+        }
+    }
     
     func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
         return (ScreenWidth - (Padding * (Amount + 1))) / Amount
@@ -118,19 +145,6 @@ class FolderViewModel: ObservableObject {
             SelectedSessions.removeAll()
         }
     }
-    
-//    func FavoritesButtonAction() {
-//        withAnimation(.spring()) { [weak self] in
-//            guard let self else { return }
-//            if self.OnlyShowFavorites {
-//                self.OnlyShowFavorites.toggle()
-//                self.LoadFolders()
-//            } else {
-//                self.Folders = self.FavoriteFolders
-//                self.OnlyShowFavorites.toggle()
-//            }
-//        }
-//    }
     
     func SelectionCountText(For Count: Int) -> String {
         switch Count {
@@ -157,20 +171,6 @@ class FolderViewModel: ObservableObject {
 //            if let Folder = self.Folder,
 //               let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
 //                self.Folders[Index].IsPinned.toggle()
-//                self.SaveFolders()
-//                self.Folder = nil
-//            }
-//
-//            self.IsSuccessTTProgressHUDVisible = true
-//        }
-//    }
-    
-//    func ToggleFavorite() {
-//        withAnimation(.spring()) { [weak self] in
-//            guard let self else { return }
-//            if let Folder = self.Folder,
-//               let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
-//                self.Folders[Index].IsFavorite.toggle()
 //                self.SaveFolders()
 //                self.Folder = nil
 //            }

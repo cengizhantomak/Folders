@@ -56,26 +56,26 @@ struct FolderItemView: View {
                 .scaledToFit()
                 .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
                 .foregroundColor(.gray)
-//            FavoriteIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
+            FavoriteIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
             SelectionIcon(CircleOffset: CircleOffset)
         }
     }
     
     // MARK: - Icons
-//    private func FavoriteIcon(CircleOffset: (X: CGFloat, Y: CGFloat), SafeItemWidth: CGFloat) -> some View {
-//        Group {
-//            if Folder.isFavorite && !ViewModel.IsSelecting {
-//                Image(systemName: StringConstants.SystemImage.HeartFill)
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: SafeItemWidth * 0.08, height: SafeItemWidth * 0.08)
-//                    .foregroundColor(.red)
-//                    .offset(x: CircleOffset.X, y: CircleOffset.Y)
-//            } else {
-//                EmptyView()
-//            }
-//        }
-//    }
+    private func FavoriteIcon(CircleOffset: (X: CGFloat, Y: CGFloat), SafeItemWidth: CGFloat) -> some View {
+        Group {
+            if Folder.isFavorite && !ViewModel.IsSelecting {
+                Image(systemName: StringConstants.SystemImage.HeartFill)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: SafeItemWidth * 0.08, height: SafeItemWidth * 0.08)
+                    .foregroundColor(.red)
+                    .offset(x: CircleOffset.X, y: CircleOffset.Y)
+            } else {
+                EmptyView()
+            }
+        }
+    }
     
     private func SelectionIcon(CircleOffset: (X: CGFloat, Y: CGFloat)) -> some View {
         Group {
@@ -123,15 +123,13 @@ struct FolderItemView: View {
     
     private var ToggleFavoriteButton: some View {
         Button {
-//            ViewModel.Folder = Folder
-//            ViewModel.ToggleFavorite()
+            ViewModel.Session = Folder
+            ViewModel.ToggleFavorite()
         } label: {
             Label(
-//                Folder.IsFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text :
-                    StringConstants.ContextMenu.AddFavorite.Text,
+                Folder.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
                 systemImage:
-//                        Folder.IsFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage :
-                    StringConstants.ContextMenu.AddFavorite.SystemImage
+                        Folder.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage
             )
         }
     }
@@ -178,16 +176,16 @@ struct FolderItemView: View {
 //        }
 //    }
 //
-    private var DeleteVideoAlert: some View {
-        Group {
-            Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-                ViewModel.DeleteFolders(ViewModel.SelectedSessions)
-            }
-            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                print("Cancel Tapped")
-            }
-        }
-    }
+//    private var DeleteVideoAlert: some View {
+//        Group {
+//            Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+//                ViewModel.DeleteFolders(ViewModel.SelectedSessions)
+//            }
+//            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+//                print("Cancel Tapped")
+//            }
+//        }
+//    }
 }
 
 //struct FolderItemView_Previews: PreviewProvider {
