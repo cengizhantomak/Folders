@@ -16,9 +16,9 @@ class FolderViewModel: ObservableObject {
     @Published var OnlyShowFavorites = false
     //    @Published var ShowBottomBarDeleteAlert = false
     @Published var ShowCreatedAlert = false
-    //    @Published var ShowRenameAlert = false
+    @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
-    //    @Published var NewName = ""
+    @Published var NewName = ""
     //    @Published var Folder: FolderModel?
     //    @Published var IsSuccessTTProgressHUDVisible = false
     //    @Published var IsErrorTTProgressHUDVisible = false
@@ -85,6 +85,20 @@ class FolderViewModel: ObservableObject {
         SelectedSessions.removeAll()
     }
     
+    func RenameFolder(NewName: String) {
+        Task {
+            do {
+                if var Folder = Session {
+                    Folder.name = NewName
+                    try await FolderRepository.shared.edit(Folder)
+                }
+                LoadFolders()
+            } catch {
+                print("Error updating favorite status: \(error)")
+            }
+        }
+    }
+    
     var TodaySection: [SessionModel] {
         let Today = Date()
         return Sessions.filter {
@@ -104,7 +118,6 @@ class FolderViewModel: ObservableObject {
     }
     
     func TogglePin() {
-        print("111: ", Sessions)
         Task {
             do {
                 if var Folder = Session {
@@ -171,20 +184,6 @@ class FolderViewModel: ObservableObject {
             return String(format: StringConstants.MultipleFoldersSelected, Count)
         }
     }
-    
-//    func RenameFolder(NewName: String) {
-//        withAnimation(.spring()) { [weak self] in
-//            guard let self else { return }
-//            if let Folder = self.Folder,
-//               let Index = self.Folders.firstIndex(where: { $0.id == Folder.id }) {
-//                self.Folders[Index].Name = NewName
-//                self.SaveFolders()
-//                self.Folder = nil
-//            }
-//
-//            self.IsSuccessTTProgressHUDVisible = true
-//        }
-//    }
     
     func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat = 20, YOffsetValue: CGFloat = 20) -> (X: CGFloat, Y: CGFloat) {
         let X = (ItemWidth / 2) - XOffsetValue

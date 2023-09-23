@@ -31,9 +31,9 @@ struct FolderItemView: View {
                 .font(.system(size: 14))
                 .foregroundColor(.gray)
         }
-//        .alert(StringConstants.Alert.Title.RenameFolder, isPresented: $ViewModel.ShowRenameAlert) {
-//            RenameVideoAlert
-//        }
+        .alert(StringConstants.Alert.Title.RenameFolder, isPresented: $ViewModel.ShowRenameAlert) {
+            RenameVideoAlert
+        }
 //        .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
 //            DeleteVideoAlert
 //        } message: {
@@ -134,9 +134,9 @@ struct FolderItemView: View {
     
     private var RenameVideoButton: some View {
         Button {
-//            ViewModel.Folder = Folder
-//            ViewModel.NewName = Folder.Name
-//            ViewModel.ShowRenameAlert = true
+            ViewModel.Session = Folder
+            ViewModel.NewName = Folder.name
+            ViewModel.ShowRenameAlert = true
         } label: {
             Label(
                 StringConstants.ContextMenu.Rename.Text,
@@ -158,21 +158,21 @@ struct FolderItemView: View {
     }
     
     // MARK: - Alerts
-//    private var RenameVideoAlert: some View {
-//        Group {
-//            TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.NewName)
-//            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-//                if !ViewModel.NewName.isEmpty {
-//                    ViewModel.RenameFolder(NewName: ViewModel.NewName)
-//                } else {
+    private var RenameVideoAlert: some View {
+        Group {
+            TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.NewName)
+            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
+                if !ViewModel.NewName.isEmpty {
+                    ViewModel.RenameFolder(NewName: ViewModel.NewName)
+                } else {
 //                    ViewModel.IsErrorTTProgressHUDVisible = true
-//                }
-//            }
-//            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-//                print("Cancel Tapped")
-//            }
-//        }
-//    }
+                }
+            }
+            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                print("Cancel Tapped")
+            }
+        }
+    }
 //
 //    private var DeleteVideoAlert: some View {
 //        Group {
