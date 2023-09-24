@@ -31,10 +31,20 @@ class VideoViewModel: ObservableObject {
         LoadPractices(For: Session)
     }
     
+    private func UpdatePracticeModel(PracticeModel: [PracticeModel]) {
+        DispatchQueue.main.async { [weak self] in
+            withAnimation(.spring()) {
+                guard let self else { return }
+                self.Practices = PracticeModel
+            }
+        }
+    }
+    
     func LoadPractices(For Session: SessionModel) {
         Task {
             do {
-                self.Practices = try await PracticeRepository.shared.getPractices(Session)
+                let AllPractices = try await PracticeRepository.shared.getPractices(Session)
+                UpdatePracticeModel(PracticeModel: AllPractices)
             } catch {
                 print("Failed to load practices: \(error)")
             }

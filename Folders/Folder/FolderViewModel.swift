@@ -191,16 +191,17 @@ class FolderViewModel: ObservableObject {
         return (X, Y)
     }
     
-    func AddFolderWithAssetVideo() {
+    func AddPractice() {
         Task {
             do {
-                if let lastFolder = try? await FolderRepository.shared.getLastFolder() {
-                    var newPractice = PracticeModel(id: UUID().uuidString, Name: Date().dateFormat("yyyyMMddHHmmssSSS"), VideoPath: "LVS")
-                    newPractice.Session = lastFolder
-                    _ = try await PracticeRepository.shared.addPractice(&newPractice)
-                } else {
-                    print("No folder found.")
+                if let LastFolder = try? await FolderRepository.shared.getLastFolder() {
+                    var NewPractice = PracticeModel(id: UUID().uuidString, 
+                                                    Name: Date().dateFormat("yyyyMMddHHmmssSSS"),
+                                                    VideoPath: "LVS")
+                    NewPractice.Session = LastFolder
+                    _ = try await PracticeRepository.shared.addPractice(&NewPractice)
                 }
+                LoadFolders()
             } catch {
                 print("Failed to add practice: \(error)")
             }

@@ -55,7 +55,7 @@ struct FolderView: View {
                                 .clipShape(Circle())
                         }
                         Button {
-                            ViewModel.AddFolderWithAssetVideo()
+                            ViewModel.AddPractice()
                         } label: {
                             Text("Ekle")
                                 .foregroundColor(.primary)
