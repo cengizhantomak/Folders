@@ -104,7 +104,7 @@ struct FolderView: View {
                             .foregroundColor(ViewModel.SelectedSessions.isEmpty ? .gray : .primary)
                         Spacer()
                         Button {
-                            ViewModel.ShowDeleteAlert = true
+                            ViewModel.ShowBottomBarDeleteAlert = true
                         } label: {
                             Image(systemName: StringConstants.SystemImage.Trash)
                                 .foregroundColor(ViewModel.SelectedSessions.isEmpty ? .gray : .primary)
@@ -126,7 +126,7 @@ struct FolderView: View {
                     print("Cancel Tapped")
                 }
             }
-            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
+            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
                 Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
                     ViewModel.DeleteFolders(ViewModel.SelectedSessions)
                     ViewModel.IsSelecting = false

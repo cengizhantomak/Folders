@@ -34,11 +34,11 @@ struct FolderItemView: View {
         .alert(StringConstants.Alert.Title.RenameFolder, isPresented: $ViewModel.ShowRenameAlert) {
             RenameVideoAlert
         }
-//        .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
-//            DeleteVideoAlert
-//        } message: {
-//            Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
-//        }
+        .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
+            DeleteVideoAlert
+        } message: {
+            Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
+        }
     }
     
     // MARK: - FolderItem
@@ -173,17 +173,18 @@ struct FolderItemView: View {
             }
         }
     }
-//
-//    private var DeleteVideoAlert: some View {
-//        Group {
-//            Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-//                ViewModel.DeleteFolders(ViewModel.SelectedSessions)
-//            }
-//            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-//                print("Cancel Tapped")
-//            }
-//        }
-//    }
+
+    private var DeleteVideoAlert: some View {
+        Group {
+            Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                ViewModel.DeleteFolders(ViewModel.SelectedSessions)
+            }
+            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                ViewModel.SelectedSessions.removeAll()
+                print("Cancel Tapped")
+            }
+        }
+    }
 }
 
 //struct FolderItemView_Previews: PreviewProvider {

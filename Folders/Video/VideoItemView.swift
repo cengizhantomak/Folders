@@ -22,11 +22,11 @@ struct VideoItemView: View {
                 .alert(StringConstants.Alert.Title.RenameVideo, isPresented: $ViewModel.ShowRenameAlert) {
                     RenameVideoAlert
                 }
-//                .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
-//                    DeleteVideoAlert
-//                } message: {
-//                    Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
-//                }
+                .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
+                    DeleteVideoAlert
+                } message: {
+                    Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
+                }
         } else {
             VideoItem
         }
@@ -180,16 +180,17 @@ struct VideoItemView: View {
         }
     }
     
-//    private var DeleteVideoAlert: some View {
-//        Group {
-//            Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-//                ViewModel.RemoveVideo()
-//            }
-//            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-//                print("Cancel Tapped")
-//            }
-//        }
-//    }
+    private var DeleteVideoAlert: some View {
+        Group {
+            Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                ViewModel.DeletePractices(ViewModel.SelectedPractices)
+            }
+            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                ViewModel.SelectedPractices.removeAll()
+                print("Cancel Tapped")
+            }
+        }
+    }
 }
 
 //struct VideoItemView_Previews: PreviewProvider {

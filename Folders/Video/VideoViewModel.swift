@@ -14,7 +14,7 @@ class VideoViewModel: ObservableObject {
 //    @Published var SelectedVideos: [VideoModel] = []
     @Published var Columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
-//    @Published var ShowBottomBarDeleteAlert = false
+    @Published var ShowBottomBarDeleteAlert = false
     @Published var OnlyShowFavorites = false
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false

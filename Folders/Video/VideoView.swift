@@ -95,7 +95,7 @@ struct VideoView: View {
                             .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
                         Spacer()
                         Button {
-                            ViewModel.ShowDeleteAlert = true
+                            ViewModel.ShowBottomBarDeleteAlert = true
                         } label: {
                             Image(systemName: StringConstants.SystemImage.Trash)
                                 .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
@@ -104,7 +104,7 @@ struct VideoView: View {
                     }
                 }
             }
-            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
+            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
                 Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
                     ViewModel.DeletePractices(ViewModel.SelectedPractices)
                     ViewModel.IsSelecting = false
