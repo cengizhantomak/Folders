@@ -53,10 +53,10 @@ struct VideoView: View {
                 Spacer()
             }
             .navigationBarTitle("", displayMode: .inline)
-//            .toolbar {
-//                if !ViewModel.IsSelecting {
-//                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-//                        HStack(spacing: 0) {
+            .toolbar {
+                if !ViewModel.IsSelecting {
+                    ToolbarItemGroup(placement: .navigationBarTrailing) {
+                        HStack(spacing: 0) {
 //                            Button {
 //                                ViewModel.FavoritesButtonAction()
 //                            } label: {
@@ -66,59 +66,55 @@ struct VideoView: View {
 //                                    .background(Color.gray.opacity(0.25))
 //                                    .clipShape(Circle())
 //                            }
-//                            Button {
-//                                ViewModel.SelectCancelButtonAction()
-//                            } label: {
-//                                Text(StringConstants.Select)
-//                                    .foregroundColor(.primary)
-//                                    .padding(8)
-//                                    .background(Color.gray.opacity(0.25))
-//                                    .clipShape(Capsule())
-//                            }
-//                        }
-//                    }
-//                } else {
-//                    ToolbarItem(placement: .navigationBarTrailing) {
-//                        Button {
-//                            ViewModel.SelectCancelButtonAction()
-//                        } label: {
-//                            Text(StringConstants.Cancel)
-//                                .foregroundColor(.primary)
-//                                .padding(8)
-//                                .background(Color.gray.opacity(0.25))
-//                                .clipShape(Capsule())
-//                        }
-//                    }
-//                    ToolbarItemGroup(placement: .bottomBar) {
-//                        Spacer()
-//                        Text(ViewModel.SelectionCount(For: ViewModel.SelectedVideos.count))
-//                            .foregroundColor(ViewModel.SelectedVideos.isEmpty ? .gray : .primary)
-//                        Spacer()
-//                        Button {
-//                            ViewModel.ShowBottomBarDeleteAlert = true
-//                        } label: {
-//                            Image(systemName: StringConstants.SystemImage.Trash)
-//                                .foregroundColor(ViewModel.SelectedVideos.isEmpty ? .gray : .primary)
-//                        }
-//                        .disabled(ViewModel.SelectedVideos.isEmpty)
-//                    }
-//                }
-//            }
-//            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
-//                Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-//                    for Video in ViewModel.SelectedVideos {
-//                        ViewModel.Video = Video
-//                        ViewModel.RemoveVideo()
-//                    }
-//                    ViewModel.SelectedVideos.removeAll()
-//                    ViewModel.IsSelecting.toggle()
-//                }
-//                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-//                    print("Cancel Tapped")
-//                }
-//            } message: {
-//                Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
-//            }
+                            Button {
+                                ViewModel.SelectCancelButtonAction()
+                            } label: {
+                                Text(StringConstants.Select)
+                                    .foregroundColor(.primary)
+                                    .padding(8)
+                                    .background(Color.gray.opacity(0.25))
+                                    .clipShape(Capsule())
+                            }
+                        }
+                    }
+                } else {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            ViewModel.SelectCancelButtonAction()
+                        } label: {
+                            Text(StringConstants.Cancel)
+                                .foregroundColor(.primary)
+                                .padding(8)
+                                .background(Color.gray.opacity(0.25))
+                                .clipShape(Capsule())
+                        }
+                    }
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Spacer()
+                        Text(ViewModel.SelectionCount(For: ViewModel.SelectedPractices.count))
+                            .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
+                        Spacer()
+                        Button {
+                            ViewModel.ShowDeleteAlert = true
+                        } label: {
+                            Image(systemName: StringConstants.SystemImage.Trash)
+                                .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
+                        }
+                        .disabled(ViewModel.SelectedPractices.isEmpty)
+                    }
+                }
+            }
+            .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
+                Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                    ViewModel.DeletePractices(ViewModel.SelectedPractices)
+                    ViewModel.IsSelecting = false
+                }
+                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                    print("Cancel Tapped")
+                }
+            } message: {
+                Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
+            }
         }
 //        .overlay {
 //            CustomTTProgressHUD(IsSuccessVisible: $ViewModel.IsSuccessTTProgressHUDVisible, IsErrorVisible: $ViewModel.IsErrorTTProgressHUDVisible)

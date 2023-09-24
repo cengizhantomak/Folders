@@ -17,7 +17,7 @@ class VideoViewModel: ObservableObject {
 //    @Published var ShowBottomBarDeleteAlert = false
 //    @Published var OnlyShowFavorites = false
 //    @Published var ShowRenameAlert = false
-//    @Published var ShowDeleteAlert = false
+    @Published var ShowDeleteAlert = false
 //    @Published var NewName = ""
 //    @Published var Video: VideoModel?
 //    @Published var IsSuccessTTProgressHUDVisible = false
@@ -25,10 +25,11 @@ class VideoViewModel: ObservableObject {
     @Published var Session: SessionModel
     @Published var Practices: [PracticeModel] = []
     @Published var SelectedPractices: [PracticeModel] = []
+    @Published var Practice: PracticeModel?
     
     init(Folder: SessionModel) {
         self.Session = Folder
-        LoadPractices(For: Session)
+        LoadPractices()
     }
     
     private func UpdatePracticeModel(PracticeModel: [PracticeModel]) {
@@ -40,7 +41,7 @@ class VideoViewModel: ObservableObject {
         }
     }
     
-    func LoadPractices(For Session: SessionModel) {
+    func LoadPractices() {
         Task {
             do {
                 let AllPractices = try await PracticeRepository.shared.getPractices(Session)
@@ -49,6 +50,18 @@ class VideoViewModel: ObservableObject {
                 print("Failed to load practices: \(error)")
             }
         }
+    }
+    
+    func DeletePractices(_ Practice: [PracticeModel]) {
+        Task {
+            do {
+                try await PracticeRepository.shared.deletePractices(Practice)
+                LoadPractices()
+            } catch {
+                print("Error deleting session: \(error)")
+            }
+        }
+        SelectedPractices.removeAll()
     }
     
 //    var FavoriteVideos: [VideoModel] {
@@ -104,44 +117,23 @@ class VideoViewModel: ObservableObject {
 //        IsSuccessTTProgressHUDVisible = true
 //    }
     
-//    func SelectCancelButtonAction() {
-//        IsSelecting.toggle()
-//        if !IsSelecting {
-//            SelectedVideos.removeAll()
-//        }
-//    }
+    func SelectCancelButtonAction() {
+        IsSelecting.toggle()
+        if !IsSelecting {
+            SelectedPractices.removeAll()
+        }
+    }
     
-//    func SelectionCount(For Count: Int) -> String {
-//        switch Count {
-//        case 0:
-//            return StringConstants.SelectItems
-//        case 1:
-//            return StringConstants.OneVideoSelected
-//        default:
-//            return String(format: StringConstants.MultipleVideosSelected, Count)
-//        }
-//    }
-    
-//    func RemoveVideo() {
-//        withAnimation(.spring()) { [weak self] in
-//            guard let self else { return }
-//            guard let Video = self.Video,
-//                  let VideoIndex = self.Videos.firstIndex(where: { $0.id == Video.id }) else {
-//                return
-//            }
-//            
-//            self.Videos.remove(at: VideoIndex)
-//            
-//            guard let FolderVideoIndex = self.Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
-//                return
-//            }
-//            
-//            self.Folder.Videos?.remove(at: FolderVideoIndex)
-//            self.SaveUpdatedFolder()
-//            self.Video = nil
-//            self.IsSuccessTTProgressHUDVisible = true
-//        }
-//    }
+    func SelectionCount(For Count: Int) -> String {
+        switch Count {
+        case 0:
+            return StringConstants.SelectItems
+        case 1:
+            return StringConstants.OneVideoSelected
+        default:
+            return String(format: StringConstants.MultipleVideosSelected, Count)
+        }
+    }
     
 //    func SaveToPhone() {
 //        print("Save to Phone Tapped")

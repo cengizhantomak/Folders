@@ -16,9 +16,9 @@ struct VideoItemView: View {
     var body: some View {
         if !ViewModel.IsSelecting {
             VideoItem
-//                .contextMenu {
-//                    VideoContextMenu
-//                }
+                .contextMenu {
+                    VideoContextMenu
+                }
 //                .alert(StringConstants.Alert.Title.RenameVideo, isPresented: $ViewModel.ShowRenameAlert) {
 //                    RenameVideoAlert
 //                }
@@ -105,63 +105,63 @@ struct VideoItemView: View {
     }
     
     // MARK: - Context Menu and Actions
-//    private var VideoContextMenu: some View {
-//        VStack {
-//            ToggleFavoriteButton
-//            SaveToPhoneButton
-//            Divider()
-//            RenameVideoButton
-//            DeleteVideoButton
-//        }
-//    }
+    private var VideoContextMenu: some View {
+        VStack {
+            ToggleFavoriteButton
+            SaveToPhoneButton
+            Divider()
+            RenameVideoButton
+            DeleteVideoButton
+        }
+    }
     
-//    private var ToggleFavoriteButton: some View {
-//        Button {
+    private var ToggleFavoriteButton: some View {
+        Button {
 //            ViewModel.Video = Video
 //            ViewModel.ToggleFavorite()
-//        } label: {
-//            Label(
-//                Video.IsFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
-//                systemImage: Video.IsFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage
-//            )
-//        }
-//    }
+        } label: {
+            Label(
+                Video.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
+                systemImage: Video.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage
+            )
+        }
+    }
     
-//    private var SaveToPhoneButton: some View {
-//        Button {
+    private var SaveToPhoneButton: some View {
+        Button {
 //            ViewModel.SaveToPhone()
-//        } label: {
-//            Label(
-//                StringConstants.ContextMenu.SaveToPhone.Text,
-//                systemImage: StringConstants.ContextMenu.SaveToPhone.SystemImage
-//            )
-//        }
-//    }
+        } label: {
+            Label(
+                StringConstants.ContextMenu.SaveToPhone.Text,
+                systemImage: StringConstants.ContextMenu.SaveToPhone.SystemImage
+            )
+        }
+    }
     
-//    private var RenameVideoButton: some View {
-//        Button {
+    private var RenameVideoButton: some View {
+        Button {
 //            ViewModel.Video = Video
 //            ViewModel.NewName = Video.Name
 //            ViewModel.ShowRenameAlert = true
-//        } label: {
-//            Label(
-//                StringConstants.ContextMenu.Rename.Text,
-//                systemImage: StringConstants.ContextMenu.Rename.SystemImage
-//            )
-//        }
-//    }
+        } label: {
+            Label(
+                StringConstants.ContextMenu.Rename.Text,
+                systemImage: StringConstants.ContextMenu.Rename.SystemImage
+            )
+        }
+    }
     
-//    private var DeleteVideoButton: some View {
-//        Button(role: .destructive) {
-//            ViewModel.Video = Video
-//            ViewModel.ShowDeleteAlert = true
-//        } label: {
-//            Label(
-//                StringConstants.ContextMenu.Delete.Text,
-//                systemImage: StringConstants.ContextMenu.Delete.SystemImage
-//            )
-//        }
-//    }
+    private var DeleteVideoButton: some View {
+        Button(role: .destructive) {
+            ViewModel.SelectedPractices.append(Video)
+            ViewModel.ShowDeleteAlert = true
+        } label: {
+            Label(
+                StringConstants.ContextMenu.Delete.Text,
+                systemImage: StringConstants.ContextMenu.Delete.SystemImage
+            )
+        }
+    }
     
     // MARK: - Alerts
 //    private var RenameVideoAlert: some View {
