@@ -15,7 +15,7 @@ class VideoViewModel: ObservableObject {
     @Published var Columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
 //    @Published var ShowBottomBarDeleteAlert = false
-//    @Published var OnlyShowFavorites = false
+    @Published var OnlyShowFavorites = false
 //    @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
 //    @Published var NewName = ""
@@ -37,6 +37,7 @@ class VideoViewModel: ObservableObject {
             withAnimation(.spring()) {
                 guard let self else { return }
                 self.Practices = PracticeModel
+                self.Practice = nil
             }
         }
     }
@@ -64,9 +65,32 @@ class VideoViewModel: ObservableObject {
         SelectedPractices.removeAll()
     }
     
-//    var FavoriteVideos: [VideoModel] {
-//        return Videos.filter { $0.IsFavorite }
-//    }
+    func FavoritesButtonAction() {
+        if OnlyShowFavorites {
+            OnlyShowFavorites.toggle()
+            LoadPractices()
+        } else {
+            withAnimation(.spring()) { [weak self] in
+                guard let self else { return }
+                self.Practices = self.Practices.filter { $0.isFavorite }
+            }
+            OnlyShowFavorites.toggle()
+        }
+    }
+
+    func ToggleFavorite() {
+        Task {
+            do {
+                if var Video = Practice {
+                    Video.isFavorite.toggle()
+                    try await PracticeRepository.shared.edit(Video)
+                }
+                LoadPractices()
+            } catch {
+                print("Error updating favorite status: \(error)")
+            }
+        }
+    }
     
 //    func SaveUpdatedFolder() {
 //        var SavedFolders: [FolderModel] = UserDefaultsManager.Shared.Load(ForKey: StringConstants.Folders) ?? []
@@ -84,37 +108,6 @@ class VideoViewModel: ObservableObject {
 //            return
 //        }
 //        Videos = VideosFromFolder
-//    }
-    
-//    func FavoritesButtonAction() {
-//        withAnimation(.spring()) { [weak self] in
-//            guard let self else { return }
-//            if self.OnlyShowFavorites {
-//                self.OnlyShowFavorites.toggle()
-//                self.LoadVideos()
-//            } else {
-//                self.Videos = self.FavoriteVideos
-//                self.OnlyShowFavorites.toggle()
-//            }
-//        }
-//    }
-    
-//    func ToggleFavorite() {
-//        guard let Video = Video,
-//              let VideoIndex = Videos.firstIndex(where: { $0.id == Video.id }) else {
-//            return
-//        }
-//        
-//        Videos[VideoIndex].IsFavorite.toggle()
-//        
-//        guard let FolderVideoIndex = Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
-//            return
-//        }
-//        
-//        Folder.Videos?[FolderVideoIndex] = Videos[VideoIndex]
-//        SaveUpdatedFolder()
-//        self.Video = nil
-//        IsSuccessTTProgressHUDVisible = true
 //    }
     
     func SelectCancelButtonAction() {

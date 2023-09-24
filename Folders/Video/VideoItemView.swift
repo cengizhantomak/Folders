@@ -117,8 +117,8 @@ struct VideoItemView: View {
     
     private var ToggleFavoriteButton: some View {
         Button {
-//            ViewModel.Video = Video
-//            ViewModel.ToggleFavorite()
+            ViewModel.Practice = Video
+            ViewModel.ToggleFavorite()
         } label: {
             Label(
                 Video.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
