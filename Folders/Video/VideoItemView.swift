@@ -19,9 +19,9 @@ struct VideoItemView: View {
                 .contextMenu {
                     VideoContextMenu
                 }
-//                .alert(StringConstants.Alert.Title.RenameVideo, isPresented: $ViewModel.ShowRenameAlert) {
-//                    RenameVideoAlert
-//                }
+                .alert(StringConstants.Alert.Title.RenameVideo, isPresented: $ViewModel.ShowRenameAlert) {
+                    RenameVideoAlert
+                }
 //                .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
 //                    DeleteVideoAlert
 //                } message: {
@@ -47,27 +47,27 @@ struct VideoItemView: View {
                 LinearGradient(colors: [Color.black, Color.clear], startPoint: .bottom, endPoint: .top)
                     .frame(height: 150)
             }
-            VideoNameAtBottom
+            .overlay(alignment: .leading) {
+                VideoNameAtBottom
+            }
             FavoriteIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
             SelectionIcon(CircleOffset: CircleOffset)
         }
     }
     
     private var VideoNameAtBottom: some View {
-        VStack {
+        VStack(alignment: .leading) {
             Spacer()
-            VStack(alignment: .leading) {
-                Text(Video.Name)
-                    .truncationMode(.tail)
-                    .lineLimit(1)
-                    .font(.system(size: 9, weight: .bold))
-                    .foregroundColor(.white)
-                Text(Date.CurrentTime(From: Video.UpdatedAt))
-                    .font(.system(size: 8))
-                    .foregroundColor(.gray)
-            }
-            .padding(5)
+            Text(Video.Name)
+                .truncationMode(.tail)
+                .lineLimit(1)
+                .font(.system(size: 9, weight: .bold))
+                .foregroundColor(.white)
+            Text(Date.CurrentTime(From: Video.UpdatedAt))
+                .font(.system(size: 8))
+                .foregroundColor(.gray)
         }
+        .padding(5)
     }
     
     // MARK: - Icons
@@ -129,7 +129,7 @@ struct VideoItemView: View {
     
     private var SaveToPhoneButton: some View {
         Button {
-//            ViewModel.SaveToPhone()
+            ViewModel.SaveToPhone()
         } label: {
             Label(
                 StringConstants.ContextMenu.SaveToPhone.Text,
@@ -140,9 +140,9 @@ struct VideoItemView: View {
     
     private var RenameVideoButton: some View {
         Button {
-//            ViewModel.Video = Video
-//            ViewModel.NewName = Video.Name
-//            ViewModel.ShowRenameAlert = true
+            ViewModel.Practice = Video
+            ViewModel.NewName = Video.Name
+            ViewModel.ShowRenameAlert = true
         } label: {
             Label(
                 StringConstants.ContextMenu.Rename.Text,
@@ -164,21 +164,21 @@ struct VideoItemView: View {
     }
     
     // MARK: - Alerts
-//    private var RenameVideoAlert: some View {
-//        Group {
-//            TextField(StringConstants.Alert.Title.VideoName, text: $ViewModel.NewName)
-//            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-//                if !ViewModel.NewName.isEmpty {
-//                    ViewModel.RenameVideo(NewName: ViewModel.NewName)
-//                } else {
+    private var RenameVideoAlert: some View {
+        Group {
+            TextField(StringConstants.Alert.Title.VideoName, text: $ViewModel.NewName)
+            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
+                if !ViewModel.NewName.isEmpty {
+                    ViewModel.RenameVideo(NewName: ViewModel.NewName)
+                } else {
 //                    ViewModel.IsErrorTTProgressHUDVisible = true
-//                }
-//            }
-//            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-//                print("Cancel Tapped")
-//            }
-//        }
-//    }
+                }
+            }
+            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                print("Cancel Tapped")
+            }
+        }
+    }
     
 //    private var DeleteVideoAlert: some View {
 //        Group {

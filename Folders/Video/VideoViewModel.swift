@@ -16,9 +16,9 @@ class VideoViewModel: ObservableObject {
     @Published var IsSelecting = false
 //    @Published var ShowBottomBarDeleteAlert = false
     @Published var OnlyShowFavorites = false
-//    @Published var ShowRenameAlert = false
+    @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
-//    @Published var NewName = ""
+    @Published var NewName = ""
 //    @Published var Video: VideoModel?
 //    @Published var IsSuccessTTProgressHUDVisible = false
 //    @Published var IsErrorTTProgressHUDVisible = false
@@ -49,6 +49,25 @@ class VideoViewModel: ObservableObject {
                 UpdatePracticeModel(PracticeModel: AllPractices)
             } catch {
                 print("Failed to load practices: \(error)")
+            }
+        }
+    }
+    
+    func SaveToPhone() {
+        print("Save to Phone Tapped")
+//        IsSuccessTTProgressHUDVisible = true
+    }
+    
+    func RenameVideo(NewName: String) {
+        Task {
+            do {
+                if var Video = Practice {
+                    Video.Name = NewName
+                    try await PracticeRepository.shared.edit(Video)
+                }
+                LoadPractices()
+            } catch {
+                print("Error updating favorite status: \(error)")
             }
         }
     }
@@ -127,32 +146,6 @@ class VideoViewModel: ObservableObject {
             return String(format: StringConstants.MultipleVideosSelected, Count)
         }
     }
-    
-//    func SaveToPhone() {
-//        print("Save to Phone Tapped")
-//        IsSuccessTTProgressHUDVisible = true
-//    }
-    
-//    func RenameVideo(NewName: String) {
-//        withAnimation(.spring()) { [weak self] in
-//            guard let self else { return }
-//            guard let Video = self.Video,
-//                  let VideoIndex = self.Videos.firstIndex(where: { $0.id == Video.id }) else {
-//                return
-//            }
-//            
-//            self.Videos[VideoIndex].Name = NewName
-//            
-//            guard let FolderVideoIndex = self.Folder.Videos?.firstIndex(where: { $0.id == Video.id }) else {
-//                return
-//            }
-//            
-//            self.Folder.Videos?[FolderVideoIndex] = self.Videos[VideoIndex]
-//            self.SaveUpdatedFolder()
-//            self.Video = nil
-//            self.IsSuccessTTProgressHUDVisible = true
-//        }
-//    }
     
     func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat = 20, YOffsetValue: CGFloat = 20) -> (X: CGFloat, Y: CGFloat) {
         let X = (ItemWidth / 2) - XOffsetValue
