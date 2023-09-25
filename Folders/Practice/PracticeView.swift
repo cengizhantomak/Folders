@@ -1,5 +1,5 @@
 //
-//  VideoView.swift
+//  PracticeView.swift
 //  Folders
 //
 //  Created by Cengizhan Tomak on 11.09.2023.
@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct VideoView: View {
-    @StateObject var ViewModel: VideoViewModel
+struct PracticeView: View {
+    @StateObject var ViewModel: PracticeViewModel
     
     var body: some View {
         ZStack {
@@ -33,7 +33,7 @@ struct VideoView: View {
                     GeometryReader { Geometry in
                         let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 1, Amount: 3)
                         ScrollView {
-                            VideoGridView(ViewModel: ViewModel, ItemWidth: ItemWidth)
+                            PracticeGridView(ViewModel: ViewModel, ItemWidth: ItemWidth)
                                 .padding(5)
                         }
                     }
@@ -122,8 +122,8 @@ struct VideoView: View {
     }
 }
 
-//struct VideoView_Previews: PreviewProvider {
+//struct PracticeView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        VideoView(ViewModel: VideoViewModel(Folder: FolderModel(Name: "LVS")))
+//        PracticeView(ViewModel: PracticeViewModel(Folder: FolderModel(Name: "LVS")))
 //    }
 //}

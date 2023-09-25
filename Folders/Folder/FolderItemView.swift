@@ -40,6 +40,9 @@ struct FolderItemView: View {
             Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
         }
     }
+}
+
+extension FolderItemView {
     
     // MARK: - FolderItem
     private var FolderItem: some View {

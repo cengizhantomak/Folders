@@ -160,7 +160,7 @@ struct FolderView: View {
     }
 }
 
-//struct ContentView_Previews: PreviewProvider {
+//struct FolderView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        FolderView()
 //    }

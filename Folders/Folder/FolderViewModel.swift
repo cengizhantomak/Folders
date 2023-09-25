@@ -9,8 +9,6 @@ import SwiftUI
 import LVRealmKit
 
 class FolderViewModel: ObservableObject {
-    //    @Published var Folders: [FolderModel] = []
-    //    @Published var SelectedFolders: [FolderModel] = []
     @Published var Columns = [GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
     @Published var OnlyShowFavorites = false
@@ -18,15 +16,32 @@ class FolderViewModel: ObservableObject {
     @Published var ShowCreatedAlert = false
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
-    @Published var NewName = ""
-    //    @Published var Folder: FolderModel?
-    //    @Published var IsSuccessTTProgressHUDVisible = false
-    //    @Published var IsErrorTTProgressHUDVisible = false
-    @Published var FolderName = ""
-    var FolderCreationDate: Date?
+//    @Published var IsSuccessTTProgressHUDVisible = false
+//    @Published var IsErrorTTProgressHUDVisible = false
     @Published var Sessions: [SessionModel] = []
     @Published var SelectedSessions: [SessionModel] = []
     @Published var Session: SessionModel?
+    @Published var FolderName = ""
+    @Published var NewName = ""
+    var FolderCreationDate: Date?
+    
+    var TodaySection: [SessionModel] {
+        let Today = Date()
+        return Sessions.filter {
+            Calendar.current.isDate($0.createdAt, inSameDayAs: Today) && !$0.isPinned
+        }
+    }
+    
+    var SessionSection: [SessionModel] {
+        let Session = Date()
+        return Sessions.filter {
+            !Calendar.current.isDate($0.createdAt, inSameDayAs: Session) && !$0.isPinned
+        }
+    }
+    
+    var PinnedSection: [SessionModel] {
+        return Sessions.filter { $0.isPinned }
+    }
     
     init() {
         LoadFolders()
@@ -73,16 +88,21 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-    func DeleteFolders(_ Folder: [SessionModel]) {
+    func AddPractice() {
         Task {
             do {
-                try await FolderRepository.shared.deleteFolders(Folder)
+                if let LastFolder = try? await FolderRepository.shared.getLastFolder() {
+                    var NewPractice = PracticeModel(id: UUID().uuidString,
+                                                    Name: Date().dateFormat("yyyyMMddHHmmssSSS"),
+                                                    VideoPath: "LVS")
+                    NewPractice.Session = LastFolder
+                    _ = try await PracticeRepository.shared.addPractice(&NewPractice)
+                }
                 LoadFolders()
             } catch {
-                print("Error deleting session: \(error)")
+                print("Failed to add practice: \(error)")
             }
         }
-        SelectedSessions.removeAll()
     }
     
     func RenameFolder(NewName: String) {
@@ -99,22 +119,16 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-    var TodaySection: [SessionModel] {
-        let Today = Date()
-        return Sessions.filter {
-            Calendar.current.isDate($0.createdAt, inSameDayAs: Today) && !$0.isPinned
+    func DeleteFolders(_ Folder: [SessionModel]) {
+        Task {
+            do {
+                try await FolderRepository.shared.deleteFolders(Folder)
+                LoadFolders()
+            } catch {
+                print("Error deleting session: \(error)")
+            }
         }
-    }
-    
-    var SessionSection: [SessionModel] {
-        let Session = Date()
-        return Sessions.filter {
-            !Calendar.current.isDate($0.createdAt, inSameDayAs: Session) && !$0.isPinned
-        }
-    }
-    
-    var PinnedSection: [SessionModel] {
-        return Sessions.filter { $0.isPinned }
+        SelectedSessions.removeAll()
     }
     
     func TogglePin() {
@@ -143,7 +157,7 @@ class FolderViewModel: ObservableObject {
             OnlyShowFavorites.toggle()
         }
     }
-
+    
     func ToggleFavorite() {
         Task {
             do {
@@ -157,15 +171,6 @@ class FolderViewModel: ObservableObject {
             }
         }
     }
-    
-    func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
-        return (ScreenWidth - (Padding * (Amount + 1))) / Amount
-    }
-    
-//    func SaveFolders() {
-//        UserDefaultsManager.Shared.Save(Folders, ForKey: StringConstants.Folders)
-//    }
-//
     
     func SelectCancelButtonAction() {
         IsSelecting.toggle()
@@ -185,56 +190,17 @@ class FolderViewModel: ObservableObject {
         }
     }
     
+    func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
+        return (ScreenWidth - (Padding * (Amount + 1))) / Amount
+    }
+    
     func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat = 20, YOffsetValue: CGFloat = 20) -> (X: CGFloat, Y: CGFloat) {
         let X = (ItemWidth / 2) - XOffsetValue
         let Y = -(ItemWidth * (1970 / 1080) / 2) + YOffsetValue
         return (X, Y)
     }
     
-    func AddPractice() {
-        Task {
-            do {
-                if let LastFolder = try? await FolderRepository.shared.getLastFolder() {
-                    var NewPractice = PracticeModel(id: UUID().uuidString, 
-                                                    Name: Date().dateFormat("yyyyMMddHHmmssSSS"),
-                                                    VideoPath: "LVS")
-                    NewPractice.Session = LastFolder
-                    _ = try await PracticeRepository.shared.addPractice(&NewPractice)
-                }
-                LoadFolders()
-            } catch {
-                print("Failed to add practice: \(error)")
-            }
-        }
+    func Opacity(For Folder: SessionModel) -> Double {
+        return IsSelecting && !SelectedSessions.contains(where: { $0.id == Folder.id }) ? 0.5 : 1.0
     }
-    
-    //    func AddFolderWithAssetVideo() {
-    //        let TodayFolders = TodayFolders
-    //
-    //        if let LatestFolder = TodayFolders.first {
-    //            var UpdatedFolder = LatestFolder
-    //            var NewVideo = VideoModel()
-    //            NewVideo.AssetVideoName = "LVS"
-    //
-    //            if UpdatedFolder.Videos != nil {
-    //                UpdatedFolder.Videos?.append(NewVideo)
-    //            } else {
-    //                UpdatedFolder.Videos = [NewVideo]
-    //            }
-    //
-    //            if let Index = Folders.firstIndex(where: { $0.id == UpdatedFolder.id }) {
-    //                Folders[Index] = UpdatedFolder
-    //            }
-    //        } else {
-    //            var NewFolder = FolderModel()
-    //            var NewVideo = VideoModel()
-    //            NewVideo.AssetVideoName = "LVS"
-    //            NewFolder.Videos = [NewVideo]
-    //            Folders.insert(NewFolder, at: 0)
-    //        }
-    //
-    //        SaveFolders()
-    //        IsSuccessTTProgressHUDVisible = true
-    //    }
-
 }

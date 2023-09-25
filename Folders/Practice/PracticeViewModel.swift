@@ -1,5 +1,5 @@
 //
-//  VideoViewModel.swift
+//  PracticeViewModel.swift
 //  Folders
 //
 //  Created by Cengizhan Tomak on 11.09.2023.
@@ -8,24 +8,20 @@
 import SwiftUI
 import LVRealmKit
 
-class VideoViewModel: ObservableObject {
-//    @Published var Folder: FolderModel
-//    @Published var Videos: [VideoModel] = []
-//    @Published var SelectedVideos: [VideoModel] = []
+class PracticeViewModel: ObservableObject {
     @Published var Columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
     @Published var ShowBottomBarDeleteAlert = false
     @Published var OnlyShowFavorites = false
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
-    @Published var NewName = ""
-//    @Published var Video: VideoModel?
 //    @Published var IsSuccessTTProgressHUDVisible = false
 //    @Published var IsErrorTTProgressHUDVisible = false
     @Published var Session: SessionModel
     @Published var Practices: [PracticeModel] = []
     @Published var SelectedPractices: [PracticeModel] = []
     @Published var Practice: PracticeModel?
+    @Published var NewName = ""
     
     init(Folder: SessionModel) {
         self.Session = Folder
@@ -58,7 +54,7 @@ class VideoViewModel: ObservableObject {
 //        IsSuccessTTProgressHUDVisible = true
     }
     
-    func RenameVideo(NewName: String) {
+    func RenamePractice(NewName: String) {
         Task {
             do {
                 if var Video = Practice {
@@ -96,7 +92,7 @@ class VideoViewModel: ObservableObject {
             OnlyShowFavorites.toggle()
         }
     }
-
+    
     func ToggleFavorite() {
         Task {
             do {
@@ -110,24 +106,6 @@ class VideoViewModel: ObservableObject {
             }
         }
     }
-    
-//    func SaveUpdatedFolder() {
-//        var SavedFolders: [FolderModel] = UserDefaultsManager.Shared.Load(ForKey: StringConstants.Folders) ?? []
-//        
-//        guard let FolderIndex = SavedFolders.firstIndex(where: { $0.id == Folder.id }) else {
-//            return
-//        }
-//        
-//        SavedFolders[FolderIndex] = Folder
-//        UserDefaultsManager.Shared.Save(SavedFolders, ForKey: StringConstants.Folders)
-//    }
-    
-//    func LoadVideos() {
-//        guard let VideosFromFolder = Folder.Videos else {
-//            return
-//        }
-//        Videos = VideosFromFolder
-//    }
     
     func SelectCancelButtonAction() {
         IsSelecting.toggle()
@@ -155,5 +133,9 @@ class VideoViewModel: ObservableObject {
     
     func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
         return (ScreenWidth - (Padding * (Amount + 1))) / Amount
+    }
+    
+    func Opacity(For Practice: PracticeModel) -> Double {
+        return IsSelecting && !SelectedPractices.contains(where: { $0.id == Practice.id }) ? 0.5 : 1.0
     }
 }

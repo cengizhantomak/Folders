@@ -24,23 +24,25 @@ struct FolderGridView: View {
             }
         }
     }
+}
+
+extension FolderGridView {
     
-    // MARK: Navigation Link
+    // MARK: - Navigation Link
     private func NavigatableView(For Folder: SessionModel) -> some View {
-//        NavigationLink(destination: PracticeListView(session: Folder))
-        NavigationLink(destination: VideoView(ViewModel: VideoViewModel(Folder: Folder))) {
+        NavigationLink(destination: PracticeView(ViewModel: PracticeViewModel(Folder: Folder))) {
             FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
         }
         .foregroundColor(.primary)
     }
     
-    // MARK: Selectable Folder Item
+    // MARK: - Selectable Folder Item
     private func SelectableFolderItem(For Folder: SessionModel) -> some View {
         FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
             .onTapGesture {
                 HandleFolderSelection(Of: Folder)
             }
-            .opacity(Opacity(For: Folder))
+            .opacity(ViewModel.Opacity(For: Folder))
     }
     
     // MARK: Selection Handling
@@ -50,11 +52,6 @@ struct FolderGridView: View {
         } else {
             ViewModel.SelectedSessions.append(Folder)
         }
-    }
-    
-    // MARK: Folder Opacity
-    private func Opacity(For Folder: SessionModel) -> Double {
-        return ViewModel.IsSelecting && !ViewModel.SelectedSessions.contains(where: { $0.id == Folder.id }) ? 0.5 : 1.0
     }
 }
 

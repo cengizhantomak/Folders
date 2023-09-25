@@ -1,5 +1,5 @@
 //
-//  VideoItemView.swift
+//  PracticeItemView.swift
 //  Folders
 //
 //  Created by Cengizhan Tomak on 11.09.2023.
@@ -8,14 +8,14 @@
 import SwiftUI
 import LVRealmKit
 
-struct VideoItemView: View {
-    @StateObject var ViewModel: VideoViewModel
-    var Video: PracticeModel
+struct PracticeItemView: View {
+    @StateObject var ViewModel: PracticeViewModel
+    var Practice: PracticeModel
     let ItemWidth: CGFloat
     
     var body: some View {
         if !ViewModel.IsSelecting {
-            VideoItem
+            PracticeItem
                 .contextMenu {
                     VideoContextMenu
                 }
@@ -28,17 +28,20 @@ struct VideoItemView: View {
                     Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
                 }
         } else {
-            VideoItem
+            PracticeItem
         }
     }
+}
+
+extension PracticeItemView {
     
-    // MARK: - VideoItem
-    private var VideoItem: some View {
+    // MARK: - PracticeItem
+    private var PracticeItem: some View {
         let CircleOffset = ViewModel.CircleOffset(For: ItemWidth, XOffsetValue: 20, YOffsetValue: 20)
         let SafeItemWidth = max(ItemWidth, 1)
         
         return ZStack {
-            Image(Video.VideoPath)
+            Image(Practice.VideoPath)
                 .resizable()
                 .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
                 .scaledToFit()
@@ -48,22 +51,22 @@ struct VideoItemView: View {
                     .frame(height: 150)
             }
             .overlay(alignment: .leading) {
-                VideoNameAtBottom
+                PracticeNameAtBottom
             }
             FavoriteIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
             SelectionIcon(CircleOffset: CircleOffset)
         }
     }
     
-    private var VideoNameAtBottom: some View {
+    private var PracticeNameAtBottom: some View {
         VStack(alignment: .leading) {
             Spacer()
-            Text(Video.Name)
+            Text(Practice.Name)
                 .truncationMode(.tail)
                 .lineLimit(1)
                 .font(.system(size: 9, weight: .bold))
                 .foregroundColor(.white)
-            Text(Date.CurrentTime(From: Video.UpdatedAt))
+            Text(Date.CurrentTime(From: Practice.UpdatedAt))
                 .font(.system(size: 8))
                 .foregroundColor(.gray)
         }
@@ -73,7 +76,7 @@ struct VideoItemView: View {
     // MARK: - Icons
     private func FavoriteIcon(CircleOffset: (X: CGFloat, Y: CGFloat), SafeItemWidth: CGFloat) -> some View {
         Group {
-            if Video.isFavorite && !ViewModel.IsSelecting {
+            if Practice.isFavorite && !ViewModel.IsSelecting {
                 Image(systemName: StringConstants.SystemImage.HeartFill)
                     .resizable()
                     .scaledToFit()
@@ -93,7 +96,7 @@ struct VideoItemView: View {
                     .stroke(.gray, lineWidth: 2)
                     .background(Circle().fill(Color.white))
                     .overlay(
-                        ViewModel.SelectedPractices.contains(where: { $0.id == Video.id }) ?
+                        ViewModel.SelectedPractices.contains(where: { $0.id == Practice.id }) ?
                         Circle().stroke(.gray, lineWidth: 2).frame(width: 10, height: 10) : nil
                     )
                     .frame(width: 20, height: 20)
@@ -117,12 +120,12 @@ struct VideoItemView: View {
     
     private var ToggleFavoriteButton: some View {
         Button {
-            ViewModel.Practice = Video
+            ViewModel.Practice = Practice
             ViewModel.ToggleFavorite()
         } label: {
             Label(
-                Video.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
-                systemImage: Video.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage
+                Practice.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
+                systemImage: Practice.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage
             )
         }
     }
@@ -140,8 +143,8 @@ struct VideoItemView: View {
     
     private var RenameVideoButton: some View {
         Button {
-            ViewModel.Practice = Video
-            ViewModel.NewName = Video.Name
+            ViewModel.Practice = Practice
+            ViewModel.NewName = Practice.Name
             ViewModel.ShowRenameAlert = true
         } label: {
             Label(
@@ -153,7 +156,7 @@ struct VideoItemView: View {
     
     private var DeleteVideoButton: some View {
         Button(role: .destructive) {
-            ViewModel.SelectedPractices.append(Video)
+            ViewModel.SelectedPractices.append(Practice)
             ViewModel.ShowDeleteAlert = true
         } label: {
             Label(
@@ -169,7 +172,7 @@ struct VideoItemView: View {
             TextField(StringConstants.Alert.Title.VideoName, text: $ViewModel.NewName)
             Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
                 if !ViewModel.NewName.isEmpty {
-                    ViewModel.RenameVideo(NewName: ViewModel.NewName)
+                    ViewModel.RenamePractice(NewName: ViewModel.NewName)
                 } else {
 //                    ViewModel.IsErrorTTProgressHUDVisible = true
                 }
@@ -193,8 +196,8 @@ struct VideoItemView: View {
     }
 }
 
-//struct VideoItemView_Previews: PreviewProvider {
+//struct PracticeItemView_Previews: PreviewProvider {
 //    static var previews: some View {
-//        VideoItemView(ViewModel: VideoViewModel(Folder: FolderModel(Name: "LVS")), Video: VideoModel(), ItemWidth: 100)
+//        PracticeItemView(ViewModel: PracticeViewModel(Folder: FolderModel(Name: "LVS")), Practice: VideoModel(), ItemWidth: 100)
 //    }
 //}
