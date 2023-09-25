@@ -1,5 +1,5 @@
 //
-//  VideoView.swift
+//  PracticeView.swift
 //  Folders
 //
 //  Created by Cengizhan Tomak on 11.09.2023.
@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct VideoView: View {
-    @StateObject var ViewModel: VideoViewModel
+struct PracticeView: View {
+    @StateObject var ViewModel: PracticeViewModel
     
     var body: some View {
         ZStack {
             VStack {
-                if ViewModel.Videos.isEmpty {
+                if ViewModel.Practices.isEmpty {
                     ZStack {
                         VStack {
                             Spacer()
@@ -33,7 +33,7 @@ struct VideoView: View {
                     GeometryReader { Geometry in
                         let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 1, Amount: 3)
                         ScrollView {
-                            VideoGridView(ViewModel: ViewModel, ItemWidth: ItemWidth)
+                            PracticeGridView(ViewModel: ViewModel, ItemWidth: ItemWidth)
                                 .padding(5)
                         }
                     }
@@ -41,7 +41,7 @@ struct VideoView: View {
             }
             VStack {
                 HStack {
-                    Text(ViewModel.Folder.Name)
+                    Text(ViewModel.Session.name)
                         .lineLimit(1)
                         .minimumScaleFactor(0.5)
                         .font(.title2)
@@ -91,27 +91,23 @@ struct VideoView: View {
                     }
                     ToolbarItemGroup(placement: .bottomBar) {
                         Spacer()
-                        Text(ViewModel.SelectionCount(For: ViewModel.SelectedVideos.count))
-                            .foregroundColor(ViewModel.SelectedVideos.isEmpty ? .gray : .primary)
+                        Text(ViewModel.SelectionCount(For: ViewModel.SelectedPractices.count))
+                            .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
                         Spacer()
                         Button {
                             ViewModel.ShowBottomBarDeleteAlert = true
                         } label: {
                             Image(systemName: StringConstants.SystemImage.Trash)
-                                .foregroundColor(ViewModel.SelectedVideos.isEmpty ? .gray : .primary)
+                                .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
                         }
-                        .disabled(ViewModel.SelectedVideos.isEmpty)
+                        .disabled(ViewModel.SelectedPractices.isEmpty)
                     }
                 }
             }
             .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
                 Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-                    for Video in ViewModel.SelectedVideos {
-                        ViewModel.Video = Video
-                        ViewModel.RemoveVideo()
-                    }
-                    ViewModel.SelectedVideos.removeAll()
-                    ViewModel.IsSelecting.toggle()
+                    ViewModel.DeletePractices(ViewModel.SelectedPractices)
+                    ViewModel.IsSelecting = false
                 }
                 Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
                     print("Cancel Tapped")
@@ -126,8 +122,8 @@ struct VideoView: View {
     }
 }
 
-struct VideoView_Previews: PreviewProvider {
-    static var previews: some View {
-        VideoView(ViewModel: VideoViewModel(Folder: FolderModel(Name: "LVS")))
-    }
-}
+//struct PracticeView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        PracticeView(ViewModel: PracticeViewModel(Folder: FolderModel(Name: "LVS")))
+//    }
+//}

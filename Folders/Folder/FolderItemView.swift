@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import LVRealmKit
 
 struct FolderItemView: View {
     @StateObject var ViewModel: FolderViewModel
-    var Folder: FolderModel
+    var Folder: SessionModel
     let ItemWidth: CGFloat
     
     var body: some View {
@@ -22,11 +23,11 @@ struct FolderItemView: View {
             } else {
                 FolderItem
             }
-            Text(Folder.Name)
+            Text(Folder.name)
                 .truncationMode(.tail)
                 .lineLimit(1)
                 .font(.system(size: 15))
-            Text(String(Folder.Videos?.count ?? 0))
+            Text(String(Folder.practiceCount))
                 .font(.system(size: 14))
                 .foregroundColor(.gray)
         }
@@ -39,6 +40,9 @@ struct FolderItemView: View {
             Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
         }
     }
+}
+
+extension FolderItemView {
     
     // MARK: - FolderItem
     private var FolderItem: some View {
@@ -63,7 +67,7 @@ struct FolderItemView: View {
     // MARK: - Icons
     private func FavoriteIcon(CircleOffset: (X: CGFloat, Y: CGFloat), SafeItemWidth: CGFloat) -> some View {
         Group {
-            if Folder.IsFavorite && !ViewModel.IsSelecting {
+            if Folder.isFavorite && !ViewModel.IsSelecting {
                 Image(systemName: StringConstants.SystemImage.HeartFill)
                     .resizable()
                     .scaledToFit()
@@ -83,7 +87,7 @@ struct FolderItemView: View {
                     .stroke(.gray, lineWidth: 2)
                     .background(Circle().fill(Color.white))
                     .overlay(
-                        ViewModel.SelectedFolders.contains(where: { $0.id == Folder.id }) ?
+                        ViewModel.SelectedSessions.contains(where: { $0.id == Folder.id }) ?
                         Circle().stroke(.gray, lineWidth: 2).frame(width: 10, height: 10) : nil
                     )
                     .frame(width: 20, height: 20)
@@ -107,32 +111,34 @@ struct FolderItemView: View {
     
     private var PinUnpinButton: some View {
         Button {
-            ViewModel.Folder = Folder
-            ViewModel.PinFolder()
+            ViewModel.Session = Folder
+            ViewModel.TogglePin()
         } label: {
             Label(
-                ViewModel.Folders.contains { $0.Name == Folder.Name && $0.IsPinned } ? StringConstants.ContextMenu.Unpin.Text : StringConstants.ContextMenu.Pin.Text,
-                systemImage: Folder.IsPinned ? StringConstants.ContextMenu.Unpin.SystemImage : StringConstants.ContextMenu.Pin.SystemImage
+                Folder.isPinned ? StringConstants.ContextMenu.Unpin.Text : StringConstants.ContextMenu.Pin.Text,
+                systemImage:
+                        Folder.isPinned ? StringConstants.ContextMenu.Unpin.SystemImage : StringConstants.ContextMenu.Pin.SystemImage
             )
         }
     }
     
     private var ToggleFavoriteButton: some View {
         Button {
-            ViewModel.Folder = Folder
+            ViewModel.Session = Folder
             ViewModel.ToggleFavorite()
         } label: {
             Label(
-                Folder.IsFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
-                systemImage: Folder.IsFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage
+                Folder.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
+                systemImage:
+                        Folder.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage
             )
         }
     }
     
     private var RenameVideoButton: some View {
         Button {
-            ViewModel.Folder = Folder
-            ViewModel.NewName = Folder.Name
+            ViewModel.Session = Folder
+            ViewModel.NewName = Folder.name
             ViewModel.ShowRenameAlert = true
         } label: {
             Label(
@@ -144,7 +150,7 @@ struct FolderItemView: View {
     
     private var DeleteVideoButton: some View {
         Button(role: .destructive) {
-            ViewModel.Folder = Folder
+            ViewModel.SelectedSessions.append(Folder)
             ViewModel.ShowDeleteAlert = true
         } label: {
             Label(
@@ -162,7 +168,7 @@ struct FolderItemView: View {
                 if !ViewModel.NewName.isEmpty {
                     ViewModel.RenameFolder(NewName: ViewModel.NewName)
                 } else {
-                    ViewModel.IsErrorTTProgressHUDVisible = true
+//                    ViewModel.IsErrorTTProgressHUDVisible = true
                 }
             }
             Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
@@ -170,21 +176,22 @@ struct FolderItemView: View {
             }
         }
     }
-    
+
     private var DeleteVideoAlert: some View {
         Group {
             Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-                ViewModel.RemoveFolder()
+                ViewModel.DeleteFolders(ViewModel.SelectedSessions)
             }
             Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                ViewModel.SelectedSessions.removeAll()
                 print("Cancel Tapped")
             }
         }
     }
 }
 
-struct FolderItemView_Previews: PreviewProvider {
-    static var previews: some View {
-        FolderItemView(ViewModel: FolderViewModel(), Folder: FolderModel(Name: "LVS"), ItemWidth: 100)
-    }
-}
+//struct FolderItemView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FolderItemView(ViewModel: FolderViewModel(), Folder: FolderModel(Name: "LVS"), ItemWidth: 100)
+//    }
+//}
