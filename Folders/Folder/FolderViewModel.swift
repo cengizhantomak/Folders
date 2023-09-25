@@ -9,38 +9,33 @@ import SwiftUI
 import LVRealmKit
 
 class FolderViewModel: ObservableObject {
-    @Published var Columns = [GridItem(.flexible()), GridItem(.flexible())]
+    var Columns = [GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
     @Published var OnlyShowFavorites = false
     @Published var ShowBottomBarDeleteAlert = false
     @Published var ShowCreatedAlert = false
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
-//    @Published var IsSuccessTTProgressHUDVisible = false
-//    @Published var IsErrorTTProgressHUDVisible = false
-    @Published var Sessions: [SessionModel] = []
+    @Published var IsSuccessTTProgressHUDVisible = false
+    @Published var IsErrorTTProgressHUDVisible = false
     @Published var SelectedSessions: [SessionModel] = []
     @Published var Session: SessionModel?
     @Published var FolderName = ""
     @Published var NewName = ""
     var FolderCreationDate: Date?
-    
-    var TodaySection: [SessionModel] {
-        let Today = Date()
-        return Sessions.filter {
-            Calendar.current.isDate($0.createdAt, inSameDayAs: Today) && !$0.isPinned
+    var TodaySection: [SessionModel] = []
+    var SessionSection: [SessionModel] = []
+    var PinnedSection: [SessionModel] = []
+    var Sessions: [SessionModel] = [] {
+        didSet {
+            self.TodaySection = Sessions.filter {
+                Calendar.current.isDate($0.createdAt, inSameDayAs: Date()) && !$0.isPinned
+            }
+            self.SessionSection = Sessions.filter {
+                        !Calendar.current.isDate($0.createdAt, inSameDayAs: Date()) && !$0.isPinned
+                    }
+            self.PinnedSection = Sessions.filter { $0.isPinned }
         }
-    }
-    
-    var SessionSection: [SessionModel] {
-        let Session = Date()
-        return Sessions.filter {
-            !Calendar.current.isDate($0.createdAt, inSameDayAs: Session) && !$0.isPinned
-        }
-    }
-    
-    var PinnedSection: [SessionModel] {
-        return Sessions.filter { $0.isPinned }
     }
     
     init() {
@@ -68,6 +63,20 @@ class FolderViewModel: ObservableObject {
         }
     }
     
+    private func SuccessTTProgressHUD() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.IsSuccessTTProgressHUDVisible = true
+        }
+    }
+    
+    func ErrorTTProgressHUD() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.IsErrorTTProgressHUDVisible = true
+        }
+    }
+    
     func AddButtonAction() {
         FolderCreationDate = Date()
         FolderName = FolderCreationDate?.dateFormat("yyyyMMdd-HHmmssSSS") ?? "lvs"
@@ -82,6 +91,7 @@ class FolderViewModel: ObservableObject {
                 Folder.createdAt = FolderCreationDate ?? Date()
                 try await FolderRepository.shared.addFolder(Folder)
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error adding session: \(error)")
             }
@@ -92,13 +102,14 @@ class FolderViewModel: ObservableObject {
         Task {
             do {
                 if let LastFolder = try? await FolderRepository.shared.getLastFolder() {
-                    var NewPractice = PracticeModel(id: UUID().uuidString,
+                    var NewPractice = PracticeModel(id: "",
                                                     Name: Date().dateFormat("yyyyMMddHHmmssSSS"),
                                                     VideoPath: "LVS")
                     NewPractice.Session = LastFolder
                     _ = try await PracticeRepository.shared.addPractice(&NewPractice)
                 }
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Failed to add practice: \(error)")
             }
@@ -113,6 +124,7 @@ class FolderViewModel: ObservableObject {
                     try await FolderRepository.shared.edit(Folder)
                 }
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
             }
@@ -124,6 +136,7 @@ class FolderViewModel: ObservableObject {
             do {
                 try await FolderRepository.shared.deleteFolders(Folder)
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error deleting session: \(error)")
             }
@@ -139,6 +152,7 @@ class FolderViewModel: ObservableObject {
                     try await FolderRepository.shared.edit(Folder)
                 }
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
             }
@@ -149,6 +163,7 @@ class FolderViewModel: ObservableObject {
         if OnlyShowFavorites {
             OnlyShowFavorites.toggle()
             LoadFolders()
+            SuccessTTProgressHUD()
         } else {
             withAnimation(.spring()) { [weak self] in
                 guard let self else { return }
@@ -166,6 +181,7 @@ class FolderViewModel: ObservableObject {
                     try await FolderRepository.shared.edit(Folder)
                 }
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
             }

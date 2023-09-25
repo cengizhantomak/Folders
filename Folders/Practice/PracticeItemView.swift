@@ -143,7 +143,6 @@ extension PracticeItemView {
     
     private var RenameVideoButton: some View {
         Button {
-            ViewModel.Practice = Practice
             ViewModel.NewName = Practice.Name
             ViewModel.ShowRenameAlert = true
         } label: {
@@ -172,9 +171,10 @@ extension PracticeItemView {
             TextField(StringConstants.Alert.Title.VideoName, text: $ViewModel.NewName)
             Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
                 if !ViewModel.NewName.isEmpty {
+                    ViewModel.Practice = Practice
                     ViewModel.RenamePractice(NewName: ViewModel.NewName)
                 } else {
-//                    ViewModel.IsErrorTTProgressHUDVisible = true
+                    ViewModel.ErrorTTProgressHUD()
                 }
             }
             Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
@@ -186,6 +186,7 @@ extension PracticeItemView {
     private var DeleteVideoAlert: some View {
         Group {
             Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                ViewModel.Practice = Practice
                 ViewModel.DeletePractices(ViewModel.SelectedPractices)
             }
             Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {

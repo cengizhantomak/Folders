@@ -9,16 +9,16 @@ import SwiftUI
 import LVRealmKit
 
 class PracticeViewModel: ObservableObject {
-    @Published var Columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+    var Columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
     @Published var ShowBottomBarDeleteAlert = false
     @Published var OnlyShowFavorites = false
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
-//    @Published var IsSuccessTTProgressHUDVisible = false
-//    @Published var IsErrorTTProgressHUDVisible = false
-    @Published var Session: SessionModel
-    @Published var Practices: [PracticeModel] = []
+    @Published var IsSuccessTTProgressHUDVisible = false
+    @Published var IsErrorTTProgressHUDVisible = false
+    var Session: SessionModel
+    var Practices: [PracticeModel] = []
     @Published var SelectedPractices: [PracticeModel] = []
     @Published var Practice: PracticeModel?
     @Published var NewName = ""
@@ -49,9 +49,23 @@ class PracticeViewModel: ObservableObject {
         }
     }
     
+    private func SuccessTTProgressHUD() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.IsSuccessTTProgressHUDVisible = true
+        }
+    }
+    
+    func ErrorTTProgressHUD() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.IsErrorTTProgressHUDVisible = true
+        }
+    }
+    
     func SaveToPhone() {
         print("Save to Phone Tapped")
-//        IsSuccessTTProgressHUDVisible = true
+        SuccessTTProgressHUD()
     }
     
     func RenamePractice(NewName: String) {
@@ -62,6 +76,7 @@ class PracticeViewModel: ObservableObject {
                     try await PracticeRepository.shared.edit(Video)
                 }
                 LoadPractices()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
             }
@@ -73,11 +88,27 @@ class PracticeViewModel: ObservableObject {
             do {
                 try await PracticeRepository.shared.deletePractices(Practice)
                 LoadPractices()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error deleting session: \(error)")
             }
         }
-        SelectedPractices.removeAll()
+        UpdatePracticeCount()
+    }
+    
+    func UpdatePracticeCount() {
+        Task {
+            do {
+                if var Video = Practice {
+                    Video.Session?.practiceCount -= SelectedPractices.count
+                    try await PracticeRepository.shared.edit(Video)
+                }
+                LoadPractices()
+                SelectedPractices.removeAll()
+            } catch {
+                print("Error updating favorite status: \(error)")
+            }
+        }
     }
     
     func FavoritesButtonAction() {
@@ -101,6 +132,7 @@ class PracticeViewModel: ObservableObject {
                     try await PracticeRepository.shared.edit(Video)
                 }
                 LoadPractices()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
             }

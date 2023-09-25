@@ -15,7 +15,7 @@ struct FolderGridView: View {
     
     var body: some View {
         LazyVGrid(columns: ViewModel.Columns, spacing: 10) {
-            ForEach(ViewModel.Sessions, id: \.self) { Folder in
+            ForEach(Folders, id: \.id) { Folder in
                 if !ViewModel.IsSelecting {
                     NavigatableView(For: Folder)
                 } else {

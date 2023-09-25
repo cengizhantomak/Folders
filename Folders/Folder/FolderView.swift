@@ -119,7 +119,7 @@ struct FolderView: View {
                     if !ViewModel.FolderName.isEmpty {
                         ViewModel.AddFolder()
                     } else {
-//                        ViewModel.IsErrorTTProgressHUDVisible = true
+                        ViewModel.ErrorTTProgressHUD()
                     }
                 }
                 Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
@@ -141,9 +141,9 @@ struct FolderView: View {
                 ViewModel.LoadFolders()
             })
         }
-//        .overlay {
-//            CustomTTProgressHUD(IsSuccessVisible: $ViewModel.IsSuccessTTProgressHUDVisible, IsErrorVisible: $ViewModel.IsErrorTTProgressHUDVisible)
-//        }
+        .overlay {
+            CustomTTProgressHUD(IsSuccessVisible: $ViewModel.IsSuccessTTProgressHUDVisible, IsErrorVisible: $ViewModel.IsErrorTTProgressHUDVisible)
+        }
     }
     
     private func CreateSection(WithTitle Title: String, Folders: [SessionModel], ItemWidth: CGFloat) -> some View {

@@ -15,7 +15,7 @@ struct PracticeGridView: View {
     var body: some View {
         Section(header: DateHeader) {
             LazyVGrid(columns: ViewModel.Columns, spacing: 1) {
-                ForEach(ViewModel.Practices, id: \.self) { Practice in
+                ForEach(ViewModel.Practices, id: \.id) { Practice in
                     if !ViewModel.IsSelecting {
                         PracticeItemView(ViewModel: ViewModel, Practice: Practice, ItemWidth: ItemWidth)
                     } else {

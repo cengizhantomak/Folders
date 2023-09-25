@@ -106,6 +106,9 @@ struct PracticeView: View {
             }
             .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
                 Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
+                    if let FirstPractice = ViewModel.SelectedPractices.first {
+                        ViewModel.Practice = FirstPractice
+                    }
                     ViewModel.DeletePractices(ViewModel.SelectedPractices)
                     ViewModel.IsSelecting = false
                 }
@@ -116,9 +119,9 @@ struct PracticeView: View {
                 Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
             }
         }
-//        .overlay {
-//            CustomTTProgressHUD(IsSuccessVisible: $ViewModel.IsSuccessTTProgressHUDVisible, IsErrorVisible: $ViewModel.IsErrorTTProgressHUDVisible)
-//        }
+        .overlay {
+            CustomTTProgressHUD(IsSuccessVisible: $ViewModel.IsSuccessTTProgressHUDVisible, IsErrorVisible: $ViewModel.IsErrorTTProgressHUDVisible)
+        }
     }
 }
 

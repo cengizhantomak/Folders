@@ -13,7 +13,7 @@ struct CustomTTProgressHUD: View {
     @Binding var IsErrorVisible: Bool
 
     private let HudConfigSuccess = TTProgressHUDConfig(type: .success ,shouldAutoHide: true, autoHideInterval: 0.5)
-    private let HudConfigError = TTProgressHUDConfig(type: .error, shouldAutoHide: true, autoHideInterval: 0.5)
+    private let HudConfigError = TTProgressHUDConfig(type: .error, shouldAutoHide: true, autoHideInterval: 0.7)
 
     var body: some View {
         Group {
