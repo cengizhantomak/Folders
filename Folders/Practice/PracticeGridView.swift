@@ -17,7 +17,7 @@ struct PracticeGridView: View {
             LazyVGrid(columns: ViewModel.Columns, spacing: 1) {
                 ForEach(ViewModel.Practices, id: \.id) { Practice in
                     if !ViewModel.IsSelecting {
-                        PracticeItemView(ViewModel: ViewModel, Practice: Practice, ItemWidth: ItemWidth)
+                        NavigatableView(For: Practice)
                     } else {
                         SelectablePracticeItem(For: Practice)
                     }
@@ -28,6 +28,14 @@ struct PracticeGridView: View {
 }
 
 extension PracticeGridView {
+    
+    // MARK: - Navigation Link
+    private func NavigatableView(For Practice: PracticeModel) -> some View {
+        NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
+            PracticeItemView(ViewModel: ViewModel, Practice: Practice, ItemWidth: ItemWidth)
+        }
+        .foregroundColor(.primary)
+    }
     
     // MARK: - Date Header
     private var DateHeader: some View {
