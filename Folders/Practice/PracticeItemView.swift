@@ -41,10 +41,14 @@ extension PracticeItemView {
         let SafeItemWidth = max(ItemWidth, 1)
         
         return ZStack {
-            Image(Practice.VideoPath)
-                .resizable()
-                .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
-                .scaledToFit()
+            AsyncImage(url: URL.documentsDirectory.appending(path: Practice.ThumbPath ?? StringConstants.LVS)) { Image in
+                Image
+                    .resizable()
+                    .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
+                    .scaledToFit()
+            } placeholder: {
+                ProgressView()
+            }
             VStack {
                 Spacer()
                 LinearGradient(colors: [Color.black, Color.clear], startPoint: .bottom, endPoint: .top)

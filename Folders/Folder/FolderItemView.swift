@@ -50,15 +50,27 @@ extension FolderItemView {
         let SafeItemWidth = max(ItemWidth, 1)
         
         return ZStack {
-            Rectangle()
-                .fill(Color.gray.opacity(0.15))
-                .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
-                .cornerRadius(10)
-            Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
-                .resizable()
-                .scaledToFit()
-                .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                .foregroundColor(.gray)
+            if Folder.thumbnail != nil {
+                AsyncImage(url: URL.documentsDirectory.appending(path: Folder.thumbnail ?? StringConstants.LVS)) { Image in
+                    Image
+                        .resizable()
+                        .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
+                        .scaledToFit()
+                        .cornerRadius(10)
+                } placeholder: {
+                    ProgressView()
+                }
+            } else {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.15))
+                    .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
+                    .cornerRadius(10)
+                Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
+                    .foregroundColor(.gray)
+            }
             FavoriteIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
             SelectionIcon(CircleOffset: CircleOffset)
         }
@@ -117,7 +129,7 @@ extension FolderItemView {
             Label(
                 Folder.isPinned ? StringConstants.ContextMenu.Unpin.Text : StringConstants.ContextMenu.Pin.Text,
                 systemImage:
-                        Folder.isPinned ? StringConstants.ContextMenu.Unpin.SystemImage : StringConstants.ContextMenu.Pin.SystemImage
+                    Folder.isPinned ? StringConstants.ContextMenu.Unpin.SystemImage : StringConstants.ContextMenu.Pin.SystemImage
             )
         }
     }
@@ -130,7 +142,7 @@ extension FolderItemView {
             Label(
                 Folder.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.Text : StringConstants.ContextMenu.AddFavorite.Text,
                 systemImage:
-                        Folder.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage
+                    Folder.isFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage
             )
         }
     }
@@ -176,7 +188,7 @@ extension FolderItemView {
             }
         }
     }
-
+    
     private var DeleteVideoAlert: some View {
         Group {
             Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {

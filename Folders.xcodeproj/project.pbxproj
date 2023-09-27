@@ -10,6 +10,7 @@
 		478A82CC2AAB0E7F00106389 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478A82CB2AAB0E7F00106389 /* StringConstants.swift */; };
 		CB020CCB2AAEE72100C30EE0 /* PracticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB020CCA2AAEE72100C30EE0 /* PracticeView.swift */; };
 		CB020CCD2AAEE75200C30EE0 /* PracticeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB020CCC2AAEE75200C30EE0 /* PracticeViewModel.swift */; };
+		CB26274A2AC2B6E800927110 /* GolfSwing in Resources */ = {isa = PBXBuildFile; fileRef = CB2627492AC2B6E800927110 /* GolfSwing */; };
 		CB2864492ABC632E0014535E /* LVRealmKit in Frameworks */ = {isa = PBXBuildFile; productRef = CB2864482ABC632E0014535E /* LVRealmKit */; };
 		CB2AA4E92AB4997D0068F54E /* TTProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = CB2AA4E82AB4997D0068F54E /* TTProgressHUD */; };
 		CB2FBD722AA5B03C007C46F3 /* FoldersApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB2FBD712AA5B03C007C46F3 /* FoldersApp.swift */; };
@@ -30,6 +31,7 @@
 		478A82CB2AAB0E7F00106389 /* StringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
 		CB020CCA2AAEE72100C30EE0 /* PracticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeView.swift; sourceTree = "<group>"; };
 		CB020CCC2AAEE75200C30EE0 /* PracticeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeViewModel.swift; sourceTree = "<group>"; };
+		CB2627492AC2B6E800927110 /* GolfSwing */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GolfSwing; sourceTree = "<group>"; };
 		CB2FBD6E2AA5B03C007C46F3 /* Folders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Folders.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CB2FBD712AA5B03C007C46F3 /* FoldersApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FoldersApp.swift; sourceTree = "<group>"; };
 		CB2FBD732AA5B03C007C46F3 /* FolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FolderView.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				CB2FBD712AA5B03C007C46F3 /* FoldersApp.swift */,
+				CB2627492AC2B6E800927110 /* GolfSwing */,
 				CB020CC82AAEE5F400C30EE0 /* Helpers */,
 				CB020CC72AAEE3E900C30EE0 /* Folder */,
 				CB020CC92AAEE6E400C30EE0 /* Practice */,
@@ -195,6 +198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB2FBD792AA5B03D007C46F3 /* Preview Assets.xcassets in Resources */,
+				CB26274A2AC2B6E800927110 /* GolfSwing in Resources */,
 				CB2FBD762AA5B03D007C46F3 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -104,7 +104,7 @@ class PracticeViewModel: ObservableObject {
                     try await PracticeRepository.shared.edit(Video)
                 }
                 LoadPractices()
-                SelectedPractices.removeAll()
+//                SelectedPractices.removeAll()
             } catch {
                 print("Error updating favorite status: \(error)")
             }

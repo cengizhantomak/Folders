@@ -7,8 +7,11 @@
 
 import SwiftUI
 import LVRealmKit
+import AVFoundation
 
 class FolderViewModel: ObservableObject {
+    @Published var mediaURLs: [URL: URL] = [:]  // [videoURL: imageURL]
+    @Published var sortedVideoURLs: [URL] = []
     var Columns = [GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
     @Published var OnlyShowFavorites = false
@@ -32,14 +35,10 @@ class FolderViewModel: ObservableObject {
                 Calendar.current.isDate($0.createdAt, inSameDayAs: Date()) && !$0.isPinned
             }
             self.SessionSection = Sessions.filter {
-                        !Calendar.current.isDate($0.createdAt, inSameDayAs: Date()) && !$0.isPinned
-                    }
+                !Calendar.current.isDate($0.createdAt, inSameDayAs: Date()) && !$0.isPinned
+            }
             self.PinnedSection = Sessions.filter { $0.isPinned }
         }
-    }
-    
-    init() {
-        LoadFolders()
     }
     
     private func UpdateSessionModel(SessionModel: [SessionModel]) {
@@ -79,7 +78,7 @@ class FolderViewModel: ObservableObject {
     
     func AddButtonAction() {
         FolderCreationDate = Date()
-        FolderName = FolderCreationDate?.dateFormat("yyyyMMdd-HHmmssSSS") ?? "lvs"
+        FolderName = FolderCreationDate?.dateFormat(StringConstants.DateTimeFormatFolder) ?? StringConstants.LVS
         ShowCreatedAlert = true
     }
     
@@ -99,21 +98,79 @@ class FolderViewModel: ObservableObject {
     }
     
     func AddPractice() {
-        Task {
-            do {
-                if let LastFolder = try? await FolderRepository.shared.getLastFolder() {
-                    var NewPractice = PracticeModel(id: "",
-                                                    Name: Date().dateFormat("yyyyMMddHHmmssSSS"),
-                                                    VideoPath: "LVS")
-                    NewPractice.Session = LastFolder
-                    _ = try await PracticeRepository.shared.addPractice(&NewPractice)
+        do {
+            guard let Container = try SaveRandomVideoToContainer() else { return }
+            let VideoPath = Container.VideoPath
+            let ThumbnailPath = Container.ThumbnailPath
+            let Date = Container.Date
+            
+            Task {
+                do {
+                    if var LastFolder = try? await FolderRepository.shared.getLastFolder() {
+                        var NewPractice = PracticeModel(id: "",
+                                                        Name: Date.dateFormat(StringConstants.DateTimeFormatPractice),
+                                                        ThumbPath: ThumbnailPath,
+                                                        VideoPath: VideoPath,
+                                                        CreatedAt: Date)
+                        LastFolder.thumbnail = ThumbnailPath
+                        NewPractice.Session = LastFolder
+                        _ = try await PracticeRepository.shared.addPractice(&NewPractice)
+                    }
+                    LoadFolders()
+                    SuccessTTProgressHUD()
+                } catch {
+                    print("Failed to add practice: \(error)")
                 }
-                LoadFolders()
-                SuccessTTProgressHUD()
-            } catch {
-                print("Failed to add practice: \(error)")
             }
+        } catch {
+            print("An error occurred: \(error)")
         }
+    }
+    
+    func SaveRandomVideoToContainer() throws -> (Date: Date, VideoPath: String, ThumbnailPath: String)? {
+        guard let Path = Bundle.main.resourcePath else { return nil }
+        
+        let FolderURL = URL(fileURLWithPath: Path).appendingPathComponent("GolfSwing")
+        let FileURLs = try FileManager.default.contentsOfDirectory(at: FolderURL, includingPropertiesForKeys: nil)
+        let VideoURLs = FileURLs.filter { $0.pathExtension == "mp4" }
+        
+        if let RandomURL = VideoURLs.randomElement() {
+            let Data = try Data(contentsOf: RandomURL)
+            
+            let DocumentsPath = URL.documentsDirectory
+            let FolderPath = "Practices/Videos"
+            let PracticesPath = DocumentsPath.appendingPathComponent(FolderPath)
+            
+            try FileManager.default.createDirectory(at: PracticesPath, withIntermediateDirectories: true, attributes: nil)
+            
+            let Date = Date()
+            let DateString = Date.dateFormat("yyyyMMddHHmmssSSS")
+            
+            let NewFileName = "\(DateString).mp4"
+            let VideoPath = FolderPath + "/" + NewFileName
+            let VideoDestinationPath = PracticesPath.appendingPathComponent(NewFileName)
+            
+            try Data.write(to: VideoDestinationPath)
+            
+            // Thumbnail oluştur.
+            let Asset = AVAsset(url: RandomURL)
+            let AssetImgGenerate = AVAssetImageGenerator(asset: Asset)
+            AssetImgGenerate.appliesPreferredTrackTransform = true
+            let Time = CMTimeMakeWithSeconds(0.0, preferredTimescale: 600)
+            let Img = try AssetImgGenerate.copyCGImage(at: Time, actualTime: nil)
+            
+            // Thumbnail'i kaydet.
+            let Thumbnail = UIImage(cgImage: Img)
+            let ThumbnailData = Thumbnail.jpegData(compressionQuality: 0.7)
+            let ThumbnailFileName = "\(DateString).jpg"
+            let ThumbnailPath = FolderPath + "/" + ThumbnailFileName
+            let ThumbnailDestinationPath = PracticesPath.appendingPathComponent(ThumbnailFileName)
+            try ThumbnailData?.write(to: ThumbnailDestinationPath)
+            
+            return (Date, VideoPath, ThumbnailPath)
+        }
+        
+        return nil
     }
     
     func RenameFolder(NewName: String) {
@@ -163,7 +220,6 @@ class FolderViewModel: ObservableObject {
         if OnlyShowFavorites {
             OnlyShowFavorites.toggle()
             LoadFolders()
-            SuccessTTProgressHUD()
         } else {
             withAnimation(.spring()) { [weak self] in
                 guard let self else { return }

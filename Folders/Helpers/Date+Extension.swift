@@ -10,7 +10,7 @@ import Foundation
 extension Date {
     public func CurrentDateTime(From Date: Date = Date()) -> String {
         let Formatter = DateFormatter()
-        Formatter.dateFormat = StringConstants.DateTimeFormat
+        Formatter.dateFormat = StringConstants.DateTimeFormatFolder
         return Formatter.string(from: Date)
     }
     
