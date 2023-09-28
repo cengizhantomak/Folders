@@ -38,7 +38,7 @@ enum StringConstants {
         static let HeartFill = "heart.fill"
         static let RectangleStackBadgePlay = "rectangle.stack.badge.play"
         static let NoVideo = "video.slash"
-        static let Folder = "folder"
+        static let FolderBadgePlus = "folder.badge.plus"
     }
     
     
@@ -91,7 +91,7 @@ enum StringConstants {
             case .SaveToPhone:
                 return "square.and.arrow.down"
             case .Move:
-                return "folder"
+                return "folder.badge.plus"
             }
             
         }
