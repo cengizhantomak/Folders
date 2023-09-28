@@ -90,10 +90,21 @@ struct PracticeView: View {
                         }
                     }
                     ToolbarItemGroup(placement: .bottomBar) {
+//                        Button {
+//                            ViewModel.ShowBottomBarMoveAlert = true
+//                        } label: {
+//                            Image(systemName: StringConstants.SystemImage.Folder)
+//                                .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
+//                        }
+//                        .disabled(ViewModel.SelectedPractices.isEmpty)
+                        
                         Spacer()
+                        
                         Text(ViewModel.SelectionCount(For: ViewModel.SelectedPractices.count))
                             .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
+                        
                         Spacer()
+                        
                         Button {
                             ViewModel.ShowBottomBarDeleteAlert = true
                         } label: {
@@ -104,6 +115,20 @@ struct PracticeView: View {
                     }
                 }
             }
+//            .alert(StringConstants.Alert.Title.MoveVideo, isPresented: $ViewModel.ShowBottomBarMoveAlert) {
+//                Button(StringConstants.Alert.ButtonText.Move, role: .destructive) {
+////                    if let FirstPractice = ViewModel.SelectedPractices.first {
+////                        ViewModel.Practice = FirstPractice
+////                    }
+//                    ViewModel.MovePractice()
+//                    ViewModel.IsSelecting = false
+//                }
+//                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+//                    print("Cancel Tapped")
+//                }
+//            } message: {
+//                Text(StringConstants.Alert.Message.MoveConfirmationMessage)
+//            }
             .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
                 Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
                     if let FirstPractice = ViewModel.SelectedPractices.first {

@@ -12,7 +12,9 @@ class PracticeViewModel: ObservableObject {
     var Columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
     @Published var ShowBottomBarDeleteAlert = false
+//    @Published var ShowBottomBarMoveAlert = false
     @Published var OnlyShowFavorites = false
+//    @Published var ShowMoveAlert = false
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
     @Published var IsSuccessTTProgressHUDVisible = false
@@ -33,6 +35,7 @@ class PracticeViewModel: ObservableObject {
             withAnimation(.spring()) {
                 guard let self else { return }
                 self.Practices = PracticeModel
+                self.SelectedPractices.removeAll()
                 self.Practice = nil
             }
         }
@@ -63,10 +66,15 @@ class PracticeViewModel: ObservableObject {
         }
     }
     
-    func SaveToPhone() {
+    func SaveToPhonePractice() {
         print("Save to Phone Tapped")
         SuccessTTProgressHUD()
     }
+    
+//    func MovePractice() {
+//        print("Move Tapped")
+//        SuccessTTProgressHUD()
+//    }
     
     func RenamePractice(NewName: String) {
         Task {
@@ -83,28 +91,36 @@ class PracticeViewModel: ObservableObject {
         }
     }
     
-    func DeletePractices(_ Practice: [PracticeModel]) {
+    func DeletePractices(_ DeletePractice: [PracticeModel]) {
         Task {
             do {
-                try await PracticeRepository.shared.deletePractices(Practice)
+                try await PracticeRepository.shared.deletePractices(DeletePractice)
+                
                 LoadPractices()
                 SuccessTTProgressHUD()
             } catch {
                 print("Error deleting session: \(error)")
             }
         }
-        UpdatePracticeCount()
+        UpdatePractice(DeletePractice)
     }
     
-    func UpdatePracticeCount() {
+    func UpdatePractice(_ UpdatePractice: [PracticeModel]) {
         Task {
             do {
+                let UpdatedArray = Practices.filter { Practice in
+                    !UpdatePractice.contains(where: { $0.id == Practice.id })
+                }
+                
+                let CurrentThumb = UpdatedArray.first?.ThumbPath
+                
                 if var Video = Practice {
-                    Video.Session?.practiceCount -= SelectedPractices.count
+                    Video.Session?.practiceCount = UpdatedArray.count
+                    Video.Session?.thumbnail = CurrentThumb
                     try await PracticeRepository.shared.edit(Video)
                 }
+                
                 LoadPractices()
-//                SelectedPractices.removeAll()
             } catch {
                 print("Error updating favorite status: \(error)")
             }
