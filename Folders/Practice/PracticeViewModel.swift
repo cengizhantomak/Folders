@@ -12,15 +12,15 @@ class PracticeViewModel: ObservableObject {
     var Columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
     @Published var ShowBottomBarDeleteAlert = false
-//    @Published var ShowBottomBarMoveAlert = false
+    @Published var ShowBottomBarMoveAlert = false
     @Published var OnlyShowFavorites = false
-//    @Published var ShowMoveAlert = false
+    @Published var ShowMoveAlert = false
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
     @Published var IsSuccessTTProgressHUDVisible = false
     @Published var IsErrorTTProgressHUDVisible = false
-    var Session: SessionModel
-    var Practices: [PracticeModel] = []
+    @Published var Session: SessionModel
+    @Published var Practices: [PracticeModel] = []
     @Published var SelectedPractices: [PracticeModel] = []
     @Published var Practice: PracticeModel?
     @Published var NewName = ""
@@ -39,6 +39,11 @@ class PracticeViewModel: ObservableObject {
                 self.Practice = nil
             }
         }
+    }
+    
+    func LoadPractices2() async throws {
+        let AllPractices = try await PracticeRepository.shared.getPractices(Session)
+        UpdatePracticeModel(PracticeModel: AllPractices)
     }
     
     func LoadPractices() {
@@ -71,15 +76,15 @@ class PracticeViewModel: ObservableObject {
         SuccessTTProgressHUD()
     }
     
-//    func MovePractice() {
-//        print("Move Tapped")
-//        SuccessTTProgressHUD()
-//    }
+    func MovePractice() {
+        print("Move Tapped")
+        SuccessTTProgressHUD()
+    }
     
-    func RenamePractice(NewName: String) {
+    func RenamePractice() {
         Task {
             do {
-                if var Video = Practice {
+                if var Video = self.Practice {
                     Video.Name = NewName
                     try await PracticeRepository.shared.edit(Video)
                 }
@@ -96,33 +101,23 @@ class PracticeViewModel: ObservableObject {
             do {
                 try await PracticeRepository.shared.deletePractices(DeletePractice)
                 
-                LoadPractices()
-                SuccessTTProgressHUD()
-            } catch {
-                print("Error deleting session: \(error)")
-            }
-        }
-        UpdatePractice(DeletePractice)
-    }
-    
-    func UpdatePractice(_ UpdatePractice: [PracticeModel]) {
-        Task {
-            do {
                 let UpdatedArray = Practices.filter { Practice in
-                    !UpdatePractice.contains(where: { $0.id == Practice.id })
+                    !DeletePractice.contains(where: { $0.id == Practice.id })
                 }
                 
                 let CurrentThumb = UpdatedArray.first?.ThumbPath
                 
-                if var Video = Practice {
-                    Video.Session?.practiceCount = UpdatedArray.count
-                    Video.Session?.thumbnail = CurrentThumb
-                    try await PracticeRepository.shared.edit(Video)
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+                    self.Session.practiceCount = UpdatedArray.count
+                    self.Session.thumbnail = CurrentThumb
                 }
                 
-                LoadPractices()
+                try await FolderRepository.shared.edit(self.Session)
+                try await LoadPractices2()
+                SuccessTTProgressHUD()
             } catch {
-                print("Error updating favorite status: \(error)")
+                print("Error deleting session: \(error)")
             }
         }
     }
@@ -147,7 +142,7 @@ class PracticeViewModel: ObservableObject {
                     Video.isFavorite.toggle()
                     try await PracticeRepository.shared.edit(Video)
                 }
-                LoadPractices()
+                try await LoadPractices2()
                 SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")

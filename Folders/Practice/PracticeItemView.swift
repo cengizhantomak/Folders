@@ -19,11 +19,6 @@ struct PracticeItemView: View {
                 .contextMenu {
                     VideoContextMenu
                 }
-//                .alert(StringConstants.Alert.Title.MoveVideo, isPresented: $ViewModel.ShowMoveAlert) {
-//                    MoveVideoAlert
-//                } message: {
-//                    Text(StringConstants.Alert.Message.MoveConfirmationMessage)
-//                }
             
                 .alert(StringConstants.Alert.Title.RenameVideo, isPresented: $ViewModel.ShowRenameAlert) {
                     RenameVideoAlert
@@ -123,7 +118,7 @@ extension PracticeItemView {
         VStack {
             ToggleFavoriteButton
             SaveToPhoneButton
-//            MoveButton
+            MoveButton
             Divider()
             RenameVideoButton
             DeleteVideoButton
@@ -153,20 +148,22 @@ extension PracticeItemView {
         }
     }
     
-//    private var MoveButton: some View {
-//        Button {
-////            ViewModel.SelectedPractices.append(Practice)
+    private var MoveButton: some View {
+        Button {
+            //TODO: -
+//            ViewModel.SelectedPractices.append(Practice)
 //            ViewModel.ShowMoveAlert = true
-//        } label: {
-//            Label(
-//                StringConstants.ContextMenu.Move.Text,
-//                systemImage: StringConstants.ContextMenu.Move.SystemImage
-//            )
-//        }
-//    }
+        } label: {
+            Label(
+                StringConstants.ContextMenu.Move.Text,
+                systemImage: StringConstants.ContextMenu.Move.SystemImage
+            )
+        }
+    }
     
     private var RenameVideoButton: some View {
         Button {
+            ViewModel.Practice = Practice
             ViewModel.NewName = Practice.Name
             ViewModel.ShowRenameAlert = true
         } label: {
@@ -190,26 +187,12 @@ extension PracticeItemView {
     }
     
     // MARK: - Alerts
-//    private var MoveVideoAlert: some View {
-//        Group {
-//            Button(StringConstants.Alert.ButtonText.Move, role: .destructive) {
-////                ViewModel.Practice = Practice
-//                ViewModel.MovePractice()
-//            }
-//            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-////                ViewModel.SelectedPractices.removeAll()
-//                print("Cancel Tapped")
-//            }
-//        }
-//    }
-    
     private var RenameVideoAlert: some View {
         Group {
             TextField(StringConstants.Alert.Title.VideoName, text: $ViewModel.NewName)
             Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
                 if !ViewModel.NewName.isEmpty {
-                    ViewModel.Practice = Practice
-                    ViewModel.RenamePractice(NewName: ViewModel.NewName)
+                    ViewModel.RenamePractice()
                 } else {
                     ViewModel.ErrorTTProgressHUD()
                 }
@@ -223,7 +206,6 @@ extension PracticeItemView {
     private var DeleteVideoAlert: some View {
         Group {
             Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-                ViewModel.Practice = Practice
                 ViewModel.DeletePractices(ViewModel.SelectedPractices)
             }
             Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
