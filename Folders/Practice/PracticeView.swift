@@ -116,7 +116,7 @@ struct PracticeView: View {
                 }
             }
             .sheet(isPresented: $ViewModel.ShowBottomBarMoveAlert) {
-                DestinationFolderView(ViewModel: DestinationFolderViewModel(SelectedPractices: ViewModel.SelectedPractices))
+                DestinationFolderView(ViewModel: DestinationFolderViewModel(SelectedPractices: ViewModel.SelectedPractices, PracticeViewModel: ViewModel))
             }
             .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowBottomBarDeleteAlert) {
                 Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
