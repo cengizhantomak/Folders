@@ -13,9 +13,11 @@ class DestinationFolderViewModel: ObservableObject {
     @Published var SelectedPractices: [PracticeModel] = []
     @Published var SelectedFolder: SessionModel?
     @Published var ShowMoveAlert = false
+    weak var PracticeViewModel: PracticeViewModel?
     
-    init(SelectedPractices: [PracticeModel]) {
+    init(SelectedPractices: [PracticeModel], PracticeViewModel: PracticeViewModel) {
         self.SelectedPractices = SelectedPractices
+        self.PracticeViewModel = PracticeViewModel
         LoadFolders()
     }
     
@@ -47,22 +49,34 @@ class DestinationFolderViewModel: ObservableObject {
     func MovePractice() {
         Task {
             do {
-                var updatedPracticesArray: [PracticeModel] = []
+                var UpdatedPracticesArray: [PracticeModel] = []
                 
-                SelectedPractices.forEach { practice in
-                    var updatedPractice = practice
-                    updatedPractice.Session = SelectedFolder
-                    updatedPracticesArray.append(updatedPractice)
+                SelectedPractices.forEach { Practice in
+                    var UpdatedPractice = Practice
+                    UpdatedPractice.Session = SelectedFolder
+                    UpdatedPracticesArray.append(UpdatedPractice)
                 }
                 
-                try await PracticeRepository.shared.edit(updatedPracticesArray)
+                try await PracticeRepository.shared.edit(UpdatedPracticesArray)
                 
-                let latestPractice = SelectedPractices.max(by: { $0.CreatedAt < $1.CreatedAt })
+                let LatestPractice = SelectedPractices.max(by: { $0.CreatedAt < $1.CreatedAt })
                 
-                if var Folder = SelectedFolder {
-                    Folder.practiceCount += SelectedPractices.count
-                    Folder.thumbnail = latestPractice?.ThumbPath
-                    try await FolderRepository.shared.edit(Folder)
+                if var DestinationFolder = SelectedFolder {
+                    DestinationFolder.practiceCount += SelectedPractices.count
+                    DestinationFolder.thumbnail = LatestPractice?.ThumbPath
+                    try await FolderRepository.shared.edit(DestinationFolder)
+                }
+                
+                if var FolderOfSelectedPractices = self.SelectedPractices.first?.Session {
+                    FolderOfSelectedPractices.practiceCount -= SelectedPractices.count
+                    try await FolderRepository.shared.edit(FolderOfSelectedPractices)
+                }
+                
+                DispatchQueue.main.async { [weak self] in
+                    guard let self else { return }
+                    self.PracticeViewModel?.LoadPractices()
+                    self.PracticeViewModel?.SelectCancelButtonAction()
+                    self.PracticeViewModel?.ShowBottomBarMoveAlert = false
                 }
             } catch {
                 print("Error updating practice status: \(error)")
