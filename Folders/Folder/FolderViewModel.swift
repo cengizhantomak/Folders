@@ -55,7 +55,26 @@ class FolderViewModel: ObservableObject {
         Task {
             do {
                 let AllSessions = try await FolderRepository.shared.getFolders()
-                UpdateSessionModel(SessionModel: AllSessions)
+                var UpdatedSessions: [SessionModel] = []
+                
+                for var Session in AllSessions {
+                    
+                    // Session içindeki Practice sayısını güncelle
+                    let Practices = try await PracticeRepository.shared.getPractices(Session)
+                    Session.practiceCount = Practices.count
+                    
+                    // En son oluşturulan Practice'in thumbnail'ını güncelle
+                    if let LastPractice = Practices.max(by: { $0.CreatedAt < $1.CreatedAt }) {
+                        Session.thumbnail = LastPractice.ThumbPath
+                    } else {
+                        Session.thumbnail = nil
+                    }
+                    
+                    try await FolderRepository.shared.edit(Session)
+                    UpdatedSessions.append(Session)
+                }
+                
+                UpdateSessionModel(SessionModel: UpdatedSessions)
             } catch {
                 print("Error loading sessions: \(error)")
             }
