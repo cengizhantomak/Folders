@@ -43,6 +43,7 @@ class PracticeViewModel: ObservableObject {
     
     func LoadPractices2() async throws {
         let AllPractices = try await PracticeRepository.shared.getPractices(Session)
+        try await UpdateSession(AllPractices)
         UpdatePracticeModel(PracticeModel: AllPractices)
     }
     
@@ -50,6 +51,7 @@ class PracticeViewModel: ObservableObject {
         Task {
             do {
                 let AllPractices = try await PracticeRepository.shared.getPractices(Session)
+                try await UpdateSession(AllPractices)
                 UpdatePracticeModel(PracticeModel: AllPractices)
             } catch {
                 print("Failed to load practices: \(error)")
@@ -57,7 +59,22 @@ class PracticeViewModel: ObservableObject {
         }
     }
     
-    private func SuccessTTProgressHUD() {
+    private func UpdateSession(_ AllPractices: [PracticeModel]) async throws {
+        var UpdateSession = self.Session
+        // Session içindeki Practice sayısını güncelle
+        UpdateSession.practiceCount = AllPractices.count
+        
+        // Session'ın thumbnail'ını güncelle
+        if let LastPractice = AllPractices.first {
+            UpdateSession.thumbnail = LastPractice.ThumbPath
+        } else {
+            UpdateSession.thumbnail = nil
+        }
+        
+        try await FolderRepository.shared.edit(UpdateSession)
+    }
+    
+    func SuccessTTProgressHUD() {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.IsSuccessTTProgressHUDVisible = true
@@ -100,20 +117,6 @@ class PracticeViewModel: ObservableObject {
         Task {
             do {
                 try await PracticeRepository.shared.deletePractices(DeletePractice)
-                
-                let UpdatedArray = Practices.filter { Practice in
-                    !DeletePractice.contains(where: { $0.id == Practice.id })
-                }
-                
-                let CurrentThumb = UpdatedArray.first?.ThumbPath
-                
-                DispatchQueue.main.async { [weak self] in
-                    guard let self else { return }
-                    self.Session.practiceCount = UpdatedArray.count
-                    self.Session.thumbnail = CurrentThumb
-                }
-                
-                try await FolderRepository.shared.edit(self.Session)
                 try await LoadPractices2()
                 SuccessTTProgressHUD()
             } catch {

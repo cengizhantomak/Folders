@@ -58,29 +58,34 @@ class DestinationFolderViewModel: ObservableObject {
                 }
                 
                 try await PracticeRepository.shared.edit(UpdatedPracticesArray)
-                
-                let LatestPractice = SelectedPractices.max(by: { $0.CreatedAt < $1.CreatedAt })
-                
-                if var DestinationFolder = SelectedFolder {
-                    DestinationFolder.practiceCount += SelectedPractices.count
-                    DestinationFolder.thumbnail = LatestPractice?.ThumbPath
-                    try await FolderRepository.shared.edit(DestinationFolder)
-                }
-                
-                if var FolderOfSelectedPractices = self.SelectedPractices.first?.Session {
-                    FolderOfSelectedPractices.practiceCount -= SelectedPractices.count
-                    try await FolderRepository.shared.edit(FolderOfSelectedPractices)
-                }
-                
-                DispatchQueue.main.async { [weak self] in
-                    guard let self else { return }
-                    self.PracticeViewModel?.LoadPractices()
-                    self.PracticeViewModel?.SelectCancelButtonAction()
-                    self.PracticeViewModel?.ShowBottomBarMoveAlert = false
-                }
+                try await UpdateDestinationFolder()
+                UpdateUI()
             } catch {
                 print("Error updating practice status: \(error)")
             }
+        }
+    }
+    
+    private func UpdateDestinationFolder() async throws {
+        if var DestinationFolder = SelectedFolder {
+            let Practices = try await PracticeRepository.shared.getPractices(DestinationFolder)
+            // DestinationFolder içindeki Practice sayısını güncelle
+            DestinationFolder.practiceCount = Practices.count
+            // DestinationFolder'ın thumbnail'ını güncelle
+            if let LastPractice = Practices.first {
+                DestinationFolder.thumbnail = LastPractice.ThumbPath
+            }
+            try await FolderRepository.shared.edit(DestinationFolder)
+        }
+    }
+    
+    private func UpdateUI() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.PracticeViewModel?.LoadPractices()
+            self.PracticeViewModel?.SelectCancelButtonAction()
+            self.PracticeViewModel?.ShowBottomBarMoveAlert = false
+            self.PracticeViewModel?.SuccessTTProgressHUD()
         }
     }
 }
