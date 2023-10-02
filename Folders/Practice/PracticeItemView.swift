@@ -150,9 +150,8 @@ extension PracticeItemView {
     
     private var MoveButton: some View {
         Button {
-            //TODO: -
-//            ViewModel.SelectedPractices.append(Practice)
-//            ViewModel.ShowMoveAlert = true
+            ViewModel.SelectedPractices.append(Practice)
+            ViewModel.ShowBottomBarMoveAlert = true
         } label: {
             Label(
                 StringConstants.ContextMenu.Move.Text,

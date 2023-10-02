@@ -10,13 +10,11 @@ import LVRealmKit
 
 class DestinationFolderViewModel: ObservableObject {
     @Published var Sessions: [SessionModel] = []
-    @Published var SelectedPractices: [PracticeModel] = []
     @Published var SelectedFolder: SessionModel?
     @Published var ShowMoveAlert = false
     weak var PracticeViewModel: PracticeViewModel?
     
-    init(SelectedPractices: [PracticeModel], PracticeViewModel: PracticeViewModel) {
-        self.SelectedPractices = SelectedPractices
+    init(PracticeViewModel: PracticeViewModel) {
         self.PracticeViewModel = PracticeViewModel
         LoadFolders()
     }
@@ -25,7 +23,7 @@ class DestinationFolderViewModel: ObservableObject {
         DispatchQueue.main.async { [weak self] in
             withAnimation(.spring()) {
                 guard let self else { return }
-                if let sessionID = self.SelectedPractices.first?.Session?.id {
+                if let sessionID = self.PracticeViewModel?.Session.id {
                     let updatedSessions = SessionModel.filter { session in
                         sessionID != session.id
                     }
@@ -51,7 +49,7 @@ class DestinationFolderViewModel: ObservableObject {
             do {
                 var UpdatedPracticesArray: [PracticeModel] = []
                 
-                SelectedPractices.forEach { Practice in
+                PracticeViewModel?.SelectedPractices.forEach { Practice in
                     var UpdatedPractice = Practice
                     UpdatedPractice.Session = SelectedFolder
                     UpdatedPracticesArray.append(UpdatedPractice)
@@ -83,7 +81,7 @@ class DestinationFolderViewModel: ObservableObject {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.PracticeViewModel?.LoadPractices()
-            self.PracticeViewModel?.SelectCancelButtonAction()
+            self.PracticeViewModel?.IsSelecting = false
             self.PracticeViewModel?.ShowBottomBarMoveAlert = false
             self.PracticeViewModel?.SuccessTTProgressHUD()
         }
