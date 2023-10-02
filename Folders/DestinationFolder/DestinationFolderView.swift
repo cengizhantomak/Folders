@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TTProgressHUD
 
 struct DestinationFolderView: View {
     @StateObject var ViewModel: DestinationFolderViewModel
@@ -23,7 +24,7 @@ struct DestinationFolderView: View {
                             ViewModel.MovePractice()
                         }
                         Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                            print("Cancel Tapped")
+                            print("Move Alert Cancel Tapped")
                         }
                     } message: {
                         Text(StringConstants.Alert.Message.MoveConfirmationMessage)
@@ -33,9 +34,9 @@ struct DestinationFolderView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        print("Cancel Tapped")
+                        print("Toolbar Cancel Tapped")
                     } label: {
-                        Text("Cancel")
+                        Text(StringConstants.Cancel)
                             .foregroundColor(.primary)
                             .padding(8)
                             .background(Color.gray.opacity(0.25))
@@ -45,7 +46,6 @@ struct DestinationFolderView: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         ViewModel.AddButtonAction()
-                        print("Add Folder")
                     } label: {
                         Image(systemName: StringConstants.SystemImage.Plus)
                             .foregroundColor(.primary)
@@ -61,13 +61,17 @@ struct DestinationFolderView: View {
                     if !ViewModel.FolderName.isEmpty {
                         ViewModel.AddFolder()
                     } else {
-//                        ViewModel.ErrorTTProgressHUD()
+                        ViewModel.ErrorTTProgressHUD()
                     }
                 }
                 Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                    print("Cancel Tapped")
+                    print("Creat Alert Cancel Tapped")
                 }
             }
+        }
+        .overlay {
+            CustomTTProgressHUD(IsVisible: $ViewModel.IsSuccessTTProgressHUDVisible, HudType: .success)
+            CustomTTProgressHUD(IsVisible: $ViewModel.IsErrorTTProgressHUDVisible, HudType: .error)
         }
     }
 }

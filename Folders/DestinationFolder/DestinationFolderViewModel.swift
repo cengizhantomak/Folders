@@ -13,6 +13,8 @@ class DestinationFolderViewModel: ObservableObject {
     @Published var SelectedFolder: SessionModel?
     @Published var ShowMoveAlert = false
     @Published var ShowCreatedAlert = false
+    @Published var IsSuccessTTProgressHUDVisible = false
+    @Published var IsErrorTTProgressHUDVisible = false
     @Published var FolderName = ""
     var FolderCreationDate: Date?
     weak var PracticeViewModel: PracticeViewModel?
@@ -104,9 +106,24 @@ class DestinationFolderViewModel: ObservableObject {
                 Folder.createdAt = FolderCreationDate ?? Date()
                 try await FolderRepository.shared.addFolder(Folder)
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error adding session: \(error)")
             }
+        }
+    }
+    
+    private func SuccessTTProgressHUD() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.IsSuccessTTProgressHUDVisible = true
+        }
+    }
+    
+    func ErrorTTProgressHUD() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.IsErrorTTProgressHUDVisible = true
         }
     }
 }

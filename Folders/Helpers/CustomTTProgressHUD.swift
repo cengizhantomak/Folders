@@ -9,18 +9,19 @@ import SwiftUI
 import TTProgressHUD
 
 struct CustomTTProgressHUD: View {
-    @Binding var IsSuccessVisible: Bool
-    @Binding var IsErrorVisible: Bool
-
-    private let HudConfigSuccess = TTProgressHUDConfig(type: .success ,shouldAutoHide: true, autoHideInterval: 0.5)
-    private let HudConfigError = TTProgressHUDConfig(type: .error, shouldAutoHide: true, autoHideInterval: 0.7)
-
+    @Binding var IsVisible: Bool
+    var HudType: TTProgressHUDType
+    var TimeInterval: Double = 0.7
+    
     var body: some View {
-        Group {
-            TTProgressHUD($IsSuccessVisible, config: HudConfigSuccess)
+        if IsVisible {
+            TTProgressHUD($IsVisible, config: .init(type: HudType))
                 .scaleEffect(0.5)
-            TTProgressHUD($IsErrorVisible, config: HudConfigError)
-                .scaleEffect(0.5)
+                .onAppear {
+                    Timer.scheduledTimer(withTimeInterval: TimeInterval, repeats: false) { _ in
+                        self.IsVisible = false
+                    }
+                }
         }
     }
 }
