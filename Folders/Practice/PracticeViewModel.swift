@@ -30,6 +30,22 @@ class PracticeViewModel: ObservableObject {
         LoadPractices()
     }
     
+    func LoadPractices() {
+        Task {
+            do {
+                try await GetPractices()
+            } catch {
+                print("Failed to load practices: \(error)")
+            }
+        }
+    }
+    
+    func GetPractices() async throws {
+        let AllPractices = try await PracticeRepository.shared.getPractices(Session)
+        try await UpdateSession(AllPractices)
+        UpdatePracticeModel(PracticeModel: AllPractices)
+    }
+    
     private func UpdatePracticeModel(PracticeModel: [PracticeModel]) {
         DispatchQueue.main.async { [weak self] in
             withAnimation(.spring()) {
@@ -37,24 +53,6 @@ class PracticeViewModel: ObservableObject {
                 self.Practices = PracticeModel
                 self.SelectedPractices.removeAll()
                 self.Practice = nil
-            }
-        }
-    }
-    
-    func LoadPractices2() async throws {
-        let AllPractices = try await PracticeRepository.shared.getPractices(Session)
-        try await UpdateSession(AllPractices)
-        UpdatePracticeModel(PracticeModel: AllPractices)
-    }
-    
-    func LoadPractices() {
-        Task {
-            do {
-                let AllPractices = try await PracticeRepository.shared.getPractices(Session)
-                try await UpdateSession(AllPractices)
-                UpdatePracticeModel(PracticeModel: AllPractices)
-            } catch {
-                print("Failed to load practices: \(error)")
             }
         }
     }
@@ -105,7 +103,7 @@ class PracticeViewModel: ObservableObject {
                     Video.Name = NewName
                     try await PracticeRepository.shared.edit(Video)
                 }
-                LoadPractices()
+                try await GetPractices()
                 SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
@@ -117,7 +115,7 @@ class PracticeViewModel: ObservableObject {
         Task {
             do {
                 try await PracticeRepository.shared.deletePractices(DeletePractice)
-                try await LoadPractices2()
+                try await GetPractices()
                 SuccessTTProgressHUD()
             } catch {
                 print("Error deleting session: \(error)")
@@ -145,7 +143,7 @@ class PracticeViewModel: ObservableObject {
                     Video.isFavorite.toggle()
                     try await PracticeRepository.shared.edit(Video)
                 }
-                try await LoadPractices2()
+                try await GetPractices()
                 SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
