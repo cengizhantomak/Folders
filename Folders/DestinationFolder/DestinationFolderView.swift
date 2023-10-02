@@ -13,37 +13,32 @@ struct DestinationFolderView: View {
     
     var body: some View {
         NavigationStack {
-            List(ViewModel.Sessions, id: \.id) { Folder in
-                Text(Folder.name)
-                    .onTapGesture {
-                        ViewModel.SelectedFolder = Folder
-                        ViewModel.ShowMoveAlert = true
+            VStack {
+                if ViewModel.Sessions.isEmpty {
+                    VStack {
+                        Spacer()
+                        Image(systemName: StringConstants.SystemImage.NoVideo)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
+                        Text(StringConstants.NoVideo)
+                            .font(.system(size: 15))
+                        Spacer()
                     }
-                    .alert(StringConstants.Alert.Title.MoveVideo, isPresented: $ViewModel.ShowMoveAlert) {
-                        Button(StringConstants.Alert.ButtonText.Move, role: .destructive) {
-                            ViewModel.MovePractice()
+                    .foregroundColor(.gray)
+                    .ignoresSafeArea(.all)
+                } else {
+                    List(ViewModel.Sessions, id: \.id) { Folder in
+                        NavigationLink(destination: DestinationFolderDetailView(ViewModel: DestinationFolderDetailViewModel(Folder: Folder, DestinationFolderViewModel: ViewModel))) {
+                            Text(Folder.name)
                         }
-                        Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                            print("Move Alert Cancel Tapped")
-                        }
-                    } message: {
-                        Text(StringConstants.Alert.Message.MoveConfirmationMessage)
+                        .foregroundColor(.primary)
                     }
+                }
             }
             .navigationBarTitle("Move Practice")
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        print("Toolbar Cancel Tapped")
-                    } label: {
-                        Text(StringConstants.Cancel)
-                            .foregroundColor(.primary)
-                            .padding(8)
-                            .background(Color.gray.opacity(0.25))
-                            .clipShape(Capsule())
-                    }
-                }
-                ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         ViewModel.AddButtonAction()
                     } label: {
@@ -52,6 +47,17 @@ struct DestinationFolderView: View {
                             .padding(8)
                             .background(Color.gray.opacity(0.25))
                             .clipShape(Circle())
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        ViewModel.PracticeViewModel?.ShowBottomBarMoveAlert = false
+                    } label: {
+                        Text(StringConstants.Cancel)
+                            .foregroundColor(.primary)
+                            .padding(8)
+                            .background(Color.gray.opacity(0.25))
+                            .clipShape(Capsule())
                     }
                 }
             }
