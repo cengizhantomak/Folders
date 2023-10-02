@@ -30,6 +30,44 @@ struct DestinationFolderView: View {
                     }
             }
             .navigationBarTitle("Move Practice")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        print("Cancel Tapped")
+                    } label: {
+                        Text("Cancel")
+                            .foregroundColor(.primary)
+                            .padding(8)
+                            .background(Color.gray.opacity(0.25))
+                            .clipShape(Capsule())
+                    }
+                }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        ViewModel.AddButtonAction()
+                        print("Add Folder")
+                    } label: {
+                        Image(systemName: StringConstants.SystemImage.Plus)
+                            .foregroundColor(.primary)
+                            .padding(8)
+                            .background(Color.gray.opacity(0.25))
+                            .clipShape(Circle())
+                    }
+                }
+            }
+            .alert(StringConstants.Alert.Title.CreateFolder, isPresented: $ViewModel.ShowCreatedAlert) {
+                TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.FolderName)
+                Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
+                    if !ViewModel.FolderName.isEmpty {
+                        ViewModel.AddFolder()
+                    } else {
+//                        ViewModel.ErrorTTProgressHUD()
+                    }
+                }
+                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
+                    print("Cancel Tapped")
+                }
+            }
         }
     }
 }

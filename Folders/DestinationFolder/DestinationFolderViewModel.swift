@@ -12,6 +12,9 @@ class DestinationFolderViewModel: ObservableObject {
     @Published var Sessions: [SessionModel] = []
     @Published var SelectedFolder: SessionModel?
     @Published var ShowMoveAlert = false
+    @Published var ShowCreatedAlert = false
+    @Published var FolderName = ""
+    var FolderCreationDate: Date?
     weak var PracticeViewModel: PracticeViewModel?
     
     init(PracticeViewModel: PracticeViewModel) {
@@ -84,6 +87,26 @@ class DestinationFolderViewModel: ObservableObject {
             self.PracticeViewModel?.IsSelecting = false
             self.PracticeViewModel?.ShowBottomBarMoveAlert = false
             self.PracticeViewModel?.SuccessTTProgressHUD()
+        }
+    }
+    
+    func AddButtonAction() {
+        FolderCreationDate = Date()
+        FolderName = FolderCreationDate?.dateFormat(StringConstants.DateTimeFormatFolder) ?? StringConstants.LVS
+        ShowCreatedAlert = true
+    }
+    
+    func AddFolder() {
+        Task {
+            do {
+                var Folder = SessionModel()
+                Folder.name = FolderName
+                Folder.createdAt = FolderCreationDate ?? Date()
+                try await FolderRepository.shared.addFolder(Folder)
+                LoadFolders()
+            } catch {
+                print("Error adding session: \(error)")
+            }
         }
     }
 }
