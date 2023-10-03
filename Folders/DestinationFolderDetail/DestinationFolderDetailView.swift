@@ -28,7 +28,23 @@ struct DestinationFolderDetailView: View {
             } else {
                 List(ViewModel.Practices, id: \.id) { Practice in
                     NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
-                        Text(Practice.Name)
+                        HStack {
+                            AsyncImage(url: URL.documentsDirectory.appending(path: Practice.ThumbPath ?? StringConstants.LVS)) { Image in
+                                Image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 50, height: 50)
+                                    .cornerRadius(5)
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            VStack(alignment: .leading) {
+                                Text(Practice.Name)
+                                Text(Date.CurrentTime(From: Practice.UpdatedAt))
+                                    .font(.subheadline)
+                                    .foregroundStyle(.gray)
+                            }
+                        }
                     }
                     .foregroundColor(.primary)
                 }
@@ -40,7 +56,7 @@ struct DestinationFolderDetailView: View {
                 Button {
                     ViewModel.ShowMoveAlert = true
                 } label: {
-                    Text("Move")
+                    Text(StringConstants.Move)
                         .foregroundColor(.primary)
                         .padding(8)
                         .background(Color.gray.opacity(0.25))

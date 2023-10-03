@@ -30,13 +30,43 @@ struct DestinationFolderView: View {
                 } else {
                     List(ViewModel.Sessions, id: \.id) { Folder in
                         NavigationLink(destination: DestinationFolderDetailView(ViewModel: DestinationFolderDetailViewModel(Folder: Folder, DestinationFolderViewModel: ViewModel))) {
-                            Text(Folder.name)
+                            HStack {
+                                if Folder.thumbnail != nil {
+                                    AsyncImage(url: URL.documentsDirectory.appending(path: Folder.thumbnail ?? StringConstants.LVS)) { Image in
+                                        Image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 50, height: 50)
+                                            .cornerRadius(5)
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                } else {
+                                    ZStack {
+                                        Rectangle()
+                                            .fill(Color.gray.opacity(0.15))
+                                            .frame(width: 50, height: 50)
+                                            .cornerRadius(5)
+                                        Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 30, height: 30)
+                                            .foregroundColor(.gray)
+                                    }
+                                }
+                                VStack(alignment: .leading) {
+                                    Text(Folder.name)
+                                    Text(String(Folder.practiceCount))
+                                        .font(.subheadline)
+                                        .foregroundColor(.gray)
+                                }
+                            }
                         }
                         .foregroundColor(.primary)
                     }
                 }
             }
-            .navigationBarTitle("Move Practice")
+            .navigationBarTitle(StringConstants.Move, displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
