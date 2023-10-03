@@ -37,7 +37,21 @@ struct FolderView: View {
                                 CreateSection(WithTitle: StringConstants.SectionTitle.Session, Folders: ViewModel.SessionSection, ItemWidth: ItemWidth)
                             }
                             .padding(10)
+                            .background(GeometryReader { Proxy -> Color in
+                                DispatchQueue.main.async {
+                                    ViewModel.UpdateClampedOpacity(With: Proxy, Name: StringConstants.Scroll)
+                                }
+                                return Color.clear
+                            })
                         }
+                        .coordinateSpace(name: StringConstants.Scroll)
+                        LinearGradient(
+                            gradient: Gradient(colors: [.black, .clear]),
+                            startPoint: .top,
+                            endPoint: .bottom)
+                        .opacity(ViewModel.ClampedOpacity)
+                        .edgesIgnoringSafeArea(.top)
+                        .frame(height: 10)
                     }
                 }
             }

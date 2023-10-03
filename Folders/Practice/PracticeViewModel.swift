@@ -24,6 +24,7 @@ class PracticeViewModel: ObservableObject {
     @Published var SelectedPractices: [PracticeModel] = []
     @Published var Practice: PracticeModel?
     @Published var NewName = ""
+    @Published var ClampedOpacity: CGFloat = 0.0
     
     init(Folder: SessionModel) {
         self.Session = Folder
@@ -181,5 +182,11 @@ class PracticeViewModel: ObservableObject {
     
     func Opacity(For Practice: PracticeModel) -> Double {
         return IsSelecting && !SelectedPractices.contains(where: { $0.id == Practice.id }) ? 0.5 : 1.0
+    }
+    
+    func UpdateClampedOpacity(With Proxy: GeometryProxy, Name: String) {
+        let Offset = -Proxy.frame(in: .named(Name)).origin.y
+        let NormalizedOpacity = (Offset - 10) / (110 - 10)
+        ClampedOpacity = min(max(NormalizedOpacity, 0), 1) * 0.7
     }
 }

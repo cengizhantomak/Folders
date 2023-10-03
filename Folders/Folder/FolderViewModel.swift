@@ -25,6 +25,7 @@ class FolderViewModel: ObservableObject {
     @Published var Session: SessionModel?
     @Published var FolderName = ""
     @Published var NewName = ""
+    @Published var ClampedOpacity: CGFloat = 0.0
     var FolderCreationDate: Date?
     var TodaySection: [SessionModel] = []
     var SessionSection: [SessionModel] = []
@@ -274,5 +275,11 @@ class FolderViewModel: ObservableObject {
     
     func Opacity(For Folder: SessionModel) -> Double {
         return IsSelecting && !SelectedSessions.contains(where: { $0.id == Folder.id }) ? 0.5 : 1.0
+    }
+    
+    func UpdateClampedOpacity(With Proxy: GeometryProxy, Name: String) {
+        let Offset = -Proxy.frame(in: .named(Name)).origin.y
+        let NormalizedOpacity = (Offset - 10) / (110 - 10)
+        ClampedOpacity = min(max(NormalizedOpacity, 0), 1) * 0.7
     }
 }

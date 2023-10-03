@@ -25,6 +25,7 @@ enum StringConstants {
     static let NoVideo = "No Video"
     static let LVS = "LVS"
     static let Move = "Move"
+    static let Scroll = "Scroll"
     
     enum SectionTitle {
         static let Pinned = "Pinned"
