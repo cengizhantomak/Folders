@@ -9,6 +9,7 @@ import SwiftUI
 import LVRealmKit
 
 class DestinationFolderViewModel: ObservableObject {
+    weak var PracticeViewModel: PracticeViewModel?
     @Published var Sessions: [SessionModel] = []
     @Published var SelectedFolder: SessionModel?
     @Published var ShowMoveAlert = false
@@ -17,7 +18,13 @@ class DestinationFolderViewModel: ObservableObject {
     @Published var IsErrorTTProgressHUDVisible = false
     @Published var FolderName = ""
     var FolderCreationDate: Date?
-    weak var PracticeViewModel: PracticeViewModel?
+    @Published var SearchText: String = ""
+        
+    var FilteredSessions: [SessionModel] {
+        Sessions.filter { Session in
+            SearchText.isEmpty || Session.name.localizedStandardContains(SearchText)
+        }
+    }
     
     init(PracticeViewModel: PracticeViewModel) {
         self.PracticeViewModel = PracticeViewModel

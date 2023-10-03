@@ -26,6 +26,8 @@ enum StringConstants {
     static let LVS = "LVS"
     static let Move = "Move"
     static let Scroll = "Scroll"
+    static let SearchFolder = "Search Folder..."
+    static let SearchPractice = "Search Practice..."
     
     enum SectionTitle {
         static let Pinned = "Pinned"
@@ -41,6 +43,8 @@ enum StringConstants {
         static let RectangleStackBadgePlay = "rectangle.stack.badge.play"
         static let NoVideo = "video.slash"
         static let FolderBadgePlus = "folder.badge.plus"
+        static let Magnifyingglass = "magnifyingglass"
+        static let MultiplyCircleFill = "multiply.circle.fill"
     }
     
     

@@ -9,11 +9,18 @@ import SwiftUI
 import LVRealmKit
 
 class DestinationFolderDetailViewModel: ObservableObject {
+    weak var DestinationFolderViewModel: DestinationFolderViewModel?
     @Published var ShowMoveAlert = false
     @Published var Session: SessionModel
     @Published var Practices: [PracticeModel] = []
+    @Published var SearchText: String = ""
+        
+    var FilteredPractices: [PracticeModel] {
+        Practices.filter { Practice in
+            SearchText.isEmpty || Practice.Name.localizedStandardContains(SearchText)
+        }
+    }
     
-    weak var DestinationFolderViewModel: DestinationFolderViewModel?
     
     init(Folder: SessionModel, DestinationFolderViewModel: DestinationFolderViewModel) {
         self.Session = Folder

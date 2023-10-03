@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		478A82CC2AAB0E7F00106389 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478A82CB2AAB0E7F00106389 /* StringConstants.swift */; };
+		818EC7752ACCA7E3007D5066 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EC7742ACCA7E3007D5066 /* CustomSearchBar.swift */; };
 		81BD22CD2ACB4AC9001FFDA3 /* DestinationFolderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BD22CC2ACB4AC9001FFDA3 /* DestinationFolderDetailView.swift */; };
 		81BD22D02ACB4B21001FFDA3 /* DestinationFolderDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BD22CF2ACB4B21001FFDA3 /* DestinationFolderDetailViewModel.swift */; };
 		CB020CCB2AAEE72100C30EE0 /* PracticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB020CCA2AAEE72100C30EE0 /* PracticeView.swift */; };
@@ -34,6 +35,7 @@
 
 /* Begin PBXFileReference section */
 		478A82CB2AAB0E7F00106389 /* StringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
+		818EC7742ACCA7E3007D5066 /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		81BD22CC2ACB4AC9001FFDA3 /* DestinationFolderDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationFolderDetailView.swift; sourceTree = "<group>"; };
 		81BD22CF2ACB4B21001FFDA3 /* DestinationFolderDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationFolderDetailViewModel.swift; sourceTree = "<group>"; };
 		CB020CCA2AAEE72100C30EE0 /* PracticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeView.swift; sourceTree = "<group>"; };
@@ -70,6 +72,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		818EC7732ACCA7AE007D5066 /* CustomViews */ = {
+			isa = PBXGroup;
+			children = (
+				818EC7742ACCA7E3007D5066 /* CustomSearchBar.swift */,
+			);
+			path = CustomViews;
+			sourceTree = "<group>";
+		};
 		81BD22CB2ACB4A92001FFDA3 /* DestinationFolderDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -150,6 +160,7 @@
 			children = (
 				CB2FBD712AA5B03C007C46F3 /* FoldersApp.swift */,
 				CB2627492AC2B6E800927110 /* GolfSwing */,
+				818EC7732ACCA7AE007D5066 /* CustomViews */,
 				CB020CC82AAEE5F400C30EE0 /* Helpers */,
 				CB020CC72AAEE3E900C30EE0 /* Folder */,
 				CB020CC92AAEE6E400C30EE0 /* Practice */,
@@ -253,6 +264,7 @@
 				CB2FBD842AA5F669007C46F3 /* FolderViewModel.swift in Sources */,
 				81BD22CD2ACB4AC9001FFDA3 /* DestinationFolderDetailView.swift in Sources */,
 				CB020CCB2AAEE72100C30EE0 /* PracticeView.swift in Sources */,
+				818EC7752ACCA7E3007D5066 /* CustomSearchBar.swift in Sources */,
 				478A82CC2AAB0E7F00106389 /* StringConstants.swift in Sources */,
 				CB2FBD822AA5B190007C46F3 /* FolderItemView.swift in Sources */,
 				CB2FBD862AA5FD70007C46F3 /* Date+Extension.swift in Sources */,

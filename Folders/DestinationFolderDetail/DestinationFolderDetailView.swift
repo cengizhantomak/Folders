@@ -26,7 +26,9 @@ struct DestinationFolderDetailView: View {
                 .foregroundColor(.gray)
                 .ignoresSafeArea(.all)
             } else {
-                List(ViewModel.Practices, id: \.id) { Practice in
+                CustomSearchBar(Placeholder: StringConstants.SearchPractice, Text: $ViewModel.SearchText)
+                    .padding(.horizontal, 20)
+                List(ViewModel.FilteredPractices, id: \.id) { Practice in
                     NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
                         HStack {
                             AsyncImage(url: URL.documentsDirectory.appending(path: Practice.ThumbPath ?? StringConstants.LVS)) { Image in
@@ -50,6 +52,7 @@ struct DestinationFolderDetailView: View {
                 }
             }
         }
+//        .searchable(text: $ViewModel.SearchText)
         .navigationBarTitle(ViewModel.Session.name, displayMode: .inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

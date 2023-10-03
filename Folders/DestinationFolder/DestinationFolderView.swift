@@ -28,7 +28,9 @@ struct DestinationFolderView: View {
                     .foregroundColor(.gray)
                     .ignoresSafeArea(.all)
                 } else {
-                    List(ViewModel.Sessions, id: \.id) { Folder in
+                    CustomSearchBar(Placeholder: StringConstants.SearchFolder, Text: $ViewModel.SearchText)
+                        .padding(.horizontal, 20)
+                    List(ViewModel.FilteredSessions, id: \.id) { Folder in
                         NavigationLink(destination: DestinationFolderDetailView(ViewModel: DestinationFolderDetailViewModel(Folder: Folder, DestinationFolderViewModel: ViewModel))) {
                             HStack {
                                 if Folder.thumbnail != nil {
@@ -66,6 +68,7 @@ struct DestinationFolderView: View {
                     }
                 }
             }
+//            .searchable(text: $ViewModel.SearchText)
             .navigationBarTitle(StringConstants.Move, displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
