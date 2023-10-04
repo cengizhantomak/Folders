@@ -51,7 +51,7 @@ struct FolderView: View {
                             endPoint: .bottom)
                         .opacity(ViewModel.ClampedOpacity)
                         .edgesIgnoringSafeArea(.top)
-                        .frame(height: 10)
+                        .frame(height: 25)
                     }
                 }
             }

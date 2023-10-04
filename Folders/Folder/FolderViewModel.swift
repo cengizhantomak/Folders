@@ -280,6 +280,6 @@ class FolderViewModel: ObservableObject {
     func UpdateClampedOpacity(With Proxy: GeometryProxy, Name: String) {
         let Offset = -Proxy.frame(in: .named(Name)).origin.y
         let NormalizedOpacity = (Offset - 10) / (110 - 10)
-        ClampedOpacity = min(max(NormalizedOpacity, 0), 1) * 0.7
+        ClampedOpacity = min(max(NormalizedOpacity, 0), 1) * 0.75
     }
 }

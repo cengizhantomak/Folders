@@ -13,7 +13,7 @@ struct PracticeView: View {
     var body: some View {
         ZStack {
             VStack {
-                if ViewModel.Practices.isEmpty {
+                if ViewModel.Session.practiceCount == 0 {
                     ZStack {
                         VStack {
                             Spacer()
@@ -49,7 +49,7 @@ struct PracticeView: View {
                             endPoint: .bottom)
                         .opacity(ViewModel.ClampedOpacity)
                         .edgesIgnoringSafeArea(.top)
-                        .frame(height: 10)
+                        .frame(height: 25)
                     }
                 }
             }

@@ -12,7 +12,7 @@ struct DestinationFolderDetailView: View {
     
     var body: some View {
         VStack {
-            if ViewModel.Practices.isEmpty {
+            if ViewModel.Session.practiceCount == 0 {
                 VStack {
                     Spacer()
                     Image(systemName: StringConstants.SystemImage.NoVideo)
@@ -26,9 +26,7 @@ struct DestinationFolderDetailView: View {
                 .foregroundColor(.gray)
                 .ignoresSafeArea(.all)
             } else {
-                CustomSearchBar(Placeholder: StringConstants.SearchPractice, Text: $ViewModel.SearchText)
-                    .padding(.horizontal, 20)
-                List(ViewModel.FilteredPractices, id: \.id) { Practice in
+                List(ViewModel.Practices, id: \.id) { Practice in
                     NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
                         HStack {
                             AsyncImage(url: URL.documentsDirectory.appending(path: Practice.ThumbPath ?? StringConstants.LVS)) { Image in
@@ -39,6 +37,7 @@ struct DestinationFolderDetailView: View {
                                     .cornerRadius(5)
                             } placeholder: {
                                 ProgressView()
+                                    .frame(width: 50, height: 50)
                             }
                             VStack(alignment: .leading) {
                                 Text(Practice.Name)
@@ -52,7 +51,6 @@ struct DestinationFolderDetailView: View {
                 }
             }
         }
-//        .searchable(text: $ViewModel.SearchText)
         .navigationBarTitle(ViewModel.Session.name, displayMode: .inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {

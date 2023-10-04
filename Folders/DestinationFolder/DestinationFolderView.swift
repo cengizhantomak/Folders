@@ -28,8 +28,6 @@ struct DestinationFolderView: View {
                     .foregroundColor(.gray)
                     .ignoresSafeArea(.all)
                 } else {
-                    CustomSearchBar(Placeholder: StringConstants.SearchFolder, Text: $ViewModel.SearchText)
-                        .padding(.horizontal, 20)
                     List(ViewModel.FilteredSessions, id: \.id) { Folder in
                         NavigationLink(destination: DestinationFolderDetailView(ViewModel: DestinationFolderDetailViewModel(Folder: Folder, DestinationFolderViewModel: ViewModel))) {
                             HStack {
@@ -42,6 +40,7 @@ struct DestinationFolderView: View {
                                             .cornerRadius(5)
                                     } placeholder: {
                                         ProgressView()
+                                            .frame(width: 50, height: 50)
                                     }
                                 } else {
                                     ZStack {
@@ -68,7 +67,7 @@ struct DestinationFolderView: View {
                     }
                 }
             }
-//            .searchable(text: $ViewModel.SearchText)
+            .searchable(text: $ViewModel.SearchText)
             .navigationBarTitle(StringConstants.Move, displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
