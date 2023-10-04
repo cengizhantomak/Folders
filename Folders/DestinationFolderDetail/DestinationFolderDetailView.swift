@@ -57,11 +57,15 @@ struct PracticeRowView: View {
     var body: some View {
         HStack {
             if let ThumbPath = Practice.ThumbPath {
-                Image(uiImage: UIImage(contentsOfFile: URL.documentsDirectory.appending(path: ThumbPath).path) ?? UIImage())
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 50, height: 50)
-                    .cornerRadius(5)
+                AsyncImage(url: URL.documentsDirectory.appending(path: ThumbPath)) { Image in
+                    Image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 50, height: 50)
+                        .cornerRadius(5)
+                } placeholder: {
+                    ProgressView()
+                }
             } else {
                 Rectangle()
                     .fill(Color.gray.opacity(0.15))

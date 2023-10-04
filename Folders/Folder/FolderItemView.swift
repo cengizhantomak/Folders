@@ -51,11 +51,15 @@ extension FolderItemView {
         
         return ZStack {
             if let ThumbPath = Folder.thumbnail {
-                Image(uiImage: UIImage(contentsOfFile: URL.documentsDirectory.appending(path: ThumbPath).path) ?? UIImage())
-                    .resizable()
-                    .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
-                    .scaledToFit()
-                    .cornerRadius(10)
+                AsyncImage(url: URL.documentsDirectory.appending(path: ThumbPath)) { Image in
+                    Image
+                        .resizable()
+                        .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
+                        .scaledToFit()
+                        .cornerRadius(10)
+                } placeholder: {
+                    ProgressView()
+                }
             } else {
                 Rectangle()
                     .fill(Color.gray.opacity(0.15))

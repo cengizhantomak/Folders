@@ -44,10 +44,15 @@ extension PracticeItemView {
         
         return ZStack {
             if let ThumbPath = Practice.ThumbPath {
-                Image(uiImage: UIImage(contentsOfFile: URL.documentsDirectory.appending(path: ThumbPath).path) ?? UIImage())
-                    .resizable()
-                    .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
-                    .scaledToFit()
+//                Image(uiImage: UIImage(contentsOfFile: URL.documentsDirectory.appending(path: ThumbPath).path) ?? UIImage())
+                AsyncImage(url: URL.documentsDirectory.appending(path: ThumbPath)) { Image in
+                    Image
+                        .resizable()
+                        .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
+                        .scaledToFit()
+                } placeholder: {
+                    ProgressView()
+                }
             } else {
                 Rectangle()
                     .fill(Color.gray.opacity(0.15))
