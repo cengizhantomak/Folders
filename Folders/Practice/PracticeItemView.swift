@@ -43,13 +43,21 @@ extension PracticeItemView {
         let SafeItemWidth = max(ItemWidth, 1)
         
         return ZStack {
-            AsyncImage(url: URL.documentsDirectory.appending(path: Practice.ThumbPath ?? StringConstants.LVS)) { Image in
-                Image
+            if let ThumbPath = Practice.ThumbPath {
+                Image(uiImage: UIImage(contentsOfFile: URL.documentsDirectory.appending(path: ThumbPath).path) ?? UIImage())
                     .resizable()
                     .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
                     .scaledToFit()
-            } placeholder: {
-                ProgressView()
+            } else {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.15))
+                    .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
+                    .cornerRadius(10)
+                Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
+                    .foregroundColor(.gray)
             }
             VStack {
                 Spacer()

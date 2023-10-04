@@ -7,6 +7,7 @@
 
 import SwiftUI
 import TTProgressHUD
+import LVRealmKit
 
 struct DestinationFolderView: View {
     @StateObject var ViewModel: DestinationFolderViewModel
@@ -15,53 +16,11 @@ struct DestinationFolderView: View {
         NavigationStack {
             VStack {
                 if ViewModel.Sessions.isEmpty {
-                    VStack {
-                        Spacer()
-                        Image(systemName: StringConstants.SystemImage.NoVideo)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50, height: 50)
-                        Text(StringConstants.NoVideo)
-                            .font(.system(size: 15))
-                        Spacer()
-                    }
-                    .foregroundColor(.gray)
-                    .ignoresSafeArea(.all)
+                    NoVideoView()
                 } else {
                     List(ViewModel.FilteredSessions, id: \.id) { Folder in
                         NavigationLink(destination: DestinationFolderDetailView(ViewModel: DestinationFolderDetailViewModel(Folder: Folder, DestinationFolderViewModel: ViewModel))) {
-                            HStack {
-                                if Folder.thumbnail != nil {
-                                    AsyncImage(url: URL.documentsDirectory.appending(path: Folder.thumbnail ?? StringConstants.LVS)) { Image in
-                                        Image
-                                            .resizable()
-                                            .scaledToFill()
-                                            .frame(width: 50, height: 50)
-                                            .cornerRadius(5)
-                                    } placeholder: {
-                                        ProgressView()
-                                            .frame(width: 50, height: 50)
-                                    }
-                                } else {
-                                    ZStack {
-                                        Rectangle()
-                                            .fill(Color.gray.opacity(0.15))
-                                            .frame(width: 50, height: 50)
-                                            .cornerRadius(5)
-                                        Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 30, height: 30)
-                                            .foregroundColor(.gray)
-                                    }
-                                }
-                                VStack(alignment: .leading) {
-                                    Text(Folder.name)
-                                    Text(String(Folder.practiceCount))
-                                        .font(.subheadline)
-                                        .foregroundColor(.gray)
-                                }
-                            }
+                            FolderRowView(Folder: Folder)
                         }
                         .foregroundColor(.primary)
                     }
@@ -110,6 +69,40 @@ struct DestinationFolderView: View {
         .overlay {
             CustomTTProgressHUD(IsVisible: $ViewModel.IsSuccessTTProgressHUDVisible, HudType: .success)
             CustomTTProgressHUD(IsVisible: $ViewModel.IsErrorTTProgressHUDVisible, HudType: .error)
+        }
+    }
+}
+
+struct FolderRowView: View {
+    var Folder: SessionModel
+    
+    var body: some View {
+        HStack {
+            if let ThumbPath = Folder.thumbnail {
+                Image(uiImage: UIImage(contentsOfFile: URL.documentsDirectory.appending(path: ThumbPath).path) ?? UIImage())
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(5)
+            } else {
+                ZStack {
+                    Rectangle()
+                        .fill(Color.gray.opacity(0.15))
+                        .frame(width: 50, height: 50)
+                        .cornerRadius(5)
+                    Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 30, height: 30)
+                        .foregroundColor(.gray)
+                }
+            }
+            VStack(alignment: .leading) {
+                Text(Folder.name)
+                Text(String(Folder.practiceCount))
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
         }
     }
 }

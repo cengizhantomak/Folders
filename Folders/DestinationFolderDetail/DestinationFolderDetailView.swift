@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import LVRealmKit
 
 struct DestinationFolderDetailView: View {
     @StateObject var ViewModel: DestinationFolderDetailViewModel
@@ -13,39 +14,11 @@ struct DestinationFolderDetailView: View {
     var body: some View {
         VStack {
             if ViewModel.Session.practiceCount == 0 {
-                VStack {
-                    Spacer()
-                    Image(systemName: StringConstants.SystemImage.NoVideo)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 50, height: 50)
-                    Text(StringConstants.NoVideo)
-                        .font(.system(size: 15))
-                    Spacer()
-                }
-                .foregroundColor(.gray)
-                .ignoresSafeArea(.all)
+                NoVideoView()
             } else {
                 List(ViewModel.Practices, id: \.id) { Practice in
                     NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
-                        HStack {
-                            AsyncImage(url: URL.documentsDirectory.appending(path: Practice.ThumbPath ?? StringConstants.LVS)) { Image in
-                                Image
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 50, height: 50)
-                                    .cornerRadius(5)
-                            } placeholder: {
-                                ProgressView()
-                                    .frame(width: 50, height: 50)
-                            }
-                            VStack(alignment: .leading) {
-                                Text(Practice.Name)
-                                Text(Date.CurrentTime(From: Practice.UpdatedAt))
-                                    .font(.subheadline)
-                                    .foregroundStyle(.gray)
-                            }
-                        }
+                        PracticeRowView(Practice: Practice)
                     }
                     .foregroundColor(.primary)
                 }
@@ -74,6 +47,38 @@ struct DestinationFolderDetailView: View {
             }
         } message: {
             Text(StringConstants.Alert.Message.MoveConfirmationMessage)
+        }
+    }
+}
+
+struct PracticeRowView: View {
+    var Practice: PracticeModel
+    
+    var body: some View {
+        HStack {
+            if let ThumbPath = Practice.ThumbPath {
+                Image(uiImage: UIImage(contentsOfFile: URL.documentsDirectory.appending(path: ThumbPath).path) ?? UIImage())
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(5)
+            } else {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.15))
+                    .frame(width: 50, height: 50)
+                    .cornerRadius(5)
+                Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 30, height: 30)
+                    .foregroundColor(.gray)
+            }
+            VStack(alignment: .leading) {
+                Text(Practice.Name)
+                Text(Date.CurrentTime(From: Practice.UpdatedAt))
+                    .font(.subheadline)
+                    .foregroundStyle(.gray)
+            }
         }
     }
 }

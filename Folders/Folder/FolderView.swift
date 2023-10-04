@@ -15,18 +15,7 @@ struct FolderView: View {
         NavigationStack {
             VStack {
                 if ViewModel.Sessions.isEmpty {
-                    VStack {
-                        Spacer()
-                        Image(systemName: StringConstants.SystemImage.NoVideo)
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 50, height: 50)
-                        Text(StringConstants.NoVideo)
-                            .font(.system(size: 15))
-                        Spacer()
-                    }
-                    .foregroundColor(.gray)
-                    .ignoresSafeArea(.all)
+                    NoVideoView()
                 } else {
                     GeometryReader { Geometry in
                         let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 12, Amount: 2)

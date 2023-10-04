@@ -50,16 +50,12 @@ extension FolderItemView {
         let SafeItemWidth = max(ItemWidth, 1)
         
         return ZStack {
-            if Folder.thumbnail != nil {
-                AsyncImage(url: URL.documentsDirectory.appending(path: Folder.thumbnail ?? StringConstants.LVS)) { Image in
-                    Image
-                        .resizable()
-                        .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
-                        .scaledToFit()
-                        .cornerRadius(10)
-                } placeholder: {
-                    ProgressView()
-                }
+            if let ThumbPath = Folder.thumbnail {
+                Image(uiImage: UIImage(contentsOfFile: URL.documentsDirectory.appending(path: ThumbPath).path) ?? UIImage())
+                    .resizable()
+                    .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
+                    .scaledToFit()
+                    .cornerRadius(10)
             } else {
                 Rectangle()
                     .fill(Color.gray.opacity(0.15))

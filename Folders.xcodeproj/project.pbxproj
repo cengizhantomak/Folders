@@ -15,6 +15,7 @@
 		CB020CCD2AAEE75200C30EE0 /* PracticeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB020CCC2AAEE75200C30EE0 /* PracticeViewModel.swift */; };
 		CB0CAB4A2AC6C8B800B033BE /* DestinationFolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0CAB492AC6C8B800B033BE /* DestinationFolderView.swift */; };
 		CB0CAB4C2AC6C92C00B033BE /* DestinationFolderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0CAB4B2AC6C92C00B033BE /* DestinationFolderViewModel.swift */; };
+		CB1570AA2ACD6F2300F2490D /* NoVideoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1570A92ACD6F2300F2490D /* NoVideoView.swift */; };
 		CB1C54632AC41144007F703A /* VideoPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1C54622AC41144007F703A /* VideoPlayerView.swift */; };
 		CB26274A2AC2B6E800927110 /* GolfSwing in Resources */ = {isa = PBXBuildFile; fileRef = CB2627492AC2B6E800927110 /* GolfSwing */; };
 		CB2864492ABC632E0014535E /* LVRealmKit in Frameworks */ = {isa = PBXBuildFile; productRef = CB2864482ABC632E0014535E /* LVRealmKit */; };
@@ -42,6 +43,7 @@
 		CB020CCC2AAEE75200C30EE0 /* PracticeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeViewModel.swift; sourceTree = "<group>"; };
 		CB0CAB492AC6C8B800B033BE /* DestinationFolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationFolderView.swift; sourceTree = "<group>"; };
 		CB0CAB4B2AC6C92C00B033BE /* DestinationFolderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationFolderViewModel.swift; sourceTree = "<group>"; };
+		CB1570A92ACD6F2300F2490D /* NoVideoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoVideoView.swift; sourceTree = "<group>"; };
 		CB1C54622AC41144007F703A /* VideoPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerView.swift; sourceTree = "<group>"; };
 		CB2627492AC2B6E800927110 /* GolfSwing */ = {isa = PBXFileReference; lastKnownFileType = folder; path = GolfSwing; sourceTree = "<group>"; };
 		CB2FBD6E2AA5B03C007C46F3 /* Folders.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Folders.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -76,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				818EC7742ACCA7E3007D5066 /* CustomSearchBar.swift */,
+				CB1570A92ACD6F2300F2490D /* NoVideoView.swift */,
 			);
 			path = CustomViews;
 			sourceTree = "<group>";
@@ -263,6 +266,7 @@
 				CB2FBD742AA5B03C007C46F3 /* FolderView.swift in Sources */,
 				CB2FBD842AA5F669007C46F3 /* FolderViewModel.swift in Sources */,
 				81BD22CD2ACB4AC9001FFDA3 /* DestinationFolderDetailView.swift in Sources */,
+				CB1570AA2ACD6F2300F2490D /* NoVideoView.swift in Sources */,
 				CB020CCB2AAEE72100C30EE0 /* PracticeView.swift in Sources */,
 				818EC7752ACCA7E3007D5066 /* CustomSearchBar.swift in Sources */,
 				478A82CC2AAB0E7F00106389 /* StringConstants.swift in Sources */,

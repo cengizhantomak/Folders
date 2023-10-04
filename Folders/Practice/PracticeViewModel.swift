@@ -93,11 +93,6 @@ class PracticeViewModel: ObservableObject {
         SuccessTTProgressHUD()
     }
     
-    func MovePractice() {
-        print("Move Tapped")
-        SuccessTTProgressHUD()
-    }
-    
     func RenamePractice() {
         Task {
             do {
