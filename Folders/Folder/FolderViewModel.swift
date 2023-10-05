@@ -15,7 +15,6 @@ class FolderViewModel: ObservableObject {
     var Columns = [GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
     @Published var OnlyShowFavorites = false
-    @Published var ShowBottomBarDeleteAlert = false
     @Published var ShowCreatedAlert = false
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false

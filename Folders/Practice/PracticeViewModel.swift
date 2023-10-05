@@ -11,7 +11,6 @@ import LVRealmKit
 class PracticeViewModel: ObservableObject {
     var Columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
     @Published var IsSelecting = false
-    @Published var ShowBottomBarDeleteAlert = false
     @Published var ShowBottomBarMoveAlert = false
     @Published var OnlyShowFavorites = false
     @Published var ShowMoveAlert = false

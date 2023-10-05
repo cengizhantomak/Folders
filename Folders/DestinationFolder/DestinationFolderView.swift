@@ -67,8 +67,11 @@ struct DestinationFolderView: View {
             }
         }
         .overlay {
-            CustomTTProgressHUD(IsVisible: $ViewModel.IsSuccessTTProgressHUDVisible, HudType: .success)
-            CustomTTProgressHUD(IsVisible: $ViewModel.IsErrorTTProgressHUDVisible, HudType: .error)
+            if ViewModel.IsSuccessTTProgressHUDVisible {
+                CustomTTProgressHUD(IsVisible: $ViewModel.IsSuccessTTProgressHUDVisible, HudType: .success)
+            } else if ViewModel.IsErrorTTProgressHUDVisible {
+                CustomTTProgressHUD(IsVisible: $ViewModel.IsErrorTTProgressHUDVisible, HudType: .error)
+            }
         }
     }
 }

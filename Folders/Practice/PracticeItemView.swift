@@ -19,16 +19,6 @@ struct PracticeItemView: View {
                 .contextMenu {
                     VideoContextMenu
                 }
-            
-                .alert(StringConstants.Alert.Title.RenameVideo, isPresented: $ViewModel.ShowRenameAlert) {
-                    RenameVideoAlert
-                }
-            
-                .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
-                    DeleteVideoAlert
-                } message: {
-                    Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
-                }
         } else {
             PracticeItem
         }
@@ -44,7 +34,6 @@ extension PracticeItemView {
         
         return ZStack {
             if let ThumbPath = Practice.ThumbPath {
-//                Image(uiImage: UIImage(contentsOfFile: URL.documentsDirectory.appending(path: ThumbPath).path) ?? UIImage())
                 AsyncImage(url: URL.documentsDirectory.appending(path: ThumbPath)) { Image in
                     Image
                         .resizable()
@@ -52,6 +41,7 @@ extension PracticeItemView {
                         .scaledToFit()
                 } placeholder: {
                     ProgressView()
+                        .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
                 }
             } else {
                 Rectangle()
@@ -195,35 +185,6 @@ extension PracticeItemView {
                 StringConstants.ContextMenu.Delete.Text,
                 systemImage: StringConstants.ContextMenu.Delete.SystemImage
             )
-        }
-    }
-    
-    // MARK: - Alerts
-    private var RenameVideoAlert: some View {
-        Group {
-            TextField(StringConstants.Alert.Title.VideoName, text: $ViewModel.NewName)
-            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-                if !ViewModel.NewName.isEmpty {
-                    ViewModel.RenamePractice()
-                } else {
-                    ViewModel.ErrorTTProgressHUD()
-                }
-            }
-            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                print("Cancel Tapped")
-            }
-        }
-    }
-    
-    private var DeleteVideoAlert: some View {
-        Group {
-            Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-                ViewModel.DeletePractices(ViewModel.SelectedPractices)
-            }
-            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                ViewModel.SelectedPractices.removeAll()
-                print("Cancel Tapped")
-            }
         }
     }
 }
