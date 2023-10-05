@@ -31,14 +31,6 @@ struct FolderItemView: View {
                 .font(.system(size: 14))
                 .foregroundColor(.gray)
         }
-        .alert(StringConstants.Alert.Title.RenameFolder, isPresented: $ViewModel.ShowRenameAlert) {
-            RenameVideoAlert
-        }
-        .alert(StringConstants.Alert.Title.Deleting, isPresented: $ViewModel.ShowDeleteAlert) {
-            DeleteVideoAlert
-        } message: {
-            Text(StringConstants.Alert.Message.DeleteConfirmationMessage)
-        }
     }
 }
 
@@ -59,6 +51,7 @@ extension FolderItemView {
                         .cornerRadius(10)
                 } placeholder: {
                     ProgressView()
+                        .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
                 }
             } else {
                 Rectangle()
@@ -169,35 +162,6 @@ extension FolderItemView {
                 StringConstants.ContextMenu.Delete.Text,
                 systemImage: StringConstants.ContextMenu.Delete.SystemImage
             )
-        }
-    }
-    
-    // MARK: - Alerts
-    private var RenameVideoAlert: some View {
-        Group {
-            TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.NewName)
-            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-                if !ViewModel.NewName.isEmpty {
-                    ViewModel.RenameFolder(NewName: ViewModel.NewName)
-                } else {
-                    ViewModel.ErrorTTProgressHUD()
-                }
-            }
-            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                print("Cancel Tapped")
-            }
-        }
-    }
-    
-    private var DeleteVideoAlert: some View {
-        Group {
-            Button(StringConstants.Alert.ButtonText.Delete, role: .destructive) {
-                ViewModel.DeleteFolders(ViewModel.SelectedSessions)
-            }
-            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                ViewModel.SelectedSessions.removeAll()
-                print("Cancel Tapped")
-            }
         }
     }
 }
