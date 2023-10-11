@@ -10,6 +10,7 @@ import CustomAlertPackage
 
 struct PracticeView: View {
     @StateObject var ViewModel: PracticeViewModel
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var body: some View {
         PracticeViewContent
@@ -57,6 +58,10 @@ struct PracticeView: View {
                                              ViewModel.IsSelecting = false
                                          })
             )
+            .onAppear {
+                let ItemCount = ViewModel.NumberOfItemsPerRow(For: horizontalSizeClass)
+                ViewModel.Columns = Array(repeating: GridItem(.flexible()), count: ItemCount)
+            }
             .sheet(isPresented: $ViewModel.ShowBottomBarMoveAlert) {
                 DestinationFolderView(ViewModel: DestinationFolderViewModel(PracticeViewModel: ViewModel))
             }
@@ -86,12 +91,42 @@ extension PracticeView {
     
     private var PracticeContent: some View {
         GeometryReader { Geometry in
-            let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 1, Amount: 3)
+            let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 1, Amount: CGFloat(ViewModel.Columns.count))
             ScrollView {
-                PracticeGridView(ViewModel: ViewModel, ItemWidth: ItemWidth)
-                    .padding(5)
+                Section(header: DateHeader) {
+                    LazyVGrid(columns: ViewModel.Columns, spacing: 1) {
+                        ForEach(ViewModel.Practices, id: \.id) { Practice in
+                            if !ViewModel.IsSelecting {
+                                NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
+                                    PracticeItemView(ViewModel: ViewModel, Practice: Practice, ItemWidth: ItemWidth)
+                                }
+                                .foregroundColor(.primary)
+                            } else {
+                                PracticeItemView(ViewModel: ViewModel, Practice: Practice, ItemWidth: ItemWidth)
+                                    .onTapGesture {
+                                        if let Index = ViewModel.SelectedPractices.firstIndex(where: { $0.id == Practice.id }) {
+                                            ViewModel.SelectedPractices.remove(at: Index)
+                                        } else {
+                                            ViewModel.SelectedPractices.append(Practice)
+                                        }
+                                    }
+                                    .opacity(ViewModel.Opacity(For: Practice))
+                            }
+                        }
+                    }
+                }
+                .padding(5)
             }
         }
+    }
+    
+    // MARK: - Date Header
+    private var DateHeader: some View {
+        Text(Date.CurrentDate(From: ViewModel.Session.createdAt))
+            .foregroundColor(.gray)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .background(.clear)
+            .padding(.top)
     }
     
     // MARK: - Toolbars

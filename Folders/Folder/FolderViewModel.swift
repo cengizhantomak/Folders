@@ -12,7 +12,7 @@ import AVFoundation
 class FolderViewModel: ObservableObject {
     @Published var mediaURLs: [URL: URL] = [:]  // [videoURL: imageURL]
     @Published var sortedVideoURLs: [URL] = []
-    var Columns = [GridItem(.flexible()), GridItem(.flexible())]
+    @Published var Columns: [GridItem] = []
     @Published var IsSelecting = false
     @Published var OnlyShowFavorites = false
     @Published var ShowCreatedAlert = false
@@ -288,5 +288,15 @@ class FolderViewModel: ObservableObject {
         let Offset = -Proxy.frame(in: .named(Name)).origin.y
         let NormalizedOpacity = (Offset - 10) / (110 - 10)
         ClampedOpacity = min(max(NormalizedOpacity, 0), 1) * 0.75
+    }
+    
+    func NumberOfItemsPerRow(For SizeClass: UserInterfaceSizeClass?) -> Int {
+        if SizeClass == .compact {
+            // iPhone
+            return 2
+        } else {
+            // iPad
+            return 4
+        }
     }
 }

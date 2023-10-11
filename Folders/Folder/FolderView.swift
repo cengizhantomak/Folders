@@ -11,6 +11,7 @@ import CustomAlertPackage
 
 struct FolderView: View {
     @StateObject var ViewModel = FolderViewModel()
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
     var body: some View {
         NavigationStack {
@@ -20,6 +21,8 @@ struct FolderView: View {
                     Toolbars
                 }
                 .onAppear {
+                    let ItemCount = ViewModel.NumberOfItemsPerRow(For: horizontalSizeClass)
+                    ViewModel.Columns = Array(repeating: GridItem(.flexible()), count: ItemCount)
                     ViewModel.LoadFolders()
                 }
         }
@@ -122,7 +125,7 @@ extension FolderView {
     
     private var FolderContent: some View {
         GeometryReader { Geometry in
-            let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 12, Amount: 2)
+            let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 12, Amount: CGFloat(ViewModel.Columns.count))
             ScrollView {
                 VStack(alignment: .leading, spacing: 44) {
                     CreateSection(WithTitle: StringConstants.SectionTitle.Todays, Folders: ViewModel.TodaySection, ItemWidth: ItemWidth)
@@ -140,7 +143,26 @@ extension FolderView {
                 VStack(alignment: .leading) {
                     Divider()
                     Section(header: Text(Title).font(.headline)) {
-                        FolderGridView(ViewModel: ViewModel, Folders: Folders, ItemWidth: ItemWidth)
+                        LazyVGrid(columns: ViewModel.Columns, spacing: 10) {
+                            ForEach(Folders, id: \.id) { Folder in
+                                if !ViewModel.IsSelecting {
+                                    NavigationLink(destination: PracticeView(ViewModel: PracticeViewModel(Folder: Folder))) {
+                                        FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
+                                    }
+                                    .foregroundColor(.primary)
+                                } else {
+                                    FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
+                                        .onTapGesture {
+                                            if let Index = ViewModel.SelectedSessions.firstIndex(where: { $0.id == Folder.id }) {
+                                                ViewModel.SelectedSessions.remove(at: Index)
+                                            } else {
+                                                ViewModel.SelectedSessions.append(Folder)
+                                            }
+                                        }
+                                        .opacity(ViewModel.Opacity(For: Folder))
+                                }
+                            }
+                        }
                     }
                 }
             }

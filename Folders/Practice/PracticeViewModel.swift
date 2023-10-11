@@ -9,7 +9,7 @@ import SwiftUI
 import LVRealmKit
 
 class PracticeViewModel: ObservableObject {
-    var Columns = [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())]
+    @Published var Columns: [GridItem] = []
     @Published var IsSelecting = false
     @Published var ShowBottomBarMoveAlert = false
     @Published var OnlyShowFavorites = false
@@ -185,5 +185,15 @@ class PracticeViewModel: ObservableObject {
         let Offset = -Proxy.frame(in: .named(Name)).origin.y
         let NormalizedOpacity = (Offset - 10) / (110 - 10)
         ClampedOpacity = min(max(NormalizedOpacity, 0), 1) * 0.75
+    }
+    
+    func NumberOfItemsPerRow(For SizeClass: UserInterfaceSizeClass?) -> Int {
+        if SizeClass == .compact {
+            // iPhone
+            return 3
+        } else {
+            // iPad
+            return 5
+        }
     }
 }
