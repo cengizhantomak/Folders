@@ -23,6 +23,8 @@ class FolderViewModel: ObservableObject {
     @Published var SelectedSessions: [SessionModel] = []
     @Published var Session: SessionModel?
     @Published var FolderName = ""
+    @Published var FolderFavorite = false
+    @Published var FolderPinned = false
     @Published var NewName = ""
     @Published var ClampedOpacity: CGFloat = 0.0
     var FolderCreationDate: Date?
@@ -79,6 +81,8 @@ class FolderViewModel: ObservableObject {
     func AddButtonAction() {
         FolderCreationDate = Date()
         FolderName = FolderCreationDate?.dateFormat(StringConstants.DateTimeFormatFolder) ?? StringConstants.LVS
+        FolderFavorite = false
+        FolderPinned = false
         ShowCreatedAlert = true
     }
     
@@ -87,6 +91,8 @@ class FolderViewModel: ObservableObject {
             do {
                 var Folder = SessionModel()
                 Folder.name = FolderName
+                Folder.isFavorite = FolderFavorite
+                Folder.isPinned = FolderPinned
                 Folder.createdAt = FolderCreationDate ?? Date()
                 try await FolderRepository.shared.addFolder(Folder)
                 LoadFolders()
@@ -178,6 +184,8 @@ class FolderViewModel: ObservableObject {
             do {
                 if var Folder = Session {
                     Folder.name = NewName
+                    Folder.isFavorite = FolderFavorite
+                    Folder.isPinned = FolderPinned
                     try await FolderRepository.shared.edit(Folder)
                 }
                 LoadFolders()

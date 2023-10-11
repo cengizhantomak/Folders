@@ -8,6 +8,7 @@
 import SwiftUI
 import TTProgressHUD
 import LVRealmKit
+import CustomAlertPackage
 
 struct DestinationFolderView: View {
     @StateObject var ViewModel: DestinationFolderViewModel
@@ -52,20 +53,37 @@ struct DestinationFolderView: View {
                     }
                 }
             }
-            .alert(StringConstants.Alert.Title.CreateFolder, isPresented: $ViewModel.ShowCreatedAlert) {
-                TextField(StringConstants.Alert.Title.FolderName, text: $ViewModel.FolderName)
-                Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-                    if !ViewModel.FolderName.isEmpty {
-                        ViewModel.AddFolder()
-                    } else {
-                        ViewModel.ErrorTTProgressHUD()
-                    }
-                }
-                Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                    print("Creat Alert Cancel Tapped")
-                }
-            }
         }
+        .CustomAlert(
+            IsPresented: $ViewModel.ShowCreatedAlert,
+            Title: Title(Text: StringConstants.Alert.Title.CreateFolder,
+                         SystemImage: StringConstants.Alert.SystemImage.FolderFillBadgePlus),
+            TextField: TextFieldText(Placeholder: StringConstants.Alert.Title.FolderName,
+                                     Text: $ViewModel.FolderName),
+            LabelLeft: LabelButton(Text: StringConstants.ContextMenu.AddFavorite.Text,
+                                   SystemImage: ViewModel.FolderFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage,
+                                   Binding: $ViewModel.FolderFavorite,
+                                   Action: {
+                                       ViewModel.FolderFavorite.toggle()
+                                   }),
+            LabelRight: LabelButton(Text: StringConstants.ContextMenu.Pin.Text, SystemImage: ViewModel.FolderPinned ? StringConstants.ContextMenu.Pin.SystemImage : StringConstants.ContextMenu.Unpin.SystemImage,
+                                    Binding: $ViewModel.FolderPinned,
+                                    Action: {
+                                        ViewModel.FolderPinned.toggle()
+                                    }),
+            ButtonLeft: AlertButton(Text: StringConstants.Alert.ButtonText.Cancel,
+                                    Action: {
+                                        print("Cancel Tapped")
+                                    }),
+            ButtonRight: AlertButton(Text: StringConstants.Alert.ButtonText.Create,
+                                     Action: {
+                                         if !ViewModel.FolderName.isEmpty {
+                                             ViewModel.AddFolder()
+                                         } else {
+                                             ViewModel.ErrorTTProgressHUD()
+                                         }
+                                     })
+        )
         .overlay {
             if ViewModel.IsSuccessTTProgressHUDVisible {
                 CustomTTProgressHUD(IsVisible: $ViewModel.IsSuccessTTProgressHUDVisible, HudType: .success)

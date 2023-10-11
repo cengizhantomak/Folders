@@ -144,6 +144,8 @@ extension FolderItemView {
         Button {
             ViewModel.Session = Folder
             ViewModel.NewName = Folder.name
+            ViewModel.FolderFavorite = Folder.isFavorite
+            ViewModel.FolderPinned = Folder.isPinned
             ViewModel.ShowRenameAlert = true
         } label: {
             Label(

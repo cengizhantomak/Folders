@@ -50,6 +50,7 @@ enum StringConstants {
     
     enum Alert {
         enum ButtonText {
+            static let Create = "Create"
             static let Save = "Save"
             static let Cancel = "Cancel"
             static let Delete = "Delete"
@@ -67,6 +68,12 @@ enum StringConstants {
         enum Message {
             static let DeleteConfirmationMessage = "Are you sure you want to delete the selected folders?"
             static let MoveConfirmationMessage = "Are you sure you want to move the selected folders?"
+        }
+        
+        enum SystemImage {
+            static let Trash = "trash"
+            static let FolderFillBadgePlus = "folder.fill.badge.plus"
+            static let Pencil = "pencil"
         }
     }
     

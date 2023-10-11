@@ -17,9 +17,11 @@ class DestinationFolderViewModel: ObservableObject {
     @Published var IsSuccessTTProgressHUDVisible = false
     @Published var IsErrorTTProgressHUDVisible = false
     @Published var FolderName = ""
+    @Published var FolderFavorite = false
+    @Published var FolderPinned = false
     var FolderCreationDate: Date?
     @Published var SearchText: String = ""
-        
+    
     var FilteredSessions: [SessionModel] {
         Sessions.filter { Session in
             SearchText.isEmpty || Session.name.localizedStandardContains(SearchText)
@@ -102,6 +104,8 @@ class DestinationFolderViewModel: ObservableObject {
     func AddButtonAction() {
         FolderCreationDate = Date()
         FolderName = FolderCreationDate?.dateFormat(StringConstants.DateTimeFormatFolder) ?? StringConstants.LVS
+        FolderFavorite = false
+        FolderPinned = false
         ShowCreatedAlert = true
     }
     
@@ -110,6 +114,8 @@ class DestinationFolderViewModel: ObservableObject {
             do {
                 var Folder = SessionModel()
                 Folder.name = FolderName
+                Folder.isFavorite = FolderFavorite
+                Folder.isPinned = FolderPinned
                 Folder.createdAt = FolderCreationDate ?? Date()
                 try await FolderRepository.shared.addFolder(Folder)
                 LoadFolders()

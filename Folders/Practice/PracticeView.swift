@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CustomAlertPackage
 
 struct PracticeView: View {
     @StateObject var ViewModel: PracticeViewModel
@@ -16,12 +17,46 @@ struct PracticeView: View {
             .toolbar {
                 Toolbars
             }
-            .alert(StringConstants.Alert.Title.RenameVideo, isPresented: $ViewModel.ShowRenameAlert) {
-                RenamePracticeAlert
-            }
-            .alert(isPresented: $ViewModel.ShowDeleteAlert) {
-                DeleteAlert
-            }
+            .CustomAlert(
+                IsPresented: $ViewModel.ShowRenameAlert,
+                Title: Title(Text: StringConstants.Alert.Title.RenameVideo,
+                             SystemImage: StringConstants.Alert.SystemImage.Pencil),
+                TextField: TextFieldText(Placeholder: StringConstants.Alert.Title.VideoName,
+                                         Text: $ViewModel.NewName),
+                LabelLeft: LabelButton(Text: StringConstants.ContextMenu.AddFavorite.Text,
+                                       SystemImage: ViewModel.PracticeFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage,
+                                       Binding: $ViewModel.PracticeFavorite,
+                                       Action: {
+                                           ViewModel.PracticeFavorite.toggle()
+                                       }),
+                ButtonLeft: AlertButton(Text: StringConstants.Alert.ButtonText.Cancel,
+                                        Action: {
+                                            print("Cancel Tapped")
+                                        }),
+                ButtonRight: AlertButton(Text: StringConstants.Alert.ButtonText.Save,
+                                         Action: {
+                                             if !ViewModel.NewName.isEmpty {
+                                                 ViewModel.RenamePractice()
+                                             } else {
+                                                 ViewModel.ErrorTTProgressHUD()
+                                             }
+                                         })
+            )
+            .CustomAlert(
+                IsPresented: $ViewModel.ShowDeleteAlert,
+                Title: Title(Text: StringConstants.Alert.Title.Deleting,
+                             SystemImage: StringConstants.Alert.SystemImage.Trash),
+                Message: StringConstants.Alert.Message.DeleteConfirmationMessage,
+                ButtonLeft: AlertButton(Text: StringConstants.Alert.ButtonText.Cancel,
+                                        Action: {
+                                            print("Cancel Tapped")
+                                        }),
+                ButtonRight: AlertButton(Text: StringConstants.Alert.ButtonText.Delete,
+                                         Action: {
+                                             ViewModel.DeletePractices(ViewModel.SelectedPractices)
+                                             ViewModel.IsSelecting = false
+                                         })
+            )
             .sheet(isPresented: $ViewModel.ShowBottomBarMoveAlert) {
                 DestinationFolderView(ViewModel: DestinationFolderViewModel(PracticeViewModel: ViewModel))
             }
@@ -137,37 +172,6 @@ extension PracticeView {
             }
             .disabled(ViewModel.SelectedPractices.isEmpty)
         }
-    }
-    
-    // MARK: - Alerts
-    private var RenamePracticeAlert: some View {
-        Group {
-            TextField(StringConstants.Alert.Title.VideoName, text: $ViewModel.NewName)
-            Button(StringConstants.Alert.ButtonText.Save, role: .destructive) {
-                if !ViewModel.NewName.isEmpty {
-                    ViewModel.RenamePractice()
-                } else {
-                    ViewModel.ErrorTTProgressHUD()
-                }
-            }
-            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                print("Cancel Tapped")
-            }
-        }
-    }
-    
-    private var DeleteAlert: Alert {
-        Alert(
-            title: Text(StringConstants.Alert.Title.Deleting),
-            message: Text(StringConstants.Alert.Message.DeleteConfirmationMessage),
-            primaryButton: .destructive(Text(StringConstants.Alert.ButtonText.Delete)) {
-                ViewModel.DeletePractices(ViewModel.SelectedPractices)
-                ViewModel.IsSelecting = false
-            },
-            secondaryButton: .cancel {
-                print("Cancel Tapped")
-            }
-        )
     }
     
     // MARK: - Title

@@ -7,47 +7,54 @@
 
 import SwiftUI
 import LVRealmKit
+import CustomAlertPackage
 
 struct DestinationFolderDetailView: View {
     @StateObject var ViewModel: DestinationFolderDetailViewModel
     
     var body: some View {
-        VStack {
-            if ViewModel.Session.practiceCount == 0 {
-                NoVideoView()
-            } else {
-                List(ViewModel.Practices, id: \.id) { Practice in
-                    NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
-                        PracticeRowView(Practice: Practice)
-                    }
-                    .foregroundColor(.primary)
-                }
-            }
-        }
-        .navigationBarTitle(ViewModel.Session.name, displayMode: .inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    ViewModel.ShowMoveAlert = true
-                } label: {
-                    Text(StringConstants.Move)
+        NavigationStack {
+            VStack {
+                if ViewModel.Session.practiceCount == 0 {
+                    NoVideoView()
+                } else {
+                    List(ViewModel.Practices, id: \.id) { Practice in
+                        NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
+                            PracticeRowView(Practice: Practice)
+                        }
                         .foregroundColor(.primary)
-                        .padding(8)
-                        .background(Color.gray.opacity(0.25))
-                        .clipShape(Capsule())
+                    }
+                }
+            }
+            .navigationBarTitle(ViewModel.Session.name, displayMode: .inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        ViewModel.ShowMoveAlert = true
+                    } label: {
+                        Text(StringConstants.Move)
+                            .foregroundColor(.primary)
+                            .padding(8)
+                            .background(Color.gray.opacity(0.25))
+                            .clipShape(Capsule())
+                    }
                 }
             }
         }
-        .alert(StringConstants.Alert.Title.MoveVideo, isPresented: $ViewModel.ShowMoveAlert) {
-            Button(StringConstants.Alert.ButtonText.Move, role: .destructive) {
-                ViewModel.MovePractice()
-            }
-            Button(StringConstants.Alert.ButtonText.Cancel, role: .cancel) {
-                print("Move Alert Cancel Tapped")
-            }
-        } message: {
-            Text(StringConstants.Alert.Message.MoveConfirmationMessage)
-        }
+        .CustomAlert(
+            IsPresented: $ViewModel.ShowMoveAlert,
+            Title: Title(Text: StringConstants.Alert.Title.MoveVideo,
+                         SystemImage: StringConstants.SystemImage.FolderBadgePlus),
+            Message: StringConstants.Alert.Message.MoveConfirmationMessage,
+            ButtonLeft: AlertButton(Text: StringConstants.Alert.ButtonText.Cancel,
+                                    Action: {
+                                        print("Cancel Tapped")
+                                    }),
+            ButtonRight: AlertButton(Text: StringConstants.Alert.ButtonText.Move,
+                                     Action: {
+                                         ViewModel.MovePractice()
+                                     })
+        )
     }
 }
 

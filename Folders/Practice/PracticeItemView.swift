@@ -167,6 +167,7 @@ extension PracticeItemView {
         Button {
             ViewModel.Practice = Practice
             ViewModel.NewName = Practice.Name
+            ViewModel.PracticeFavorite = Practice.isFavorite
             ViewModel.ShowRenameAlert = true
         } label: {
             Label(

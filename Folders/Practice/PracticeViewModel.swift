@@ -23,6 +23,7 @@ class PracticeViewModel: ObservableObject {
     @Published var SelectedPractices: [PracticeModel] = []
     @Published var Practice: PracticeModel?
     @Published var NewName = ""
+    @Published var PracticeFavorite = false
     @Published var ClampedOpacity: CGFloat = 0.0
     
     init(Folder: SessionModel) {
@@ -97,6 +98,7 @@ class PracticeViewModel: ObservableObject {
             do {
                 if var Video = self.Practice {
                     Video.Name = NewName
+                    Video.isFavorite = PracticeFavorite
                     try await PracticeRepository.shared.edit(Video)
                 }
                 try await GetPractices()

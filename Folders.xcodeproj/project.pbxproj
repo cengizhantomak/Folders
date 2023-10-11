@@ -11,6 +11,9 @@
 		818EC7752ACCA7E3007D5066 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EC7742ACCA7E3007D5066 /* CustomSearchBar.swift */; };
 		81BD22CD2ACB4AC9001FFDA3 /* DestinationFolderDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BD22CC2ACB4AC9001FFDA3 /* DestinationFolderDetailView.swift */; };
 		81BD22D02ACB4B21001FFDA3 /* DestinationFolderDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BD22CF2ACB4B21001FFDA3 /* DestinationFolderDetailViewModel.swift */; };
+		834E7AC42AD3D0AF00D504E3 /* LVRealmKit in Frameworks */ = {isa = PBXBuildFile; productRef = 834E7AC32AD3D0AF00D504E3 /* LVRealmKit */; };
+		834E7AC62AD3D0BD00D504E3 /* TTProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 834E7AC52AD3D0BD00D504E3 /* TTProgressHUD */; };
+		83EE5AE42AD522D0004D7E1C /* CustomAlertPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 83EE5AE32AD522D0004D7E1C /* CustomAlertPackage */; };
 		CB020CCB2AAEE72100C30EE0 /* PracticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB020CCA2AAEE72100C30EE0 /* PracticeView.swift */; };
 		CB020CCD2AAEE75200C30EE0 /* PracticeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB020CCC2AAEE75200C30EE0 /* PracticeViewModel.swift */; };
 		CB0CAB4A2AC6C8B800B033BE /* DestinationFolderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB0CAB492AC6C8B800B033BE /* DestinationFolderView.swift */; };
@@ -64,8 +67,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				834E7AC42AD3D0AF00D504E3 /* LVRealmKit in Frameworks */,
 				CB2AA4E92AB4997D0068F54E /* TTProgressHUD in Frameworks */,
 				CB2864492ABC632E0014535E /* LVRealmKit in Frameworks */,
+				83EE5AE42AD522D0004D7E1C /* CustomAlertPackage in Frameworks */,
+				834E7AC62AD3D0BD00D504E3 /* TTProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,6 +206,9 @@
 			packageProductDependencies = (
 				CB2AA4E82AB4997D0068F54E /* TTProgressHUD */,
 				CB2864482ABC632E0014535E /* LVRealmKit */,
+				834E7AC32AD3D0AF00D504E3 /* LVRealmKit */,
+				834E7AC52AD3D0BD00D504E3 /* TTProgressHUD */,
+				83EE5AE32AD522D0004D7E1C /* CustomAlertPackage */,
 			);
 			productName = Folders;
 			productReference = CB2FBD6E2AA5B03C007C46F3 /* Folders.app */;
@@ -232,6 +241,7 @@
 			packageReferences = (
 				CB2AA4E72AB4997D0068F54E /* XCRemoteSwiftPackageReference "TTProgressHUD" */,
 				CB2864472ABC632E0014535E /* XCRemoteSwiftPackageReference "lvrealmkit" */,
+				83EE5AE22AD522D0004D7E1C /* XCRemoteSwiftPackageReference "CustomAlertPackage" */,
 			);
 			productRefGroup = CB2FBD6F2AA5B03C007C46F3 /* Products */;
 			projectDirPath = "";
@@ -483,6 +493,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		83EE5AE22AD522D0004D7E1C /* XCRemoteSwiftPackageReference "CustomAlertPackage" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/cengizhantomak/CustomAlertPackage";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		CB2864472ABC632E0014535E /* XCRemoteSwiftPackageReference "lvrealmkit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://cengizhan-tomak@bitbucket.org/liveviewsports/lvrealmkit.git";
@@ -502,6 +520,21 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		834E7AC32AD3D0AF00D504E3 /* LVRealmKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB2864472ABC632E0014535E /* XCRemoteSwiftPackageReference "lvrealmkit" */;
+			productName = LVRealmKit;
+		};
+		834E7AC52AD3D0BD00D504E3 /* TTProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CB2AA4E72AB4997D0068F54E /* XCRemoteSwiftPackageReference "TTProgressHUD" */;
+			productName = TTProgressHUD;
+		};
+		83EE5AE32AD522D0004D7E1C /* CustomAlertPackage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 83EE5AE22AD522D0004D7E1C /* XCRemoteSwiftPackageReference "CustomAlertPackage" */;
+			productName = CustomAlertPackage;
+		};
 		CB2864482ABC632E0014535E /* LVRealmKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CB2864472ABC632E0014535E /* XCRemoteSwiftPackageReference "lvrealmkit" */;
