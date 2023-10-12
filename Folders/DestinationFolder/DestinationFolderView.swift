@@ -20,10 +20,11 @@ struct DestinationFolderView: View {
                 if ViewModel.Sessions.isEmpty {
                     NoVideoView()
                 } else {
+                    MultiSegmentView
                     GeometryReader { Geometry in
                         let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 12, Amount: CGFloat(ViewModel.Columns.count))
                         ScrollView {
-                            LazyVGrid(columns: ViewModel.Columns, spacing: 12) {
+                            LazyVGrid(columns: ViewModel.Columns, spacing: 10) {
                                 ForEach(ViewModel.FilteredSessions, id: \.id) { Folder in
                                     DestinationFolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
                                         .onTapGesture {
@@ -35,11 +36,12 @@ struct DestinationFolderView: View {
                                         }
                                 }
                             }
+                            .padding(10)
                         }
                     }
+                    .searchable(text: $ViewModel.SearchText)
                 }
             }
-            .searchable(text: $ViewModel.SearchText)
             .navigationBarTitle(StringConstants.Move, displayMode: .inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -155,6 +157,33 @@ struct DestinationFolderView: View {
                 )
             }
         }
+    }
+    
+    // MARK: - MultiSegmentView
+    private var MultiSegmentView: some View {
+        HStack(spacing: 1) {
+            Button(action: {
+                ViewModel.ShowFavorited.toggle()
+            }) {
+                Text("Favorited")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding(.vertical, 5)
+                    .background(ViewModel.ShowFavorited ? Color.gray.opacity(0.5) : Color.gray.opacity(0.15))
+                    .foregroundColor(ViewModel.ShowFavorited ? Color.primary : Color.secondary)
+            }
+
+            Button(action: {
+                ViewModel.ShowPinned.toggle()
+            }) {
+                Text("Pinned")
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .padding(.vertical, 5)
+                    .background(ViewModel.ShowPinned ? Color.gray.opacity(0.5) : Color.gray.opacity(0.15))
+                    .foregroundColor(ViewModel.ShowPinned ? Color.primary : Color.secondary)
+            }
+        }
+        .cornerRadius(5)
+        .padding(.horizontal)
     }
 }
 

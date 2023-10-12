@@ -22,10 +22,14 @@ class DestinationFolderViewModel: ObservableObject {
     @Published var FolderPinned = false
     var FolderCreationDate: Date?
     @Published var SearchText: String = ""
-    
+    @Published var ShowFavorited = false
+    @Published var ShowPinned = false
+        
     var FilteredSessions: [SessionModel] {
-        Sessions.filter { Session in
-            SearchText.isEmpty || Session.name.localizedStandardContains(SearchText)
+        Sessions.filter {
+            (SearchText.isEmpty || $0.name.localizedStandardContains(SearchText)) &&
+            (!ShowFavorited || $0.isFavorite) &&
+            (!ShowPinned || $0.isPinned)
         }
     }
     
