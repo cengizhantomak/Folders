@@ -10,6 +10,7 @@ import LVRealmKit
 
 class DestinationFolderViewModel: ObservableObject {
     weak var PracticeViewModel: PracticeViewModel?
+    @Published var Columns: [GridItem] = []
     @Published var Sessions: [SessionModel] = []
     @Published var SelectedFolder: SessionModel?
     @Published var ShowMoveAlert = false
@@ -56,6 +57,10 @@ class DestinationFolderViewModel: ObservableObject {
                 print("Error loading sessions: \(error)")
             }
         }
+    }
+    
+    func isSelected(session: SessionModel) -> Bool {
+        return SelectedFolder?.id == session.id
     }
     
     func MovePractice() {
@@ -137,6 +142,26 @@ class DestinationFolderViewModel: ObservableObject {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.IsErrorTTProgressHUDVisible = true
+        }
+    }
+    
+    func CalculateItemWidth(ScreenWidth: CGFloat, Padding: CGFloat, Amount: CGFloat) -> CGFloat {
+        return (ScreenWidth - (Padding * (Amount + 1))) / Amount
+    }
+    
+    func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat = 20, YOffsetValue: CGFloat = 20) -> (X: CGFloat, Y: CGFloat) {
+        let X = (ItemWidth / 2) - XOffsetValue
+        let Y = -(ItemWidth * (1970 / 1080) / 2) + YOffsetValue
+        return (X, Y)
+    }
+    
+    func NumberOfItemsPerRow(For SizeClass: UserInterfaceSizeClass?) -> Int {
+        if SizeClass == .compact {
+            // iPhone
+            return 2
+        } else {
+            // iPad
+            return 4
         }
     }
 }
