@@ -95,7 +95,7 @@ extension PracticeView {
             ScrollView {
                 Section(header: DateHeader) {
                     LazyVGrid(columns: ViewModel.Columns, spacing: 1) {
-                        ForEach(ViewModel.Practices, id: \.id) { Practice in
+                        ForEach(ViewModel.DisplayedPractices, id: \.id) { Practice in
                             if !ViewModel.IsSelecting {
                                 NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
                                     PracticeItemView(ViewModel: ViewModel, Practice: Practice, ItemWidth: ItemWidth)

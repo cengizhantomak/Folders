@@ -19,12 +19,17 @@ class PracticeViewModel: ObservableObject {
     @Published var IsSuccessTTProgressHUDVisible = false
     @Published var IsErrorTTProgressHUDVisible = false
     @Published var Session: SessionModel
-    @Published var Practices: [PracticeModel] = []
     @Published var SelectedPractices: [PracticeModel] = []
     @Published var Practice: PracticeModel?
     @Published var NewName = ""
     @Published var PracticeFavorite = false
     @Published var ClampedOpacity: CGFloat = 0.0
+    var DisplayedPractices: [PracticeModel] = []
+    var Practices: [PracticeModel] = [] {
+        didSet {
+            self.DisplayedPractices = OnlyShowFavorites ? Practices.filter { $0.isFavorite } : Practices
+        }
+    }
     
     init(Folder: SessionModel) {
         self.Session = Folder
@@ -122,16 +127,8 @@ class PracticeViewModel: ObservableObject {
     }
     
     func FavoritesButtonAction() {
-        if OnlyShowFavorites {
-            OnlyShowFavorites.toggle()
-            LoadPractices()
-        } else {
-            withAnimation(.spring()) { [weak self] in
-                guard let self else { return }
-                self.Practices = self.Practices.filter { $0.isFavorite }
-            }
-            OnlyShowFavorites.toggle()
-        }
+        OnlyShowFavorites.toggle()
+        DisplayedPractices = OnlyShowFavorites ? Practices.filter { $0.isFavorite } : Practices
     }
     
     func ToggleFavorite() {

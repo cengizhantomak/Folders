@@ -14,14 +14,12 @@ struct PracticeItemView: View {
     let ItemWidth: CGFloat
     
     var body: some View {
-        if !ViewModel.IsSelecting {
-            PracticeItem
-                .contextMenu {
+        PracticeItem
+            .contextMenu {
+                if !ViewModel.IsSelecting {
                     VideoContextMenu
                 }
-        } else {
-            PracticeItem
-        }
+            }
     }
 }
 

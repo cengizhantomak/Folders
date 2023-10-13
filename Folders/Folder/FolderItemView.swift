@@ -15,14 +15,12 @@ struct FolderItemView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            if !ViewModel.IsSelecting {
-                FolderItem
-                    .contextMenu {
+            FolderItem
+                .contextMenu {
+                    if !ViewModel.IsSelecting {
                         FolderContextMenu
                     }
-            } else {
-                FolderItem
-            }
+                }
             Text(Folder.name)
                 .truncationMode(.tail)
                 .lineLimit(1)

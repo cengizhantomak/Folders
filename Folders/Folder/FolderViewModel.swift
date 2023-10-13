@@ -31,15 +31,20 @@ class FolderViewModel: ObservableObject {
     var TodaySection: [SessionModel] = []
     var SessionSection: [SessionModel] = []
     var PinnedSection: [SessionModel] = []
-    var Sessions: [SessionModel] = [] {
+    var DisplayedSessions: [SessionModel] = [] {
         didSet {
-            self.TodaySection = Sessions.filter {
+            self.TodaySection = DisplayedSessions.filter {
                 Calendar.current.isDate($0.createdAt, inSameDayAs: Date()) && !$0.isPinned
             }
-            self.SessionSection = Sessions.filter {
+            self.SessionSection = DisplayedSessions.filter {
                 !Calendar.current.isDate($0.createdAt, inSameDayAs: Date()) && !$0.isPinned
             }
-            self.PinnedSection = Sessions.filter { $0.isPinned }
+            self.PinnedSection = DisplayedSessions.filter { $0.isPinned }
+        }
+    }
+    var Sessions: [SessionModel] = [] {
+        didSet {
+            self.DisplayedSessions = OnlyShowFavorites ? Sessions.filter { $0.isFavorite } : Sessions
         }
     }
     
@@ -225,16 +230,8 @@ class FolderViewModel: ObservableObject {
     }
     
     func FavoritesButtonAction() {
-        if OnlyShowFavorites {
-            OnlyShowFavorites.toggle()
-            LoadFolders()
-        } else {
-            withAnimation(.spring()) { [weak self] in
-                guard let self else { return }
-                self.Sessions = self.Sessions.filter { $0.isFavorite }
-            }
-            OnlyShowFavorites.toggle()
-        }
+        OnlyShowFavorites.toggle()
+        DisplayedSessions = OnlyShowFavorites ? Sessions.filter { $0.isFavorite } : Sessions
     }
     
     func ToggleFavorite() {
