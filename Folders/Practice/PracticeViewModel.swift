@@ -107,11 +107,11 @@ class PracticeViewModel: ObservableObject {
                     try await PracticeRepository.shared.edit(Video)
                 }
                 try await GetPractices()
-                SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
             }
         }
+        SuccessTTProgressHUD()
     }
     
     func DeletePractices(_ DeletePractice: [PracticeModel]) {
@@ -119,11 +119,11 @@ class PracticeViewModel: ObservableObject {
             do {
                 try await PracticeRepository.shared.deletePractices(DeletePractice)
                 try await GetPractices()
-                SuccessTTProgressHUD()
             } catch {
                 print("Error deleting session: \(error)")
             }
         }
+        SuccessTTProgressHUD()
     }
     
     func FavoritesButtonAction() {
@@ -139,11 +139,11 @@ class PracticeViewModel: ObservableObject {
                     try await PracticeRepository.shared.edit(Video)
                 }
                 try await GetPractices()
-                SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
             }
         }
+        SuccessTTProgressHUD()
     }
     
     func SelectCancelButtonAction() {

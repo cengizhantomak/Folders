@@ -26,6 +26,7 @@ struct FolderView: View {
                     ViewModel.LoadFolders()
                 }
         }
+        .animation(.spring, value: [ViewModel.IsSelecting, ViewModel.OnlyShowFavorites])
         .CustomAlert(
             IsPresented: $ViewModel.ShowRenameAlert,
             Title: Title(Text: StringConstants.Alert.Title.RenameFolder,

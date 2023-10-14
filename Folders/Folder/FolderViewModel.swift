@@ -101,11 +101,11 @@ class FolderViewModel: ObservableObject {
                 Folder.createdAt = FolderCreationDate ?? Date()
                 try await FolderRepository.shared.addFolder(Folder)
                 LoadFolders()
-                SuccessTTProgressHUD()
             } catch {
                 print("Error adding session: \(error)")
             }
         }
+        SuccessTTProgressHUD()
     }
     
     func AddPractice() {
@@ -114,6 +114,8 @@ class FolderViewModel: ObservableObject {
             let VideoPath = Container.VideoPath
             let ThumbnailPath = Container.ThumbnailPath
             let Date = Container.Date
+            let Duration = Container.Duration
+            let FileSize = Container.Size
             
             Task {
                 do {
@@ -122,13 +124,14 @@ class FolderViewModel: ObservableObject {
                                                         Name: Date.dateFormat(StringConstants.DateTimeFormatPractice),
                                                         ThumbPath: ThumbnailPath,
                                                         VideoPath: VideoPath,
+                                                        Duration: Duration,
+                                                        FileSize: FileSize,
                                                         CreatedAt: Date)
                         LastFolder.thumbnail = ThumbnailPath
                         NewPractice.Session = LastFolder
                         _ = try await PracticeRepository.shared.addPractice(&NewPractice)
                     }
                     LoadFolders()
-                    SuccessTTProgressHUD()
                 } catch {
                     print("Failed to add practice: \(error)")
                 }
@@ -136,14 +139,15 @@ class FolderViewModel: ObservableObject {
         } catch {
             print("An error occurred: \(error)")
         }
+        SuccessTTProgressHUD()
     }
     
-    func SaveRandomVideoToContainer() throws -> (Date: Date, VideoPath: String, ThumbnailPath: String)? {
+    func SaveRandomVideoToContainer() throws -> (Date: Date, VideoPath: String, ThumbnailPath: String, Duration: Int64, Size: Int64)? {
         guard let Path = Bundle.main.resourcePath else { return nil }
         
         let FolderURL = URL(fileURLWithPath: Path).appendingPathComponent("GolfSwing")
         let FileURLs = try FileManager.default.contentsOfDirectory(at: FolderURL, includingPropertiesForKeys: nil)
-        let VideoURLs = FileURLs.filter { $0.pathExtension == "mp4" }
+        let VideoURLs = FileURLs.filter { $0.pathExtension.lowercased() == "mp4" }
         
         if let RandomURL = VideoURLs.randomElement() {
             let Data = try Data(contentsOf: RandomURL)
@@ -163,8 +167,9 @@ class FolderViewModel: ObservableObject {
             
             try Data.write(to: VideoDestinationPath)
             
-            // Thumbnail oluştur.
             let Asset = AVAsset(url: RandomURL)
+            
+            // Thumbnail oluştur.
             let AssetImgGenerate = AVAssetImageGenerator(asset: Asset)
             AssetImgGenerate.appliesPreferredTrackTransform = true
             let Time = CMTimeMakeWithSeconds(0.0, preferredTimescale: 600)
@@ -178,7 +183,17 @@ class FolderViewModel: ObservableObject {
             let ThumbnailDestinationPath = PracticesPath.appendingPathComponent(ThumbnailFileName)
             try ThumbnailData?.write(to: ThumbnailDestinationPath)
             
-            return (Date, VideoPath, ThumbnailPath)
+            // Video Süresini Alma
+            let DurationInSeconds = CMTimeGetSeconds(Asset.duration)
+            let DurationInInt64: Int64 = Int64(DurationInSeconds.rounded())
+            
+            // Video Boyutunu Alma
+            let fileSizeAttributes = try FileManager.default.attributesOfItem(atPath: VideoDestinationPath.path)
+            guard let fileSize = fileSizeAttributes[FileAttributeKey.size] as? Int64 else {
+                throw NSError(domain: "com.example.yourapp", code: 1, userInfo: [NSLocalizedDescriptionKey: "Failed to get file size"])
+            }
+            
+            return (Date, VideoPath, ThumbnailPath, DurationInInt64, fileSize)
         }
         
         return nil
@@ -194,11 +209,11 @@ class FolderViewModel: ObservableObject {
                     try await FolderRepository.shared.edit(Folder)
                 }
                 LoadFolders()
-                SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
             }
         }
+        SuccessTTProgressHUD()
     }
     
     func DeleteFolders(_ Folder: [SessionModel]) {
@@ -206,12 +221,12 @@ class FolderViewModel: ObservableObject {
             do {
                 try await FolderRepository.shared.deleteFolders(Folder)
                 LoadFolders()
-                SuccessTTProgressHUD()
             } catch {
                 print("Error deleting session: \(error)")
             }
         }
         SelectedSessions.removeAll()
+        SuccessTTProgressHUD()
     }
     
     func TogglePin() {
@@ -222,11 +237,11 @@ class FolderViewModel: ObservableObject {
                     try await FolderRepository.shared.edit(Folder)
                 }
                 LoadFolders()
-                SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
             }
         }
+        SuccessTTProgressHUD()
     }
     
     func FavoritesButtonAction() {
@@ -242,11 +257,11 @@ class FolderViewModel: ObservableObject {
                     try await FolderRepository.shared.edit(Folder)
                 }
                 LoadFolders()
-                SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
             }
         }
+        SuccessTTProgressHUD()
     }
     
     func SelectCancelButtonAction() {

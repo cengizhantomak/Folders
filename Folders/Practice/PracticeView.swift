@@ -58,6 +58,7 @@ struct PracticeView: View {
                                              ViewModel.IsSelecting = false
                                          })
             )
+            .animation(.spring, value: [ViewModel.IsSelecting, ViewModel.OnlyShowFavorites])
             .onAppear {
                 let ItemCount = ViewModel.NumberOfItemsPerRow(For: horizontalSizeClass)
                 ViewModel.Columns = Array(repeating: GridItem(.flexible()), count: ItemCount)
