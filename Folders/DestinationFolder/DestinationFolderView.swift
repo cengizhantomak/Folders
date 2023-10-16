@@ -20,6 +20,8 @@ struct DestinationFolderView: View {
                 if ViewModel.Sessions.isEmpty {
                     NoVideoView()
                 } else {
+                    CustomSearchBar(Placeholder: "Search", Text: $ViewModel.SearchText)
+                        .padding(.horizontal)
                     MultiSegmentView
                     GeometryReader { Geometry in
                         let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 12, Amount: CGFloat(ViewModel.Columns.count))
@@ -38,8 +40,9 @@ struct DestinationFolderView: View {
                             }
                             .padding(10)
                         }
+                        .scrollDismissesKeyboard(.immediately)
                     }
-                    .searchable(text: $ViewModel.SearchText)
+//                    .searchable(text: $ViewModel.SearchText)
                 }
             }
             .navigationBarTitle(StringConstants.Move, displayMode: .inline)
@@ -60,20 +63,12 @@ struct DestinationFolderView: View {
                         ViewModel.ShowMoveAlert = true
                     } label: {
                         Text(StringConstants.Move)
-                            .foregroundColor(.primary)
+                            .foregroundColor(ViewModel.SelectedFolder == nil ? .gray : .primary)
                             .padding(8)
                             .background(Color.gray.opacity(0.25))
                             .clipShape(Capsule())
                     }
-//                    Button {
-//                        ViewModel.PracticeViewModel?.ShowBottomBarMoveAlert = false
-//                    } label: {
-//                        Text(StringConstants.Cancel)
-//                            .foregroundColor(.primary)
-//                            .padding(8)
-//                            .background(Color.gray.opacity(0.25))
-//                            .clipShape(Capsule())
-//                    }
+                    .disabled(ViewModel.SelectedFolder == nil)
                 }
             }
         }
@@ -169,7 +164,7 @@ struct DestinationFolderView: View {
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .padding(.vertical, 5)
                     .background(ViewModel.ShowFavorited ? Color.gray.opacity(0.5) : Color.gray.opacity(0.15))
-                    .foregroundColor(ViewModel.ShowFavorited ? Color.primary : Color.secondary)
+                    .foregroundColor(ViewModel.ShowFavorited ? Color.primary : Color.gray)
             }
 
             Button(action: {
@@ -179,10 +174,10 @@ struct DestinationFolderView: View {
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .padding(.vertical, 5)
                     .background(ViewModel.ShowPinned ? Color.gray.opacity(0.5) : Color.gray.opacity(0.15))
-                    .foregroundColor(ViewModel.ShowPinned ? Color.primary : Color.secondary)
+                    .foregroundColor(ViewModel.ShowPinned ? Color.primary : Color.gray)
             }
         }
-        .cornerRadius(5)
+        .cornerRadius(8)
         .padding(.horizontal)
     }
 }

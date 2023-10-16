@@ -17,7 +17,7 @@ struct CustomSearchBar: View {
                 .foregroundColor(.gray)
             
             TextField(Placeholder, text: $Text)
-                .foregroundColor(.gray)
+                .foregroundColor(.primary)
             
             if !Text.isEmpty {
                 Button(action: {
@@ -29,7 +29,7 @@ struct CustomSearchBar: View {
             }
         }
         .padding(7)
-        .background(Color(.systemGray5))
+        .background(Color.gray.opacity(0.15))
         .cornerRadius(8)
     }
 }

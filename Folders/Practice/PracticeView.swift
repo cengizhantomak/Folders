@@ -18,45 +18,63 @@ struct PracticeView: View {
             .toolbar {
                 Toolbars
             }
+            .disabled(ViewModel.ShowDeleteAlert)
+            .navigationBarBackButtonHidden(ViewModel.ShowDeleteAlert)
             .CustomAlert(
                 IsPresented: $ViewModel.ShowRenameAlert,
-                Title: Title(Text: StringConstants.Alert.Title.RenameVideo,
-                             SystemImage: StringConstants.Alert.SystemImage.Pencil),
-                TextField: TextFieldText(Placeholder: StringConstants.Alert.Title.VideoName,
-                                         Text: $ViewModel.NewName),
-                LabelLeft: LabelButton(Text: StringConstants.ContextMenu.AddFavorite.Text,
-                                       SystemImage: ViewModel.PracticeFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage,
-                                       Binding: $ViewModel.PracticeFavorite,
-                                       Action: {
-                                           ViewModel.PracticeFavorite.toggle()
-                                       }),
-                ButtonLeft: AlertButton(Text: StringConstants.Alert.ButtonText.Cancel,
-                                        Action: {
-                                            print("Cancel Tapped")
-                                        }),
-                ButtonRight: AlertButton(Text: StringConstants.Alert.ButtonText.Save,
-                                         Action: {
-                                             if !ViewModel.NewName.isEmpty {
-                                                 ViewModel.RenamePractice()
-                                             } else {
-                                                 ViewModel.ErrorTTProgressHUD()
-                                             }
-                                         })
+                Title: Title(
+                    Text: StringConstants.Alert.Title.RenameVideo,
+                    SystemImage: StringConstants.Alert.SystemImage.Pencil
+                ),
+                TextField: TextFieldText(
+                    Placeholder: StringConstants.Alert.Title.VideoName,
+                    Text: $ViewModel.NewName
+                ),
+                LabelLeft: LabelButton(
+                    Text: StringConstants.ContextMenu.AddFavorite.Text,
+                    SystemImage: ViewModel.PracticeFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage,
+                    Binding: $ViewModel.PracticeFavorite,
+                    Action: {
+                        ViewModel.PracticeFavorite.toggle()
+                    }
+                ),
+                ButtonLeft: AlertButton(
+                    Text: StringConstants.Alert.ButtonText.Cancel,
+                    Action: {
+                        print("Cancel Tapped")
+                    }
+                ),
+                ButtonRight: AlertButton(
+                    Text: StringConstants.Alert.ButtonText.Save,
+                    Action: {
+                        if !ViewModel.NewName.isEmpty {
+                            ViewModel.RenamePractice()
+                        } else {
+                            ViewModel.ErrorTTProgressHUD()
+                        }
+                    }
+                )
             )
             .CustomAlert(
                 IsPresented: $ViewModel.ShowDeleteAlert,
-                Title: Title(Text: StringConstants.Alert.Title.Deleting,
-                             SystemImage: StringConstants.Alert.SystemImage.Trash),
+                Title: Title(
+                    Text: StringConstants.Alert.Title.Deleting,
+                    SystemImage: StringConstants.Alert.SystemImage.Trash
+                ),
                 Message: StringConstants.Alert.Message.DeleteConfirmationMessage,
-                ButtonLeft: AlertButton(Text: StringConstants.Alert.ButtonText.Cancel,
-                                        Action: {
-                                            print("Cancel Tapped")
-                                        }),
-                ButtonRight: AlertButton(Text: StringConstants.Alert.ButtonText.Delete,
-                                         Action: {
-                                             ViewModel.DeletePractices(ViewModel.SelectedPractices)
-                                             ViewModel.IsSelecting = false
-                                         })
+                ButtonLeft: AlertButton(
+                    Text: StringConstants.Alert.ButtonText.Cancel,
+                    Action: {
+                        print("Cancel Tapped")
+                    }
+                ),
+                ButtonRight: AlertButton(
+                    Text: StringConstants.Alert.ButtonText.Delete,
+                    Action: {
+                        ViewModel.DeletePractices(ViewModel.SelectedPractices)
+                        ViewModel.IsSelecting = false
+                    }
+                )
             )
             .animation(.spring, value: [ViewModel.IsSelecting, ViewModel.OnlyShowFavorites])
             .onAppear {
