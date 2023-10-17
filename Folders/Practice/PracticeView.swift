@@ -10,105 +10,67 @@ import CustomAlertPackage
 
 struct PracticeView: View {
     @StateObject var ViewModel: PracticeViewModel
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.horizontalSizeClass) var HorizontalSizeClass
+    @Environment(\.presentationMode) var PresentationMode
     
     var body: some View {
-        PracticeViewContent
+        Content
+            .gesture(DragGesture(minimumDistance: 15, coordinateSpace: .local)
+            .onEnded { Value in
+                if Value.translation.width > 100 {
+                    PresentationMode.wrappedValue.dismiss()
+                }
+            }
+        )
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                Toolbars
+                CustomBackButton
+                
+                if !ViewModel.IsSelecting {
+                    DefaultTopBar
+                } else {
+                    SelectionTopBar
+                    SelectionBottomBar
+                }
             }
             .disabled(ViewModel.ShowDeleteAlert)
-            .navigationBarBackButtonHidden(ViewModel.ShowDeleteAlert)
-            .CustomAlert(
-                IsPresented: $ViewModel.ShowRenameAlert,
-                Title: Title(
-                    Text: StringConstants.Alert.Title.RenameVideo,
-                    SystemImage: StringConstants.Alert.SystemImage.Pencil
-                ),
-                TextField: TextFieldText(
-                    Placeholder: StringConstants.Alert.Title.VideoName,
-                    Text: $ViewModel.NewName
-                ),
-                LabelLeft: LabelButton(
-                    Text: StringConstants.ContextMenu.AddFavorite.Text,
-                    SystemImage: ViewModel.PracticeFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage,
-                    Binding: $ViewModel.PracticeFavorite,
-                    Action: {
-                        ViewModel.PracticeFavorite.toggle()
-                    }
-                ),
-                ButtonLeft: AlertButton(
-                    Text: StringConstants.Alert.ButtonText.Cancel,
-                    Action: {
-                        print("Cancel Tapped")
-                    }
-                ),
-                ButtonRight: AlertButton(
-                    Text: StringConstants.Alert.ButtonText.Save,
-                    Action: {
-                        if !ViewModel.NewName.isEmpty {
-                            ViewModel.RenamePractice()
-                        } else {
-                            ViewModel.ErrorTTProgressHUD()
-                        }
-                    }
-                )
-            )
-            .CustomAlert(
-                IsPresented: $ViewModel.ShowDeleteAlert,
-                Title: Title(
-                    Text: StringConstants.Alert.Title.Deleting,
-                    SystemImage: StringConstants.Alert.SystemImage.Trash
-                ),
-                Message: StringConstants.Alert.Message.DeleteConfirmationMessage,
-                ButtonLeft: AlertButton(
-                    Text: StringConstants.Alert.ButtonText.Cancel,
-                    Action: {
-                        print("Cancel Tapped")
-                    }
-                ),
-                ButtonRight: AlertButton(
-                    Text: StringConstants.Alert.ButtonText.Delete,
-                    Action: {
-                        ViewModel.DeletePractices(ViewModel.SelectedPractices)
-                        ViewModel.IsSelecting = false
-                    }
-                )
-            )
+            .navigationBarBackButtonHidden(true)
             .animation(.spring, value: [ViewModel.IsSelecting, ViewModel.OnlyShowFavorites])
             .onAppear {
-                let ItemCount = ViewModel.NumberOfItemsPerRow(For: horizontalSizeClass)
-                ViewModel.Columns = Array(repeating: GridItem(.flexible()), count: ItemCount)
+                ViewModel.SetupColumnsToDevice(To: HorizontalSizeClass)
             }
             .sheet(isPresented: $ViewModel.ShowBottomBarMoveAlert) {
                 DestinationFolderView(ViewModel: DestinationFolderViewModel(PracticeViewModel: ViewModel))
             }
             .overlay {
                 SessionTitle
+                RenameAlert
+                DeleteAlert
                 ProgressHUD
             }
     }
 }
 
 
+// MARK: - Extension
 extension PracticeView {
-    // MARK: - Content
-    private var PracticeViewContent: some View {
+    private var Content: some View {
         if ViewModel.Session.practiceCount == 0 {
-            AnyView(NoVideoContent)
+            AnyView(NoVideoView())
         } else {
-            AnyView(PracticeContent)
+            AnyView(GridView)
         }
     }
     
-    private var NoVideoContent: some View {
-        ZStack {
-            NoVideoView()
-        }
+    private var DateHeader: some View {
+        Text(Date.CurrentDate(From: ViewModel.Session.createdAt))
+            .foregroundColor(.gray)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .background(.clear)
+            .padding(.top)
     }
     
-    private var PracticeContent: some View {
+    private var GridView: some View {
         GeometryReader { Geometry in
             let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 1, Amount: CGFloat(ViewModel.Columns.count))
             ScrollView {
@@ -139,24 +101,19 @@ extension PracticeView {
         }
     }
     
-    // MARK: - Date Header
-    private var DateHeader: some View {
-        Text(Date.CurrentDate(From: ViewModel.Session.createdAt))
-            .foregroundColor(.gray)
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .background(.clear)
-            .padding(.top)
-    }
-    
     // MARK: - Toolbars
-    private var Toolbars: some ToolbarContent {
-        Group {
-            if !ViewModel.IsSelecting {
-                DefaultTopBar
-            } else {
-                SelectionTopBar
-                SelectionBottomBar
+    private var CustomBackButton: some ToolbarContent {
+        ToolbarItem(placement: .topBarLeading) {
+            Button {
+                PresentationMode.wrappedValue.dismiss()
+            } label: {
+                HStack {
+                    Image(systemName: "chevron.left")
+                        .fontWeight(.semibold)
+                    Text("Videos")
+                }
             }
+            .foregroundStyle(.primary)
         }
     }
     
@@ -245,13 +202,82 @@ extension PracticeView {
         }
     }
     
+    // MARK: - Alerts
+    private var RenameAlert: some View {
+        CustomAlert(
+            IsPresented: $ViewModel.ShowRenameAlert,
+            Title: Title(
+                Text: StringConstants.Alert.Title.RenameVideo,
+                SystemImage: StringConstants.Alert.SystemImage.Pencil
+            ),
+            TextField: TextFieldText(
+                Placeholder: StringConstants.Alert.Title.VideoName,
+                Text: $ViewModel.NewName
+            ),
+            LabelLeft: LabelButton(
+                Text: StringConstants.ContextMenu.AddFavorite.Text,
+                SystemImage: ViewModel.PracticeFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage,
+                Binding: $ViewModel.PracticeFavorite,
+                Action: {
+                    ViewModel.PracticeFavorite.toggle()
+                }
+            ),
+            ButtonLeft: AlertButton(
+                Text: StringConstants.Alert.ButtonText.Cancel,
+                Action: {
+                    print("Cancel Tapped")
+                }
+            ),
+            ButtonRight: AlertButton(
+                Text: StringConstants.Alert.ButtonText.Save,
+                Action: {
+                    if !ViewModel.NewName.isEmpty {
+                        ViewModel.RenamePractice()
+                    } else {
+                        ViewModel.ErrorTTProgressHUD()
+                    }
+                }
+            )
+        )
+    }
+    
+    private var DeleteAlert: some View {
+        CustomAlert(
+            IsPresented: $ViewModel.ShowDeleteAlert,
+            Title: Title(
+                Text: StringConstants.Alert.Title.Deleting,
+                SystemImage: StringConstants.Alert.SystemImage.Trash
+            ),
+            Message: StringConstants.Alert.Message.DeleteConfirmationMessage,
+            ButtonLeft: AlertButton(
+                Text: StringConstants.Alert.ButtonText.Cancel,
+                Action: {
+                    print("Cancel Tapped")
+                }
+            ),
+            ButtonRight: AlertButton(
+                Text: StringConstants.Alert.ButtonText.Delete,
+                Action: {
+                    ViewModel.DeletePractices(ViewModel.SelectedPractices)
+                    ViewModel.IsSelecting = false
+                }
+            )
+        )
+    }
+    
     // MARK: - ProgressHUD
     private var ProgressHUD: some View {
         Group {
             if ViewModel.IsSuccessTTProgressHUDVisible {
-                CustomTTProgressHUD(IsVisible: $ViewModel.IsSuccessTTProgressHUDVisible, HudType: .success)
+                CustomTTProgressHUD(
+                    IsVisible: $ViewModel.IsSuccessTTProgressHUDVisible,
+                    HudType: .success
+                )
             } else if ViewModel.IsErrorTTProgressHUDVisible {
-                CustomTTProgressHUD(IsVisible: $ViewModel.IsErrorTTProgressHUDVisible, HudType: .error)
+                CustomTTProgressHUD(
+                    IsVisible: $ViewModel.IsErrorTTProgressHUDVisible,
+                    HudType: .error
+                )
             }
         }
     }

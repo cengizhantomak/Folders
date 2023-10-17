@@ -184,13 +184,13 @@ class PracticeViewModel: ObservableObject {
         ClampedOpacity = min(max(NormalizedOpacity, 0), 1) * 0.75
     }
     
-    func NumberOfItemsPerRow(For SizeClass: UserInterfaceSizeClass?) -> Int {
+    func SetupColumnsToDevice(To SizeClass: UserInterfaceSizeClass?) {
+        let ItemCount: Int
         if SizeClass == .compact {
-            // iPhone
-            return 3
+            ItemCount = 2 //iPhone
         } else {
-            // iPad
-            return 5
+            ItemCount = 4 //iPad
         }
+        Columns = Array(repeating: GridItem(.flexible()), count: ItemCount)
     }
 }

@@ -45,7 +45,6 @@ extension PracticeItemView {
                 Rectangle()
                     .fill(Color.gray.opacity(0.15))
                     .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
-                    .cornerRadius(10)
                 Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
                     .resizable()
                     .scaledToFit()

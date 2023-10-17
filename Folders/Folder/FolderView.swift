@@ -11,153 +11,53 @@ import CustomAlertPackage
 
 struct FolderView: View {
     @StateObject var ViewModel = FolderViewModel()
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.horizontalSizeClass) var HorizontalSizeClass
     
     var body: some View {
         NavigationStack {
-            FolderViewContent
+            Content
                 .navigationTitle(StringConstants.Videos)
                 .toolbar {
-                    Toolbars
+                    if !ViewModel.IsSelecting {
+                        DefaultTopBarLeading
+                        DefaultTopBarTrailing
+                    } else {
+                        SelectionTopBarTrailing
+                        SelectionBottomBar
+                    }
                 }
                 .disabled(ViewModel.ShowDeleteAlert)
                 .navigationBarBackButtonHidden(ViewModel.ShowDeleteAlert)
                 .onAppear {
-                    let ItemCount = ViewModel.NumberOfItemsPerRow(For: horizontalSizeClass)
-                    ViewModel.Columns = Array(repeating: GridItem(.flexible()), count: ItemCount)
+                    ViewModel.SetupColumnsToDevice(To: HorizontalSizeClass)
                     ViewModel.LoadFolders()
                 }
         }
         .accentColor(.primary)
         .animation(.spring, value: [ViewModel.IsSelecting, ViewModel.OnlyShowFavorites])
-        .CustomAlert(
-            IsPresented: $ViewModel.ShowRenameAlert,
-            Title: Title(
-                Text: StringConstants.Alert.Title.RenameFolder,
-                SystemImage: StringConstants.Alert.SystemImage.Pencil
-            ),
-            TextField: TextFieldText(
-                Placeholder: StringConstants.Alert.Title.FolderName,
-                Text: $ViewModel.NewName
-            ),
-            LabelLeft: LabelButton(
-                Text: StringConstants.ContextMenu.AddFavorite.Text,
-                SystemImage: ViewModel.FolderFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage,
-                Binding: $ViewModel.FolderFavorite,
-                Action: {
-                    ViewModel.FolderFavorite.toggle()
-                }
-            ),
-            LabelRight: LabelButton(
-                Text: StringConstants.ContextMenu.Pin.Text, SystemImage: ViewModel.FolderPinned ? StringConstants.ContextMenu.Pin.SystemImage : StringConstants.ContextMenu.Unpin.SystemImage,
-                Binding: $ViewModel.FolderPinned,
-                Action: {
-                    ViewModel.FolderPinned.toggle()
-                }
-            ),
-            ButtonLeft: AlertButton(
-                Text: StringConstants.Alert.ButtonText.Cancel,
-                Action: {
-                    print("Cancel Tapped")
-                }
-            ),
-            ButtonRight: AlertButton(
-                Text: StringConstants.Alert.ButtonText.Save,
-                Action: {
-                    if !ViewModel.NewName.isEmpty {
-                        ViewModel.RenameFolder(NewName: ViewModel.NewName)
-                    } else {
-                        ViewModel.ErrorTTProgressHUD()
-                    }
-                }
-            )
-        )
-        
-        .CustomAlert(
-            IsPresented: $ViewModel.ShowCreatedAlert,
-            Title: Title(
-                Text: StringConstants.Alert.Title.CreateFolder,
-                SystemImage: StringConstants.Alert.SystemImage.FolderFillBadgePlus
-            ),
-            TextField: TextFieldText(
-                Placeholder: StringConstants.Alert.Title.FolderName,
-                Text: $ViewModel.FolderName
-            ),
-            LabelLeft: LabelButton(
-                Text: StringConstants.ContextMenu.AddFavorite.Text,
-                SystemImage: ViewModel.FolderFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage,
-                Binding: $ViewModel.FolderFavorite,
-                Action: {
-                    ViewModel.FolderFavorite.toggle()
-                }
-            ),
-            LabelRight: LabelButton(
-                Text: StringConstants.ContextMenu.Pin.Text, SystemImage: ViewModel.FolderPinned ? StringConstants.ContextMenu.Pin.SystemImage : StringConstants.ContextMenu.Unpin.SystemImage,
-                Binding: $ViewModel.FolderPinned,
-                Action: {
-                    ViewModel.FolderPinned.toggle()
-                }
-            ),
-            ButtonLeft: AlertButton(
-                Text: StringConstants.Alert.ButtonText.Cancel,
-                Action: {
-                    print("Cancel Tapped")
-                }
-            ),
-            ButtonRight: AlertButton(
-                Text: StringConstants.Alert.ButtonText.Create,
-                Action: {
-                    if !ViewModel.FolderName.isEmpty {
-                        ViewModel.AddFolder()
-                    } else {
-                        ViewModel.ErrorTTProgressHUD()
-                    }
-                }
-            )
-        )
-        
-        .CustomAlert(
-            IsPresented: $ViewModel.ShowDeleteAlert,
-            Title: Title(
-                Text: StringConstants.Alert.Title.Deleting,
-                SystemImage: StringConstants.Alert.SystemImage.Trash
-            ),
-            Message: StringConstants.Alert.Message.DeleteConfirmationMessage,
-            ButtonLeft: AlertButton(
-                Text: StringConstants.Alert.ButtonText.Cancel,
-                Action: {
-                    print("Cancel Tapped")
-                }
-            ),
-            ButtonRight: AlertButton(
-                Text: StringConstants.Alert.ButtonText.Delete,
-                Action: {
-                    ViewModel.DeleteFolders(ViewModel.SelectedSessions)
-                    ViewModel.IsSelecting = false
-                }
-            )
-        )
-        
         .overlay {
+            CreatedAlert
+            RenameAlert
+            DeleteAlert
             ProgressHUD
         }
     }
 }
 
 
+// MARK: - extension
 extension FolderView {
-    // MARK: - Content
-    private var FolderViewContent: some View {
+    private var Content: some View {
         Group {
             if ViewModel.DisplayedSessions.isEmpty {
                 NoVideoView()
             } else {
-                FolderContent
+                GridView
             }
         }
     }
     
-    private var FolderContent: some View {
+    private var GridView: some View {
         GeometryReader { Geometry in
             let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 12, Amount: CGFloat(ViewModel.Columns.count))
             ScrollView {
@@ -204,18 +104,6 @@ extension FolderView {
     }
     
     // MARK: - Toolbars
-    private var Toolbars: some ToolbarContent {
-        Group {
-            if !ViewModel.IsSelecting {
-                DefaultTopBarLeading
-                DefaultTopBarTrailing
-            } else {
-                SelectionTopBarTrailing
-                SelectionBottomBar
-            }
-        }
-    }
-    
     private var DefaultTopBarLeading: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
             Button {
@@ -294,13 +182,134 @@ extension FolderView {
         }
     }
     
+    // MARK: - Alerts
+    private var CreatedAlert: some View {
+        CustomAlert(
+            IsPresented: $ViewModel.ShowCreatedAlert,
+            Title: Title(
+                Text: StringConstants.Alert.Title.CreateFolder,
+                SystemImage: StringConstants.Alert.SystemImage.FolderFillBadgePlus
+            ),
+            TextField: TextFieldText(
+                Placeholder: StringConstants.Alert.Title.FolderName,
+                Text: $ViewModel.FolderName
+            ),
+            LabelLeft: LabelButton(
+                Text: StringConstants.ContextMenu.AddFavorite.Text,
+                SystemImage: ViewModel.FolderFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage,
+                Binding: $ViewModel.FolderFavorite,
+                Action: {
+                    ViewModel.FolderFavorite.toggle()
+                }
+            ),
+            LabelRight: LabelButton(
+                Text: StringConstants.ContextMenu.Pin.Text, SystemImage: ViewModel.FolderPinned ? StringConstants.ContextMenu.Pin.SystemImage : StringConstants.ContextMenu.Unpin.SystemImage,
+                Binding: $ViewModel.FolderPinned,
+                Action: {
+                    ViewModel.FolderPinned.toggle()
+                }
+            ),
+            ButtonLeft: AlertButton(
+                Text: StringConstants.Alert.ButtonText.Cancel,
+                Action: {
+                    print("Cancel Tapped")
+                }
+            ),
+            ButtonRight: AlertButton(
+                Text: StringConstants.Alert.ButtonText.Create,
+                Action: {
+                    if !ViewModel.FolderName.isEmpty {
+                        ViewModel.AddFolder()
+                    } else {
+                        ViewModel.ErrorTTProgressHUD()
+                    }
+                }
+            )
+        )
+    }
+    
+    private var RenameAlert: some View {
+        CustomAlert(
+            IsPresented: $ViewModel.ShowRenameAlert,
+            Title: Title(
+                Text: StringConstants.Alert.Title.RenameFolder,
+                SystemImage: StringConstants.Alert.SystemImage.Pencil
+            ),
+            TextField: TextFieldText(
+                Placeholder: StringConstants.Alert.Title.FolderName,
+                Text: $ViewModel.NewName
+            ),
+            LabelLeft: LabelButton(
+                Text: StringConstants.ContextMenu.AddFavorite.Text,
+                SystemImage: ViewModel.FolderFavorite ? StringConstants.ContextMenu.RemoveFavorite.SystemImage : StringConstants.ContextMenu.AddFavorite.SystemImage,
+                Binding: $ViewModel.FolderFavorite,
+                Action: {
+                    ViewModel.FolderFavorite.toggle()
+                }
+            ),
+            LabelRight: LabelButton(
+                Text: StringConstants.ContextMenu.Pin.Text, SystemImage: ViewModel.FolderPinned ? StringConstants.ContextMenu.Pin.SystemImage : StringConstants.ContextMenu.Unpin.SystemImage,
+                Binding: $ViewModel.FolderPinned,
+                Action: {
+                    ViewModel.FolderPinned.toggle()
+                }
+            ),
+            ButtonLeft: AlertButton(
+                Text: StringConstants.Alert.ButtonText.Cancel,
+                Action: {
+                    print("Cancel Tapped")
+                }
+            ),
+            ButtonRight: AlertButton(
+                Text: StringConstants.Alert.ButtonText.Save,
+                Action: {
+                    if !ViewModel.NewName.isEmpty {
+                        ViewModel.RenameFolder(NewName: ViewModel.NewName)
+                    } else {
+                        ViewModel.ErrorTTProgressHUD()
+                    }
+                }
+            )
+        )
+    }
+    
+    private var DeleteAlert: some View {
+        CustomAlert(
+            IsPresented: $ViewModel.ShowDeleteAlert,
+            Title: Title(
+                Text: StringConstants.Alert.Title.Deleting,
+                SystemImage: StringConstants.Alert.SystemImage.Trash
+            ),
+            Message: StringConstants.Alert.Message.DeleteConfirmationMessage,
+            ButtonLeft: AlertButton(
+                Text: StringConstants.Alert.ButtonText.Cancel,
+                Action: {
+                    print("Cancel Tapped")
+                }
+            ),
+            ButtonRight: AlertButton(
+                Text: StringConstants.Alert.ButtonText.Delete,
+                Action: {
+                    ViewModel.DeleteFolders(ViewModel.SelectedSessions)
+                    ViewModel.IsSelecting = false
+                }
+            )
+        )
+    }
+    
     // MARK: - ProgressHUD
     private var ProgressHUD: some View {
         Group {
             if ViewModel.IsSuccessTTProgressHUDVisible {
-                CustomTTProgressHUD(IsVisible: $ViewModel.IsSuccessTTProgressHUDVisible, HudType: .success)
+                CustomTTProgressHUD(
+                    IsVisible: $ViewModel.IsSuccessTTProgressHUDVisible,
+                    HudType: .success
+                )
             } else if ViewModel.IsErrorTTProgressHUDVisible {
-                CustomTTProgressHUD(IsVisible: $ViewModel.IsErrorTTProgressHUDVisible, HudType: .error)
+                CustomTTProgressHUD(
+                    IsVisible: $ViewModel.IsErrorTTProgressHUDVisible,
+                    HudType: .error
+                )
             }
         }
     }

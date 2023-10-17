@@ -16,6 +16,7 @@ struct FolderItemView: View {
     var body: some View {
         VStack(alignment: .leading) {
             FolderItem
+                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 10))
                 .contextMenu {
                     if !ViewModel.IsSelecting {
                         FolderContextMenu
@@ -65,6 +66,8 @@ extension FolderItemView {
             FavoriteIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
             SelectionIcon(CircleOffset: CircleOffset)
         }
+        .background(.clear)
+        .cornerRadius(10)
     }
     
     // MARK: - Icons
