@@ -27,6 +27,7 @@ class FolderViewModel: ObservableObject {
     @Published var FolderPinned = false
     @Published var NewName = ""
     @Published var ClampedOpacity: CGFloat = 0.0
+    @Published var isActive = false
     var FolderCreationDate: Date?
     var TodaySection: [SessionModel] = []
     var SessionSection: [SessionModel] = []
@@ -42,19 +43,10 @@ class FolderViewModel: ObservableObject {
             self.PinnedSection = DisplayedSessions.filter { $0.isPinned }
         }
     }
+    
     var Sessions: [SessionModel] = [] {
         didSet {
             self.DisplayedSessions = OnlyShowFavorites ? Sessions.filter { $0.isFavorite } : Sessions
-        }
-    }
-    
-    private func UpdateSessionModel(SessionModel: [SessionModel]) {
-        DispatchQueue.main.async { [weak self] in
-            withAnimation(.spring()) {
-                guard let self else { return }
-                self.Sessions = SessionModel
-                self.Session = nil
-            }
         }
     }
     
@@ -69,17 +61,13 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-    private func SuccessTTProgressHUD() {
+    private func UpdateSessionModel(SessionModel: [SessionModel]) {
         DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            self.IsSuccessTTProgressHUDVisible = true
-        }
-    }
-    
-    func ErrorTTProgressHUD() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            self.IsErrorTTProgressHUDVisible = true
+            withAnimation {
+                guard let self else { return }
+                self.Sessions = SessionModel
+                self.Session = nil
+            }
         }
     }
     
@@ -88,7 +76,12 @@ class FolderViewModel: ObservableObject {
         FolderName = FolderCreationDate?.dateFormat(StringConstants.DateTimeFormatFolder) ?? StringConstants.LVS
         FolderFavorite = false
         FolderPinned = false
+        isActive = true
         ShowCreatedAlert = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            self.isActive = false
+        }
     }
     
     func AddFolder() {
@@ -120,13 +113,16 @@ class FolderViewModel: ObservableObject {
             Task {
                 do {
                     if var LastFolder = try? await FolderRepository.shared.getLastFolder() {
-                        var NewPractice = PracticeModel(id: "",
-                                                        Name: Date.dateFormat(StringConstants.DateTimeFormatPractice),
-                                                        ThumbPath: ThumbnailPath,
-                                                        VideoPath: VideoPath,
-                                                        Duration: Duration,
-                                                        FileSize: FileSize,
-                                                        CreatedAt: Date)
+                        var NewPractice = PracticeModel(
+                            id: "",
+                            Name: Date.dateFormat(StringConstants.DateTimeFormatPractice),
+                            ThumbPath: ThumbnailPath,
+                            VideoPath: VideoPath,
+                            Duration: Duration,
+                            FileSize: FileSize,
+                            CreatedAt: Date
+                        )
+                        
                         LastFolder.thumbnail = ThumbnailPath
                         NewPractice.Session = LastFolder
                         _ = try await PracticeRepository.shared.addPractice(&NewPractice)
@@ -245,7 +241,15 @@ class FolderViewModel: ObservableObject {
     }
     
     func FavoritesButtonAction() {
-        OnlyShowFavorites.toggle()
+        isActive = true
+        withAnimation { [weak self] in
+            guard let self else { return }
+            self.OnlyShowFavorites.toggle()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            self.isActive = false
+        }
         DisplayedSessions = OnlyShowFavorites ? Sessions.filter { $0.isFavorite } : Sessions
     }
     
@@ -265,7 +269,15 @@ class FolderViewModel: ObservableObject {
     }
     
     func SelectCancelButtonAction() {
-        IsSelecting.toggle()
+        isActive = true
+        withAnimation { [weak self] in
+            guard let self else { return }
+            self.IsSelecting.toggle()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            self.isActive = false
+        }
         if !IsSelecting {
             SelectedSessions.removeAll()
         }
@@ -279,6 +291,20 @@ class FolderViewModel: ObservableObject {
             return StringConstants.OneFolderSelected
         default:
             return String(format: StringConstants.MultipleFoldersSelected, Count)
+        }
+    }
+    
+    private func SuccessTTProgressHUD() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.IsSuccessTTProgressHUDVisible = true
+        }
+    }
+    
+    func ErrorTTProgressHUD() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.IsErrorTTProgressHUDVisible = true
         }
     }
     

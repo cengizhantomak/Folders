@@ -10,6 +10,7 @@ import LVRealmKit
 
 struct DestinationFolderItemView: View {
     @StateObject var ViewModel: DestinationFolderViewModel
+    @Environment(\.colorScheme) var ColorScheme
     var Folder: SessionModel
     let ItemWidth: CGFloat
     
@@ -50,14 +51,14 @@ extension DestinationFolderItemView {
                     }
                 } else {
                     Rectangle()
-                        .fill(Color.gray.opacity(0.15))
+                        .fill(ColorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.1) : Color(red: 0.9, green: 0.9, blue: 0.9))
                         .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
                         .cornerRadius(10)
                     Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
                         .resizable()
                         .scaledToFit()
                         .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                        .foregroundColor(.gray)
+                        .foregroundColor(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
                 }
             }
             .overlay {

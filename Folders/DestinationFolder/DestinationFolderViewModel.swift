@@ -20,11 +20,11 @@ class DestinationFolderViewModel: ObservableObject {
     @Published var FolderName = ""
     @Published var FolderFavorite = false
     @Published var FolderPinned = false
-    var FolderCreationDate: Date?
     @Published var SearchText: String = ""
     @Published var ShowFavorited = false
     @Published var ShowPinned = false
-        
+    @Published var isActive = false
+    var FolderCreationDate: Date?
     var FilteredSessions: [SessionModel] {
         Sessions.filter {
             (SearchText.isEmpty || $0.name.localizedStandardContains(SearchText)) &&
@@ -38,20 +38,6 @@ class DestinationFolderViewModel: ObservableObject {
         LoadFolders()
     }
     
-    private func UpdateSessionModel(SessionModel: [SessionModel]) {
-        DispatchQueue.main.async { [weak self] in
-            withAnimation(.spring()) {
-                guard let self else { return }
-                if let sessionID = self.PracticeViewModel?.Session.id {
-                    let updatedSessions = SessionModel.filter { session in
-                        sessionID != session.id
-                    }
-                    self.Sessions = updatedSessions
-                }
-            }
-        }
-    }
-    
     func LoadFolders() {
         Task {
             do {
@@ -59,6 +45,20 @@ class DestinationFolderViewModel: ObservableObject {
                 UpdateSessionModel(SessionModel: AllSessions)
             } catch {
                 print("Error loading sessions: \(error)")
+            }
+        }
+    }
+    
+    private func UpdateSessionModel(SessionModel: [SessionModel]) {
+        DispatchQueue.main.async { [weak self] in
+            withAnimation {
+                guard let self else { return }
+                if let sessionID = self.PracticeViewModel?.Session.id {
+                    let updatedSessions = SessionModel.filter { session in
+                        sessionID != session.id
+                    }
+                    self.Sessions = updatedSessions
+                }
             }
         }
     }
@@ -105,7 +105,7 @@ class DestinationFolderViewModel: ObservableObject {
             guard let self else { return }
             self.PracticeViewModel?.LoadPractices()
             self.PracticeViewModel?.IsSelecting = false
-            self.PracticeViewModel?.ShowBottomBarMoveAlert = false
+            self.PracticeViewModel?.ShowMoveAlert = false
             self.PracticeViewModel?.SuccessTTProgressHUD()
         }
     }
@@ -115,7 +115,12 @@ class DestinationFolderViewModel: ObservableObject {
         FolderName = FolderCreationDate?.dateFormat(StringConstants.DateTimeFormatFolder) ?? StringConstants.LVS
         FolderFavorite = false
         FolderPinned = false
+        isActive = true
         ShowCreatedAlert = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            self.isActive = false
+        }
     }
     
     func AddFolder() {

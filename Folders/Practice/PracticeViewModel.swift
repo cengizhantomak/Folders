@@ -11,7 +11,6 @@ import LVRealmKit
 class PracticeViewModel: ObservableObject {
     @Published var Columns: [GridItem] = []
     @Published var IsSelecting = false
-    @Published var ShowBottomBarMoveAlert = false
     @Published var OnlyShowFavorites = false
     @Published var ShowMoveAlert = false
     @Published var ShowRenameAlert = false
@@ -24,6 +23,7 @@ class PracticeViewModel: ObservableObject {
     @Published var NewName = ""
     @Published var PracticeFavorite = false
     @Published var ClampedOpacity: CGFloat = 0.0
+    @Published var isActive = false
     var DisplayedPractices: [PracticeModel] = []
     var Practices: [PracticeModel] = [] {
         didSet {
@@ -52,18 +52,6 @@ class PracticeViewModel: ObservableObject {
         UpdatePracticeModel(PracticeModel: AllPractices)
     }
     
-    private func UpdatePracticeModel(PracticeModel: [PracticeModel]) {
-        DispatchQueue.main.async { [weak self] in
-            withAnimation(.spring()) {
-                guard let self else { return }
-                self.Session.practiceCount = PracticeModel.count
-                self.Practices = PracticeModel
-                self.SelectedPractices.removeAll()
-                self.Practice = nil
-            }
-        }
-    }
-    
     private func UpdateSession(_ AllPractices: [PracticeModel]) async throws {
         var UpdateSession = self.Session
         // Session içindeki Practice sayısını güncelle
@@ -79,17 +67,15 @@ class PracticeViewModel: ObservableObject {
         try await FolderRepository.shared.edit(UpdateSession)
     }
     
-    func SuccessTTProgressHUD() {
+    private func UpdatePracticeModel(PracticeModel: [PracticeModel]) {
         DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            self.IsSuccessTTProgressHUDVisible = true
-        }
-    }
-    
-    func ErrorTTProgressHUD() {
-        DispatchQueue.main.async { [weak self] in
-            guard let self else { return }
-            self.IsErrorTTProgressHUDVisible = true
+            withAnimation {
+                guard let self else { return }
+                self.Session.practiceCount = PracticeModel.count
+                self.Practices = PracticeModel
+                self.SelectedPractices.removeAll()
+                self.Practice = nil
+            }
         }
     }
     
@@ -127,7 +113,15 @@ class PracticeViewModel: ObservableObject {
     }
     
     func FavoritesButtonAction() {
-        OnlyShowFavorites.toggle()
+        isActive = true
+        withAnimation { [weak self] in
+            guard let self else { return }
+            self.OnlyShowFavorites.toggle()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            self.isActive = false
+        }
         DisplayedPractices = OnlyShowFavorites ? Practices.filter { $0.isFavorite } : Practices
     }
     
@@ -147,7 +141,15 @@ class PracticeViewModel: ObservableObject {
     }
     
     func SelectCancelButtonAction() {
-        IsSelecting.toggle()
+        isActive = true
+        withAnimation { [weak self] in
+            guard let self else { return }
+            self.IsSelecting.toggle()
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            guard let self else { return }
+            self.isActive = false
+        }
         if !IsSelecting {
             SelectedPractices.removeAll()
         }
@@ -161,6 +163,20 @@ class PracticeViewModel: ObservableObject {
             return StringConstants.OneVideoSelected
         default:
             return String(format: StringConstants.MultipleVideosSelected, Count)
+        }
+    }
+    
+    func SuccessTTProgressHUD() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.IsSuccessTTProgressHUDVisible = true
+        }
+    }
+    
+    func ErrorTTProgressHUD() {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.IsErrorTTProgressHUDVisible = true
         }
     }
     

@@ -16,6 +16,7 @@ struct FolderView: View {
     var body: some View {
         NavigationStack {
             Content
+                .disabled(ViewModel.isActive)
                 .navigationTitle(StringConstants.Videos)
                 .toolbar {
                     if !ViewModel.IsSelecting {
@@ -34,7 +35,6 @@ struct FolderView: View {
                 }
         }
         .accentColor(.primary)
-        .animation(.spring, value: [ViewModel.IsSelecting, ViewModel.OnlyShowFavorites])
         .overlay {
             CreatedAlert
             RenameAlert
@@ -79,22 +79,10 @@ extension FolderView {
                     Section(header: Text(Title).font(.headline)) {
                         LazyVGrid(columns: ViewModel.Columns, spacing: 10) {
                             ForEach(Folders, id: \.id) { Folder in
-                                if !ViewModel.IsSelecting {
-                                    NavigationLink(destination: PracticeView(ViewModel: PracticeViewModel(Folder: Folder))) {
-                                        FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
-                                    }
-                                    .foregroundColor(.primary)
-                                } else {
+                                NavigationLink(destination: PracticeView(ViewModel: PracticeViewModel(Folder: Folder))) {
                                     FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
-                                        .onTapGesture {
-                                            if let Index = ViewModel.SelectedSessions.firstIndex(where: { $0.id == Folder.id }) {
-                                                ViewModel.SelectedSessions.remove(at: Index)
-                                            } else {
-                                                ViewModel.SelectedSessions.append(Folder)
-                                            }
-                                        }
-                                        .opacity(ViewModel.Opacity(For: Folder))
                                 }
+                                .foregroundColor(.primary)
                             }
                         }
                     }
@@ -173,7 +161,11 @@ extension FolderView {
                 .foregroundColor(ViewModel.SelectedSessions.isEmpty ? .gray : .primary)
             Spacer()
             Button {
+                ViewModel.isActive = true
                 ViewModel.ShowDeleteAlert = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    ViewModel.isActive = false
+                }
             } label: {
                 Image(systemName: StringConstants.SystemImage.Trash)
                     .foregroundColor(ViewModel.SelectedSessions.isEmpty ? .gray : .primary)

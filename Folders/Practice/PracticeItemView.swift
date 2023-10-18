@@ -10,16 +10,35 @@ import LVRealmKit
 
 struct PracticeItemView: View {
     @StateObject var ViewModel: PracticeViewModel
+    @Environment(\.colorScheme) var ColorScheme
     var Practice: PracticeModel
     let ItemWidth: CGFloat
     
     var body: some View {
-        PracticeItem
-            .contextMenu {
-                if !ViewModel.IsSelecting {
-                    VideoContextMenu
+        if ViewModel.IsSelecting {
+            Button {
+                if let Index = ViewModel.SelectedPractices.firstIndex(where: { $0.id == Practice.id }) {
+                    ViewModel.SelectedPractices.remove(at: Index)
+                } else {
+                    ViewModel.SelectedPractices.append(Practice)
                 }
+            } label: {
+                PracticeItem
+                    .contextMenu {
+                        if !ViewModel.IsSelecting {
+                            VideoContextMenu
+                        }
+                    }
             }
+            .opacity(ViewModel.Opacity(For: Practice))
+        } else {
+            PracticeItem
+                .contextMenu {
+                    if !ViewModel.IsSelecting {
+                        VideoContextMenu
+                    }
+                }
+        }
     }
 }
 
@@ -43,13 +62,13 @@ extension PracticeItemView {
                 }
             } else {
                 Rectangle()
-                    .fill(Color.gray.opacity(0.15))
+                    .fill(ColorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.1) : Color(red: 0.9, green: 0.9, blue: 0.9))
                     .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
                 Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
                     .resizable()
                     .scaledToFit()
                     .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                    .foregroundColor(.gray)
+                    .foregroundColor(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
             }
             VStack {
                 Spacer()
@@ -151,7 +170,7 @@ extension PracticeItemView {
     private var MoveButton: some View {
         Button {
             ViewModel.SelectedPractices.append(Practice)
-            ViewModel.ShowBottomBarMoveAlert = true
+            ViewModel.ShowMoveAlert = true
         } label: {
             Label(
                 StringConstants.ContextMenu.Move.Text,
@@ -165,7 +184,11 @@ extension PracticeItemView {
             ViewModel.Practice = Practice
             ViewModel.NewName = Practice.Name
             ViewModel.PracticeFavorite = Practice.isFavorite
+            ViewModel.isActive = true
             ViewModel.ShowRenameAlert = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                ViewModel.isActive = false
+            }
         } label: {
             Label(
                 StringConstants.ContextMenu.Rename.Text,
@@ -177,7 +200,11 @@ extension PracticeItemView {
     private var DeleteVideoButton: some View {
         Button(role: .destructive) {
             ViewModel.SelectedPractices.append(Practice)
+            ViewModel.isActive = true
             ViewModel.ShowDeleteAlert = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                ViewModel.isActive = false
+            }
         } label: {
             Label(
                 StringConstants.ContextMenu.Delete.Text,

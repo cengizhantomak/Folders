@@ -22,6 +22,7 @@ struct DestinationFolderView: View {
                     Toolbars
                 }
         }
+        .animation(.default, value: [ViewModel.ShowFavorited, ViewModel.ShowPinned])
         .onAppear {
             ViewModel.SetupColumnsToDevice(To: HorizontalSizeClass)
         }
@@ -68,7 +69,7 @@ extension DestinationFolderView {
             }
             .scrollDismissesKeyboard(.immediately)
         }
-//        .searchable(text: $ViewModel.SearchText)
+        //        .searchable(text: $ViewModel.SearchText)
     }
     
     // MARK: - MultiSegmentView
@@ -114,7 +115,11 @@ extension DestinationFolderView {
             }
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    ViewModel.isActive = true
                     ViewModel.ShowMoveAlert = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        ViewModel.isActive = false
+                    }
                 } label: {
                     Text(StringConstants.Move)
                         .foregroundColor(ViewModel.SelectedFolder == nil ? .gray : .primary)
@@ -194,29 +199,6 @@ extension DestinationFolderView {
                 )
             )
         }
-    }
-    
-    private var MoveAlert: some View {
-        CustomAlert(
-            IsPresented: $ViewModel.ShowMoveAlert,
-            Title: Title(
-                Text: StringConstants.Alert.Title.MoveVideo,
-                SystemImage: StringConstants.SystemImage.FolderBadgePlus
-            ),
-            Message: StringConstants.Alert.Message.MoveConfirmationMessage,
-            ButtonLeft: AlertButton(
-                Text: StringConstants.Alert.ButtonText.Cancel,
-                Action: {
-                    print("Cancel Tapped")
-                }
-            ),
-            ButtonRight: AlertButton(
-                Text: StringConstants.Alert.ButtonText.Move,
-                Action: {
-                    ViewModel.MovePractice()
-                }
-            )
-        )
     }
     
     // MARK: - ProgressHUD

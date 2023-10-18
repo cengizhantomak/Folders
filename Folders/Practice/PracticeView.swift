@@ -16,12 +16,12 @@ struct PracticeView: View {
     var body: some View {
         Content
             .gesture(DragGesture(minimumDistance: 15, coordinateSpace: .local)
-            .onEnded { Value in
-                if Value.translation.width > 100 {
-                    PresentationMode.wrappedValue.dismiss()
+                .onEnded { Value in
+                    if Value.translation.width > 100 {
+                        PresentationMode.wrappedValue.dismiss()
+                    }
                 }
-            }
-        )
+            )
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 CustomBackButton
@@ -39,7 +39,7 @@ struct PracticeView: View {
             .onAppear {
                 ViewModel.SetupColumnsToDevice(To: HorizontalSizeClass)
             }
-            .sheet(isPresented: $ViewModel.ShowBottomBarMoveAlert) {
+            .sheet(isPresented: $ViewModel.ShowMoveAlert) {
                 DestinationFolderView(ViewModel: DestinationFolderViewModel(PracticeViewModel: ViewModel))
             }
             .overlay {
@@ -77,22 +77,10 @@ extension PracticeView {
                 Section(header: DateHeader) {
                     LazyVGrid(columns: ViewModel.Columns, spacing: 1) {
                         ForEach(ViewModel.DisplayedPractices, id: \.id) { Practice in
-                            if !ViewModel.IsSelecting {
-                                NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
-                                    PracticeItemView(ViewModel: ViewModel, Practice: Practice, ItemWidth: ItemWidth)
-                                }
-                                .foregroundColor(.primary)
-                            } else {
+                            NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
                                 PracticeItemView(ViewModel: ViewModel, Practice: Practice, ItemWidth: ItemWidth)
-                                    .onTapGesture {
-                                        if let Index = ViewModel.SelectedPractices.firstIndex(where: { $0.id == Practice.id }) {
-                                            ViewModel.SelectedPractices.remove(at: Index)
-                                        } else {
-                                            ViewModel.SelectedPractices.append(Practice)
-                                        }
-                                    }
-                                    .opacity(ViewModel.Opacity(For: Practice))
                             }
+                            .foregroundColor(.primary)
                         }
                     }
                 }
@@ -161,7 +149,7 @@ extension PracticeView {
     private var SelectionBottomBar: some ToolbarContent {
         ToolbarItemGroup(placement: .bottomBar) {
             Button {
-                ViewModel.ShowBottomBarMoveAlert = true
+                ViewModel.ShowMoveAlert = true
             } label: {
                 Image(systemName: StringConstants.SystemImage.FolderBadgePlus)
                     .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
@@ -176,7 +164,11 @@ extension PracticeView {
             Spacer()
             
             Button {
+                ViewModel.isActive = true
                 ViewModel.ShowDeleteAlert = true
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    ViewModel.isActive = false
+                }
             } label: {
                 Image(systemName: StringConstants.SystemImage.Trash)
                     .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)

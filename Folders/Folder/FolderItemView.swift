@@ -10,25 +10,54 @@ import LVRealmKit
 
 struct FolderItemView: View {
     @StateObject var ViewModel: FolderViewModel
+    @Environment(\.colorScheme) var ColorScheme
     var Folder: SessionModel
     let ItemWidth: CGFloat
     
     var body: some View {
-        VStack(alignment: .leading) {
-            FolderItem
-                .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 10))
-                .contextMenu {
-                    if !ViewModel.IsSelecting {
-                        FolderContextMenu
-                    }
+        if ViewModel.IsSelecting {
+            Button {
+                if let Index = ViewModel.SelectedSessions.firstIndex(where: { $0.id == Folder.id }) {
+                    ViewModel.SelectedSessions.remove(at: Index)
+                } else {
+                    ViewModel.SelectedSessions.append(Folder)
                 }
-            Text(Folder.name)
-                .truncationMode(.tail)
-                .lineLimit(1)
-                .font(.system(size: 15))
-            Text(String(Folder.practiceCount))
-                .font(.system(size: 14))
-                .foregroundColor(.gray)
+            } label: {
+                VStack(alignment: .leading) {
+                    FolderItem
+                        .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 10))
+                        .contextMenu {
+                            if !ViewModel.IsSelecting {
+                                FolderContextMenu
+                            }
+                        }
+                    Text(Folder.name)
+                        .truncationMode(.tail)
+                        .lineLimit(1)
+                        .font(.system(size: 15))
+                    Text(String(Folder.practiceCount))
+                        .font(.system(size: 14))
+                        .foregroundColor(.gray)
+                }
+            }
+            .opacity(ViewModel.Opacity(For: Folder))
+        } else {
+            VStack(alignment: .leading) {
+                FolderItem
+                    .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 10))
+                    .contextMenu {
+                        if !ViewModel.IsSelecting {
+                            FolderContextMenu
+                        }
+                    }
+                Text(Folder.name)
+                    .truncationMode(.tail)
+                    .lineLimit(1)
+                    .font(.system(size: 15))
+                Text(String(Folder.practiceCount))
+                    .font(.system(size: 14))
+                    .foregroundColor(.gray)
+            }
         }
     }
 }
@@ -54,14 +83,15 @@ extension FolderItemView {
                 }
             } else {
                 Rectangle()
-                    .fill(Color.gray.opacity(0.15))
+                    .fill(ColorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.1) : Color(red: 0.9, green: 0.9, blue: 0.9))
+                    .background()
                     .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
                     .cornerRadius(10)
                 Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
                     .resizable()
                     .scaledToFit()
                     .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                    .foregroundColor(.gray)
+                    .foregroundColor(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
             }
             FavoriteIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
             SelectionIcon(CircleOffset: CircleOffset)
@@ -78,7 +108,7 @@ extension FolderItemView {
                     .resizable()
                     .scaledToFit()
                     .frame(width: SafeItemWidth * 0.08, height: SafeItemWidth * 0.08)
-                    .foregroundColor(.red)
+                    .foregroundColor(Color(red: 1, green: 0.06, blue: 0))
                     .offset(x: CircleOffset.X, y: CircleOffset.Y)
             } else {
                 EmptyView()
@@ -147,7 +177,11 @@ extension FolderItemView {
             ViewModel.NewName = Folder.name
             ViewModel.FolderFavorite = Folder.isFavorite
             ViewModel.FolderPinned = Folder.isPinned
+            ViewModel.isActive = true
             ViewModel.ShowRenameAlert = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                ViewModel.isActive = false
+            }
         } label: {
             Label(
                 StringConstants.ContextMenu.Rename.Text,
@@ -159,7 +193,11 @@ extension FolderItemView {
     private var DeleteVideoButton: some View {
         Button(role: .destructive) {
             ViewModel.SelectedSessions.append(Folder)
+            ViewModel.isActive = true
             ViewModel.ShowDeleteAlert = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                ViewModel.isActive = false
+            }
         } label: {
             Label(
                 StringConstants.ContextMenu.Delete.Text,
