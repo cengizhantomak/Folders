@@ -126,7 +126,7 @@ extension PracticeView {
                     Image(systemName: ViewModel.OnlyShowFavorites ? StringConstants.SystemImage.HeartFill : StringConstants.SystemImage.Heart)
                         .foregroundColor(.primary)
                         .padding(8)
-                        .background(Color.gray.opacity(0.25))
+                        .background(.ultraThinMaterial)
                         .clipShape(Circle())
                 }
                 Button {
@@ -135,7 +135,7 @@ extension PracticeView {
                     Text(StringConstants.Select)
                         .foregroundColor(.primary)
                         .padding(8)
-                        .background(Color.gray.opacity(0.25))
+                        .background(.ultraThinMaterial)
                         .clipShape(Capsule())
                 }
             }
@@ -151,7 +151,7 @@ extension PracticeView {
                     Text(StringConstants.Cancel)
                         .foregroundColor(.primary)
                         .padding(8)
-                        .background(Color.gray.opacity(0.25))
+                        .background(.ultraThinMaterial)
                         .clipShape(Capsule())
                 }
             }

@@ -53,13 +53,11 @@ extension DestinationFolderItemView {
                         .fill(Color.gray.opacity(0.15))
                         .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
                         .cornerRadius(10)
-                        .overlay {
-                            Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                                .foregroundColor(.gray)
-                        }
+                    Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
+                        .foregroundColor(.gray)
                 }
             }
             .overlay {

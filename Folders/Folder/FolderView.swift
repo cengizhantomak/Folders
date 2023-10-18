@@ -112,7 +112,7 @@ extension FolderView {
                 Image(systemName: StringConstants.SystemImage.Plus)
                     .foregroundColor(.primary)
                     .padding(8)
-                    .background(Color.gray.opacity(0.25))
+                    .background(.ultraThinMaterial)
                     .clipShape(Circle())
             }
             Button {
@@ -121,7 +121,7 @@ extension FolderView {
                 Text("Ekle")
                     .foregroundColor(.primary)
                     .padding(8)
-                    .background(Color.gray.opacity(0.25))
+                    .background(.ultraThinMaterial)
                     .clipShape(Capsule())
             }
         }
@@ -136,7 +136,7 @@ extension FolderView {
                     Image(systemName: ViewModel.OnlyShowFavorites ? StringConstants.SystemImage.HeartFill : StringConstants.SystemImage.Heart)
                         .foregroundColor(.primary)
                         .padding(8)
-                        .background(Color.gray.opacity(0.25))
+                        .background(.ultraThinMaterial)
                         .clipShape(Circle())
                 }
                 Button {
@@ -145,7 +145,7 @@ extension FolderView {
                     Text(StringConstants.Select)
                         .foregroundColor(.primary)
                         .padding(8)
-                        .background(Color.gray.opacity(0.25))
+                        .background(.ultraThinMaterial)
                         .clipShape(Capsule())
                 }
             }
@@ -160,7 +160,7 @@ extension FolderView {
                 Text(StringConstants.Cancel)
                     .foregroundColor(.primary)
                     .padding(8)
-                    .background(Color.gray.opacity(0.25))
+                    .background(.ultraThinMaterial)
                     .clipShape(Capsule())
             }
         }

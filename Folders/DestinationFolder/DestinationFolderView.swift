@@ -108,7 +108,7 @@ extension DestinationFolderView {
                     Image(systemName: StringConstants.SystemImage.Plus)
                         .foregroundColor(.primary)
                         .padding(8)
-                        .background(Color.gray.opacity(0.25))
+                        .background(.ultraThinMaterial)
                         .clipShape(Circle())
                 }
             }
@@ -119,7 +119,7 @@ extension DestinationFolderView {
                     Text(StringConstants.Move)
                         .foregroundColor(ViewModel.SelectedFolder == nil ? .gray : .primary)
                         .padding(8)
-                        .background(Color.gray.opacity(0.25))
+                        .background(.ultraThinMaterial)
                         .clipShape(Capsule())
                 }
                 .disabled(ViewModel.SelectedFolder == nil)
