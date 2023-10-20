@@ -210,11 +210,7 @@ extension FolderView {
             ButtonRight: AlertButton(
                 Text: StringConstants.Alert.ButtonText.Create,
                 Action: {
-                    if !ViewModel.FolderName.isEmpty {
-                        ViewModel.AddFolder()
-                    } else {
-                        ViewModel.ErrorTTProgressHUD()
-                    }
+                    ViewModel.AddFolder()
                 }
             )
         )
@@ -255,11 +251,7 @@ extension FolderView {
             ButtonRight: AlertButton(
                 Text: StringConstants.Alert.ButtonText.Save,
                 Action: {
-                    if !ViewModel.NewName.isEmpty {
-                        ViewModel.RenameFolder(NewName: ViewModel.NewName)
-                    } else {
-                        ViewModel.ErrorTTProgressHUD()
-                    }
+                    ViewModel.RenameFolder(NewName: ViewModel.NewName)
                 }
             )
         )

@@ -57,10 +57,12 @@ extension DestinationFolderView {
                     ForEach(ViewModel.FilteredSessions, id: \.id) { Folder in
                         DestinationFolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
                             .onTapGesture {
-                                if ViewModel.SelectedFolder?.id == Folder.id {
-                                    ViewModel.SelectedFolder = nil
-                                } else {
-                                    ViewModel.SelectedFolder = Folder
+                                withAnimation {
+                                    if ViewModel.SelectedFolder?.id == Folder.id {
+                                        ViewModel.SelectedFolder = nil
+                                    } else {
+                                        ViewModel.SelectedFolder = Folder
+                                    }
                                 }
                             }
                     }
@@ -170,11 +172,7 @@ extension DestinationFolderView {
                 ButtonRight: AlertButton(
                     Text: StringConstants.Alert.ButtonText.Create,
                     Action: {
-                        if !ViewModel.FolderName.isEmpty {
-                            ViewModel.AddFolder()
-                        } else {
-                            ViewModel.ErrorTTProgressHUD()
-                        }
+                        ViewModel.AddFolder()
                     }
                 )
             )

@@ -12,6 +12,7 @@
 		834E7AC42AD3D0AF00D504E3 /* LVRealmKit in Frameworks */ = {isa = PBXBuildFile; productRef = 834E7AC32AD3D0AF00D504E3 /* LVRealmKit */; };
 		834E7AC62AD3D0BD00D504E3 /* TTProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 834E7AC52AD3D0BD00D504E3 /* TTProgressHUD */; };
 		838DA53F2AD7DD0E004CC27F /* DestinationFolderItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838DA53E2AD7DD0E004CC27F /* DestinationFolderItemView.swift */; };
+		83C362B12AE2ACD100D32670 /* NoEffectButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C362B02AE2ACD100D32670 /* NoEffectButtonStyle.swift */; };
 		83EE5AE42AD522D0004D7E1C /* CustomAlertPackage in Frameworks */ = {isa = PBXBuildFile; productRef = 83EE5AE32AD522D0004D7E1C /* CustomAlertPackage */; };
 		CB020CCB2AAEE72100C30EE0 /* PracticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB020CCA2AAEE72100C30EE0 /* PracticeView.swift */; };
 		CB020CCD2AAEE75200C30EE0 /* PracticeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB020CCC2AAEE75200C30EE0 /* PracticeViewModel.swift */; };
@@ -39,6 +40,7 @@
 		478A82CB2AAB0E7F00106389 /* StringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
 		818EC7742ACCA7E3007D5066 /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
 		838DA53E2AD7DD0E004CC27F /* DestinationFolderItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationFolderItemView.swift; sourceTree = "<group>"; };
+		83C362B02AE2ACD100D32670 /* NoEffectButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoEffectButtonStyle.swift; sourceTree = "<group>"; };
 		CB020CCA2AAEE72100C30EE0 /* PracticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeView.swift; sourceTree = "<group>"; };
 		CB020CCC2AAEE75200C30EE0 /* PracticeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeViewModel.swift; sourceTree = "<group>"; };
 		CB0CAB492AC6C8B800B033BE /* DestinationFolderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationFolderView.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				CB2FBD852AA5FD70007C46F3 /* Date+Extension.swift */,
 				478A82CB2AAB0E7F00106389 /* StringConstants.swift */,
 				CBBF11062ABAD41000B7A864 /* CustomTTProgressHUD.swift */,
+				83C362B02AE2ACD100D32670 /* NoEffectButtonStyle.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CB2FBD742AA5B03C007C46F3 /* FolderView.swift in Sources */,
+				83C362B12AE2ACD100D32670 /* NoEffectButtonStyle.swift in Sources */,
 				CB2FBD842AA5F669007C46F3 /* FolderViewModel.swift in Sources */,
 				838DA53F2AD7DD0E004CC27F /* DestinationFolderItemView.swift in Sources */,
 				CB1570AA2ACD6F2300F2490D /* NoVideoView.swift in Sources */,

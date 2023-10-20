@@ -57,6 +57,7 @@ class FolderViewModel: ObservableObject {
                 UpdateSessionModel(SessionModel: AllSessions)
             } catch {
                 print("Error loading sessions: \(error)")
+                ErrorTTProgressHUD()
             }
         }
     }
@@ -96,6 +97,7 @@ class FolderViewModel: ObservableObject {
                 LoadFolders()
             } catch {
                 print("Error adding session: \(error)")
+                ErrorTTProgressHUD()
             }
         }
         SuccessTTProgressHUD()
@@ -130,10 +132,12 @@ class FolderViewModel: ObservableObject {
                     LoadFolders()
                 } catch {
                     print("Failed to add practice: \(error)")
+                    ErrorTTProgressHUD()
                 }
             }
         } catch {
             print("An error occurred: \(error)")
+            ErrorTTProgressHUD()
         }
         SuccessTTProgressHUD()
     }
@@ -206,7 +210,8 @@ class FolderViewModel: ObservableObject {
                 }
                 LoadFolders()
             } catch {
-                print("Error updating favorite status: \(error)")
+                print("Error updating rename status: \(error)")
+                ErrorTTProgressHUD()
             }
         }
         SuccessTTProgressHUD()
@@ -219,6 +224,7 @@ class FolderViewModel: ObservableObject {
                 LoadFolders()
             } catch {
                 print("Error deleting session: \(error)")
+                ErrorTTProgressHUD()
             }
         }
         SelectedSessions.removeAll()
@@ -234,7 +240,8 @@ class FolderViewModel: ObservableObject {
                 }
                 LoadFolders()
             } catch {
-                print("Error updating favorite status: \(error)")
+                print("Error updating pin status: \(error)")
+                ErrorTTProgressHUD()
             }
         }
         SuccessTTProgressHUD()
@@ -263,6 +270,7 @@ class FolderViewModel: ObservableObject {
                 LoadFolders()
             } catch {
                 print("Error updating favorite status: \(error)")
+                ErrorTTProgressHUD()
             }
         }
         SuccessTTProgressHUD()
@@ -301,7 +309,7 @@ class FolderViewModel: ObservableObject {
         }
     }
     
-    func ErrorTTProgressHUD() {
+    private func ErrorTTProgressHUD() {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.IsErrorTTProgressHUDVisible = true
@@ -312,7 +320,7 @@ class FolderViewModel: ObservableObject {
         return (ScreenWidth - (Padding * (Amount + 1))) / Amount
     }
     
-    func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat = 20, YOffsetValue: CGFloat = 20) -> (X: CGFloat, Y: CGFloat) {
+    func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat, YOffsetValue: CGFloat) -> (X: CGFloat, Y: CGFloat) {
         let X = (ItemWidth / 2) - XOffsetValue
         let Y = -(ItemWidth * (1970 / 1080) / 2) + YOffsetValue
         return (X, Y)

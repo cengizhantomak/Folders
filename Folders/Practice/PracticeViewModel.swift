@@ -42,6 +42,7 @@ class PracticeViewModel: ObservableObject {
                 try await GetPractices()
             } catch {
                 print("Failed to load practices: \(error)")
+                ErrorTTProgressHUD()
             }
         }
     }
@@ -94,7 +95,8 @@ class PracticeViewModel: ObservableObject {
                 }
                 try await GetPractices()
             } catch {
-                print("Error updating favorite status: \(error)")
+                print("Error updating rename status: \(error)")
+                ErrorTTProgressHUD()
             }
         }
         SuccessTTProgressHUD()
@@ -106,7 +108,8 @@ class PracticeViewModel: ObservableObject {
                 try await PracticeRepository.shared.deletePractices(DeletePractice)
                 try await GetPractices()
             } catch {
-                print("Error deleting session: \(error)")
+                print("Error deleting practices: \(error)")
+                ErrorTTProgressHUD()
             }
         }
         SuccessTTProgressHUD()
@@ -123,6 +126,7 @@ class PracticeViewModel: ObservableObject {
             self.isActive = false
         }
         DisplayedPractices = OnlyShowFavorites ? Practices.filter { $0.isFavorite } : Practices
+        Session.practiceCount = DisplayedPractices.count
     }
     
     func ToggleFavorite() {
@@ -135,6 +139,7 @@ class PracticeViewModel: ObservableObject {
                 try await GetPractices()
             } catch {
                 print("Error updating favorite status: \(error)")
+                ErrorTTProgressHUD()
             }
         }
         SuccessTTProgressHUD()
@@ -166,21 +171,21 @@ class PracticeViewModel: ObservableObject {
         }
     }
     
-    func SuccessTTProgressHUD() {
+    private func SuccessTTProgressHUD() {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.IsSuccessTTProgressHUDVisible = true
         }
     }
     
-    func ErrorTTProgressHUD() {
+    private func ErrorTTProgressHUD() {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             self.IsErrorTTProgressHUDVisible = true
         }
     }
     
-    func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat = 20, YOffsetValue: CGFloat = 20) -> (X: CGFloat, Y: CGFloat) {
+    func CircleOffset(For ItemWidth: CGFloat, XOffsetValue: CGFloat, YOffsetValue: CGFloat) -> (X: CGFloat, Y: CGFloat) {
         let X = (ItemWidth / 2) - XOffsetValue
         let Y = -(ItemWidth * (16 / 9) / 2) + YOffsetValue
         return (X, Y)
@@ -203,9 +208,9 @@ class PracticeViewModel: ObservableObject {
     func SetupColumnsToDevice(To SizeClass: UserInterfaceSizeClass?) {
         let ItemCount: Int
         if SizeClass == .compact {
-            ItemCount = 2 //iPhone
+            ItemCount = 3 //iPhone
         } else {
-            ItemCount = 4 //iPad
+            ItemCount = 5 //iPad
         }
         Columns = Array(repeating: GridItem(.flexible()), count: ItemCount)
     }

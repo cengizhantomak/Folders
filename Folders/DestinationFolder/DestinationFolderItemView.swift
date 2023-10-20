@@ -17,6 +17,16 @@ struct DestinationFolderItemView: View {
     var body: some View {
         VStack(alignment: .leading) {
             FolderItem
+                .overlay {
+                    if Folder.isFavorite && !ViewModel.isSelected(session: Folder) {
+                        FavoriteIcon
+                    } else if ViewModel.isSelected(session: Folder) {
+                        Color.primary.opacity(0.5)
+                            .cornerRadius(10)
+                        SelectionIcon
+                    }
+                }
+            
             Text(Folder.name)
                 .truncationMode(.tail)
                 .lineLimit(1)
@@ -33,73 +43,70 @@ extension DestinationFolderItemView {
     
     // MARK: - FolderItem
     private var FolderItem: some View {
-        let CircleOffset = ViewModel.CircleOffset(For: ItemWidth, XOffsetValue: 20, YOffsetValue: 20)
         let SafeItemWidth = max(ItemWidth, 1)
         
-        return ZStack {
-            Group {
-                if let ThumbPath = Folder.thumbnail {
-                    AsyncImage(url: URL.documentsDirectory.appending(path: ThumbPath)) { Image in
-                        Image
-                            .resizable()
-                            .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
-                            .scaledToFit()
-                            .cornerRadius(10)
-                    } placeholder: {
-                        ProgressView()
-                            .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
-                    }
-                } else {
-                    Rectangle()
-                        .fill(ColorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.1) : Color(red: 0.9, green: 0.9, blue: 0.9))
-                        .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
-                        .cornerRadius(10)
-                    Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
+        return Group {
+            if let ThumbPath = Folder.thumbnail {
+                AsyncImage(url: URL.documentsDirectory.appending(path: ThumbPath)) { Image in
+                    Image
                         .resizable()
+                        .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
                         .scaledToFit()
-                        .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                        .foregroundColor(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
+                        .cornerRadius(10)
+                } placeholder: {
+                    ProgressView()
+                        .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
                 }
-            }
-            .overlay {
-                Color.black.opacity(ViewModel.isSelected(session: Folder) ? 0.3 : 0.0)
+            } else {
+                Rectangle()
+                    .fill(ColorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.1) : Color(red: 0.9, green: 0.9, blue: 0.9))
+                    .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
                     .cornerRadius(10)
+                    .overlay {
+                        Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
+                            .foregroundColor(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
+                    }
             }
-            FavoriteIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
-            SelectionIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
         }
     }
     
     // MARK: - Icons
-    private func FavoriteIcon(CircleOffset: (X: CGFloat, Y: CGFloat), SafeItemWidth: CGFloat) -> some View {
-        Group {
-            if Folder.isFavorite && !ViewModel.isSelected(session: Folder) {
-                Image(systemName: StringConstants.SystemImage.HeartFill)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: SafeItemWidth * 0.08, height: SafeItemWidth * 0.08)
-                    .foregroundColor(.red)
-                    .offset(x: CircleOffset.X, y: CircleOffset.Y)
-            } else {
-                EmptyView()
-            }
-        }
+    private var FavoriteIcon: some View {
+        let CircleOffset = ViewModel.CircleOffset(For: ItemWidth, XOffsetValue: 20, YOffsetValue: 20)
+        
+        return Image(systemName: StringConstants.SystemImage.HeartFill)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 17, height: 17)
+            .foregroundColor(.red)
+            .offset(x: CircleOffset.X, y: CircleOffset.Y)
     }
     
-    private func SelectionIcon(CircleOffset: (X: CGFloat, Y: CGFloat), SafeItemWidth: CGFloat) -> some View {
-        Group {
-            if ViewModel.isSelected(session: Folder) {
-                Image(systemName: "checkmark.circle.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: SafeItemWidth * 0.08, height: SafeItemWidth * 0.08)
-                    .foregroundColor(.green)
-                    .offset(x: CircleOffset.X, y: CircleOffset.Y)
-            }
+    private var SelectionIcon: some View {
+        let CircleOffset = ViewModel.CircleOffset(For: ItemWidth, XOffsetValue: 20, YOffsetValue: 20)
+        
+        return Group {
+//            Color.primary.opacity(0.3)
+//                .cornerRadius(10)
+            Circle()
+                .fill(Color.green)
+                .frame(width: 20, height: 20)
+                .overlay {
+                    Image(systemName: "checkmark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 10, height: 10)
+                        .foregroundColor(.black)
+                        .fontWeight(.semibold)
+                }
+                .offset(x: CircleOffset.X, y: CircleOffset.Y)
         }
     }
 }
 
-//#Preview {
-//    DestinationFolderItemView()
-//}
+#Preview {
+    DestinationFolderItemView(ViewModel: DestinationFolderViewModel(PracticeViewModel: PracticeViewModel(Folder: SessionModel())), Folder: SessionModel(), ItemWidth: 150)
+}

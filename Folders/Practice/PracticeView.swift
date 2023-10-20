@@ -15,6 +15,7 @@ struct PracticeView: View {
     
     var body: some View {
         Content
+            .disabled(ViewModel.isActive)
             .gesture(DragGesture(minimumDistance: 15, coordinateSpace: .local)
                 .onEnded { Value in
                     if Value.translation.width > 100 {
@@ -43,7 +44,6 @@ struct PracticeView: View {
                 DestinationFolderView(ViewModel: DestinationFolderViewModel(PracticeViewModel: ViewModel))
             }
             .overlay {
-                SessionTitle
                 RenameAlert
                 DeleteAlert
                 ProgressHUD
@@ -55,19 +55,14 @@ struct PracticeView: View {
 // MARK: - Extension
 extension PracticeView {
     private var Content: some View {
-        if ViewModel.Session.practiceCount == 0 {
-            AnyView(NoVideoView())
-        } else {
-            AnyView(GridView)
+        ZStack {
+            if ViewModel.Session.practiceCount == 0 {
+                NoVideoView()
+            } else {
+                GridView
+            }
+            SessionTitle
         }
-    }
-    
-    private var DateHeader: some View {
-        Text(Date.CurrentDate(From: ViewModel.Session.createdAt))
-            .foregroundColor(.gray)
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .background(.clear)
-            .padding(.top)
     }
     
     private var GridView: some View {
@@ -86,6 +81,31 @@ extension PracticeView {
                 }
                 .padding(5)
             }
+        }
+    }
+    
+    private var DateHeader: some View {
+        Text(Date.CurrentDate(From: ViewModel.Session.createdAt))
+            .foregroundColor(.gray)
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .background(.clear)
+            .padding(.top)
+    }
+    
+    // MARK: - Title
+    private var SessionTitle: some View {
+        VStack {
+            HStack {
+                Text(ViewModel.Session.name)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.5)
+                    .font(.title2)
+                    .background(Color.clear)
+                    .padding(15)
+                    .frame(alignment: .leading)
+                Spacer(minLength: 100)
+            }
+            Spacer()
         }
     }
     
@@ -177,23 +197,6 @@ extension PracticeView {
         }
     }
     
-    // MARK: - Title
-    private var SessionTitle: some View {
-        VStack {
-            HStack {
-                Text(ViewModel.Session.name)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.5)
-                    .font(.title2)
-                    .background(Color.clear)
-                    .padding(10)
-                    .frame(alignment: .leading)
-                Spacer(minLength: 100)
-            }
-            Spacer()
-        }
-    }
-    
     // MARK: - Alerts
     private var RenameAlert: some View {
         CustomAlert(
@@ -223,11 +226,7 @@ extension PracticeView {
             ButtonRight: AlertButton(
                 Text: StringConstants.Alert.ButtonText.Save,
                 Action: {
-                    if !ViewModel.NewName.isEmpty {
-                        ViewModel.RenamePractice()
-                    } else {
-                        ViewModel.ErrorTTProgressHUD()
-                    }
+                    ViewModel.RenamePractice()
                 }
             )
         )

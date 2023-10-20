@@ -25,11 +25,9 @@ struct FolderItemView: View {
             } label: {
                 VStack(alignment: .leading) {
                     FolderItem
-                        .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 10))
-                        .contextMenu {
-                            if !ViewModel.IsSelecting {
-                                FolderContextMenu
-                            }
+                        .overlay {
+                            
+                            SelectionIcon
                         }
                     Text(Folder.name)
                         .truncationMode(.tail)
@@ -39,16 +37,20 @@ struct FolderItemView: View {
                         .font(.system(size: 14))
                         .foregroundColor(.gray)
                 }
+                .opacity(ViewModel.Opacity(For: Folder))
             }
-            .opacity(ViewModel.Opacity(For: Folder))
+            .buttonStyle(NoEffectButtonStyle())
         } else {
             VStack(alignment: .leading) {
                 FolderItem
+                    .overlay {
+                        if Folder.isFavorite {
+                            FavoriteIcon
+                        }
+                    }
                     .contentShape(.contextMenuPreview, RoundedRectangle(cornerRadius: 10))
                     .contextMenu {
-                        if !ViewModel.IsSelecting {
-                            FolderContextMenu
-                        }
+                        FolderContextMenu
                     }
                 Text(Folder.name)
                     .truncationMode(.tail)
@@ -62,14 +64,14 @@ struct FolderItemView: View {
     }
 }
 
+
 extension FolderItemView {
     
     // MARK: - FolderItem
     private var FolderItem: some View {
-        let CircleOffset = ViewModel.CircleOffset(For: ItemWidth, XOffsetValue: 20, YOffsetValue: 20)
         let SafeItemWidth = max(ItemWidth, 1)
         
-        return ZStack {
+        return Group {
             if let ThumbPath = Folder.thumbnail {
                 AsyncImage(url: URL.documentsDirectory.appending(path: ThumbPath)) { Image in
                     Image
@@ -79,7 +81,7 @@ extension FolderItemView {
                         .cornerRadius(10)
                 } placeholder: {
                     ProgressView()
-                        .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
+                        .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
                 }
             } else {
                 Rectangle()
@@ -87,51 +89,41 @@ extension FolderItemView {
                     .background()
                     .frame(width: SafeItemWidth, height: SafeItemWidth * (1970 / 1080))
                     .cornerRadius(10)
-                Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                    .foregroundColor(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
+                    .overlay {
+                        Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
+                            .foregroundColor(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
+                    }
             }
-            FavoriteIcon(CircleOffset: CircleOffset, SafeItemWidth: SafeItemWidth)
-            SelectionIcon(CircleOffset: CircleOffset)
         }
-        .background(.clear)
-        .cornerRadius(10)
     }
     
     // MARK: - Icons
-    private func FavoriteIcon(CircleOffset: (X: CGFloat, Y: CGFloat), SafeItemWidth: CGFloat) -> some View {
-        Group {
-            if Folder.isFavorite && !ViewModel.IsSelecting {
-                Image(systemName: StringConstants.SystemImage.HeartFill)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: SafeItemWidth * 0.08, height: SafeItemWidth * 0.08)
-                    .foregroundColor(Color(red: 1, green: 0.06, blue: 0))
-                    .offset(x: CircleOffset.X, y: CircleOffset.Y)
-            } else {
-                EmptyView()
-            }
-        }
+    private var FavoriteIcon: some View {
+        let CircleOffset = ViewModel.CircleOffset(For: ItemWidth, XOffsetValue: 20, YOffsetValue: 20)
+        
+        return Image(systemName: StringConstants.SystemImage.HeartFill)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 17, height: 17)
+            .foregroundColor(.red)
+            .offset(x: CircleOffset.X, y: CircleOffset.Y)
     }
     
-    private func SelectionIcon(CircleOffset: (X: CGFloat, Y: CGFloat)) -> some View {
-        Group {
-            if ViewModel.IsSelecting {
-                Circle()
-                    .stroke(.gray, lineWidth: 2)
-                    .background(Circle().fill(Color.white))
-                    .overlay(
-                        ViewModel.SelectedSessions.contains(where: { $0.id == Folder.id }) ?
-                        Circle().stroke(.gray, lineWidth: 2).frame(width: 10, height: 10) : nil
-                    )
-                    .frame(width: 20, height: 20)
-                    .offset(x: CircleOffset.X, y: CircleOffset.Y)
-            } else {
-                EmptyView()
-            }
-        }
+    private var SelectionIcon: some View {
+        let CircleOffset = ViewModel.CircleOffset(For: ItemWidth, XOffsetValue: 20, YOffsetValue: 20)
+        
+        return Circle()
+            .stroke(.gray, lineWidth: 2)
+            .background(Circle().fill(ViewModel.SelectedSessions.contains(where: { $0.id == Folder.id }) ? Color.white : Color.clear))
+            .frame(width: 20, height: 20)
+            .overlay(
+                ViewModel.SelectedSessions.contains(where: { $0.id == Folder.id }) ?
+                Circle().stroke(.gray, lineWidth: 2).frame(width: 10, height: 10) : nil
+            )
+            .offset(x: CircleOffset.X, y: CircleOffset.Y)
     }
     
     // MARK: - Context Menu and Actions
@@ -207,8 +199,8 @@ extension FolderItemView {
     }
 }
 
-//struct FolderItemView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        FolderItemView(ViewModel: FolderViewModel(), Folder: FolderModel(Name: "LVS"), ItemWidth: 100)
-//    }
-//}
+struct FolderItemView_Previews: PreviewProvider {
+    static var previews: some View {
+        FolderItemView(ViewModel: FolderViewModel(), Folder: SessionModel(), ItemWidth: 150)
+    }
+}
