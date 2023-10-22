@@ -33,7 +33,7 @@ struct DestinationFolderItemView: View {
                 .font(.system(size: 15))
             Text(String(Folder.practiceCount))
                 .font(.system(size: 14))
-                .foregroundColor(.gray)
+                .foregroundStyle(.gray)
         }
     }
 }
@@ -67,7 +67,7 @@ extension DestinationFolderItemView {
                             .resizable()
                             .scaledToFit()
                             .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                            .foregroundColor(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
+                            .foregroundStyle(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
                     }
             }
         }
@@ -81,7 +81,7 @@ extension DestinationFolderItemView {
             .resizable()
             .scaledToFit()
             .frame(width: 17, height: 17)
-            .foregroundColor(.red)
+            .foregroundStyle(.red)
             .offset(x: CircleOffset.X, y: CircleOffset.Y)
     }
     
@@ -99,7 +99,7 @@ extension DestinationFolderItemView {
                         .resizable()
                         .scaledToFit()
                         .frame(width: 10, height: 10)
-                        .foregroundColor(.black)
+                        .foregroundStyle(.black)
                         .fontWeight(.semibold)
                 }
                 .offset(x: CircleOffset.X, y: CircleOffset.Y)

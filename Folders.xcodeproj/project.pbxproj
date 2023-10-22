@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		478A82CC2AAB0E7F00106389 /* StringConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 478A82CB2AAB0E7F00106389 /* StringConstants.swift */; };
 		818EC7752ACCA7E3007D5066 /* CustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 818EC7742ACCA7E3007D5066 /* CustomSearchBar.swift */; };
+		8338627F2AE56BEE00CB40FB /* UINavigationController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8338627E2AE56BEE00CB40FB /* UINavigationController+Extension.swift */; };
 		834E7AC42AD3D0AF00D504E3 /* LVRealmKit in Frameworks */ = {isa = PBXBuildFile; productRef = 834E7AC32AD3D0AF00D504E3 /* LVRealmKit */; };
 		834E7AC62AD3D0BD00D504E3 /* TTProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 834E7AC52AD3D0BD00D504E3 /* TTProgressHUD */; };
 		838DA53F2AD7DD0E004CC27F /* DestinationFolderItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838DA53E2AD7DD0E004CC27F /* DestinationFolderItemView.swift */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		478A82CB2AAB0E7F00106389 /* StringConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringConstants.swift; sourceTree = "<group>"; };
 		818EC7742ACCA7E3007D5066 /* CustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSearchBar.swift; sourceTree = "<group>"; };
+		8338627E2AE56BEE00CB40FB /* UINavigationController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extension.swift"; sourceTree = "<group>"; };
 		838DA53E2AD7DD0E004CC27F /* DestinationFolderItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DestinationFolderItemView.swift; sourceTree = "<group>"; };
 		83C362B02AE2ACD100D32670 /* NoEffectButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoEffectButtonStyle.swift; sourceTree = "<group>"; };
 		CB020CCA2AAEE72100C30EE0 /* PracticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PracticeView.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				CB2FBD852AA5FD70007C46F3 /* Date+Extension.swift */,
+				8338627E2AE56BEE00CB40FB /* UINavigationController+Extension.swift */,
 				478A82CB2AAB0E7F00106389 /* StringConstants.swift */,
 				CBBF11062ABAD41000B7A864 /* CustomTTProgressHUD.swift */,
 				83C362B02AE2ACD100D32670 /* NoEffectButtonStyle.swift */,
@@ -269,6 +272,7 @@
 				CB1570AA2ACD6F2300F2490D /* NoVideoView.swift in Sources */,
 				CB020CCB2AAEE72100C30EE0 /* PracticeView.swift in Sources */,
 				818EC7752ACCA7E3007D5066 /* CustomSearchBar.swift in Sources */,
+				8338627F2AE56BEE00CB40FB /* UINavigationController+Extension.swift in Sources */,
 				478A82CC2AAB0E7F00106389 /* StringConstants.swift in Sources */,
 				CB2FBD822AA5B190007C46F3 /* FolderItemView.swift in Sources */,
 				CB2FBD862AA5FD70007C46F3 /* Date+Extension.swift in Sources */,

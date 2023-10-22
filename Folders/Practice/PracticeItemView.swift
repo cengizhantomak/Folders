@@ -72,7 +72,7 @@ extension PracticeItemView {
                             .resizable()
                             .scaledToFit()
                             .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                            .foregroundColor(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
+                            .foregroundStyle(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
                     }
             }
             VStack {
@@ -91,10 +91,10 @@ extension PracticeItemView {
                     .truncationMode(.tail)
                     .lineLimit(1)
                     .font(.system(size: 9, weight: .bold))
-                    .foregroundColor(.white)
+                    .foregroundStyle(.white)
                 Text(Date.CurrentTime(From: Practice.UpdatedAt))
                     .font(.system(size: 8))
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
             }
             .padding(5)
             
@@ -110,7 +110,7 @@ extension PracticeItemView {
             .resizable()
             .scaledToFit()
             .frame(width: 15, height: 15)
-            .foregroundColor(.red)
+            .foregroundStyle(.red)
             .offset(x: CircleOffset.X, y: CircleOffset.Y)
     }
     

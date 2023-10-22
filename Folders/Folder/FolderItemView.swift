@@ -35,7 +35,7 @@ struct FolderItemView: View {
                         .font(.system(size: 15))
                     Text(String(Folder.practiceCount))
                         .font(.system(size: 14))
-                        .foregroundColor(.gray)
+                        .foregroundStyle(.gray)
                 }
                 .opacity(ViewModel.Opacity(For: Folder))
             }
@@ -58,7 +58,7 @@ struct FolderItemView: View {
                     .font(.system(size: 15))
                 Text(String(Folder.practiceCount))
                     .font(.system(size: 14))
-                    .foregroundColor(.gray)
+                    .foregroundStyle(.gray)
             }
         }
     }
@@ -94,7 +94,7 @@ extension FolderItemView {
                             .resizable()
                             .scaledToFit()
                             .frame(width: SafeItemWidth * 0.3, height: SafeItemWidth * 0.3)
-                            .foregroundColor(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
+                            .foregroundStyle(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
                     }
             }
         }
@@ -108,7 +108,7 @@ extension FolderItemView {
             .resizable()
             .scaledToFit()
             .frame(width: 17, height: 17)
-            .foregroundColor(.red)
+            .foregroundStyle(.red)
             .offset(x: CircleOffset.X, y: CircleOffset.Y)
     }
     

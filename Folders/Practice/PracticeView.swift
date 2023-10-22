@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CustomAlertPackage
+import LVRealmKit
 
 struct PracticeView: View {
     @StateObject var ViewModel: PracticeViewModel
@@ -16,13 +17,6 @@ struct PracticeView: View {
     var body: some View {
         Content
             .disabled(ViewModel.isActive)
-            .gesture(DragGesture(minimumDistance: 15, coordinateSpace: .local)
-                .onEnded { Value in
-                    if Value.translation.width > 100 {
-                        PresentationMode.wrappedValue.dismiss()
-                    }
-                }
-            )
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 CustomBackButton
@@ -34,9 +28,8 @@ struct PracticeView: View {
                     SelectionBottomBar
                 }
             }
-            .disabled(ViewModel.ShowDeleteAlert)
+            .disabled(ViewModel.ShowDeleteAlert || ViewModel.ShowRenameAlert)
             .navigationBarBackButtonHidden(true)
-            .animation(.spring, value: [ViewModel.IsSelecting, ViewModel.OnlyShowFavorites])
             .onAppear {
                 ViewModel.SetupColumnsToDevice(To: HorizontalSizeClass)
             }
@@ -75,7 +68,8 @@ extension PracticeView {
                             NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
                                 PracticeItemView(ViewModel: ViewModel, Practice: Practice, ItemWidth: ItemWidth)
                             }
-                            .foregroundColor(.primary)
+                            .buttonStyle(NoEffectButtonStyle())
+                            .foregroundStyle(.primary)
                         }
                     }
                 }
@@ -86,10 +80,9 @@ extension PracticeView {
     
     private var DateHeader: some View {
         Text(Date.CurrentDate(From: ViewModel.Session.createdAt))
-            .foregroundColor(.gray)
+            .foregroundStyle(.gray)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .background(.clear)
-            .padding(.top)
     }
     
     // MARK: - Title
@@ -97,11 +90,12 @@ extension PracticeView {
         VStack {
             HStack {
                 Text(ViewModel.Session.name)
+                    .fontWeight(.bold)
                     .lineLimit(1)
                     .minimumScaleFactor(0.5)
                     .font(.title2)
                     .background(Color.clear)
-                    .padding(15)
+                    .padding(.horizontal)
                     .frame(alignment: .leading)
                 Spacer(minLength: 100)
             }
@@ -116,12 +110,11 @@ extension PracticeView {
                 PresentationMode.wrappedValue.dismiss()
             } label: {
                 HStack {
-                    Image(systemName: "chevron.left")
+                    Image(systemName: "chevron.backward")
                         .fontWeight(.semibold)
                     Text("Videos")
                 }
             }
-            .foregroundStyle(.primary)
         }
     }
     
@@ -132,7 +125,6 @@ extension PracticeView {
                     ViewModel.FavoritesButtonAction()
                 } label: {
                     Image(systemName: ViewModel.OnlyShowFavorites ? StringConstants.SystemImage.HeartFill : StringConstants.SystemImage.Heart)
-                        .foregroundColor(.primary)
                         .padding(8)
                         .background(.ultraThinMaterial)
                         .clipShape(Circle())
@@ -141,7 +133,6 @@ extension PracticeView {
                     ViewModel.SelectCancelButtonAction()
                 } label: {
                     Text(StringConstants.Select)
-                        .foregroundColor(.primary)
                         .padding(8)
                         .background(.ultraThinMaterial)
                         .clipShape(Capsule())
@@ -157,7 +148,6 @@ extension PracticeView {
                     ViewModel.SelectCancelButtonAction()
                 } label: {
                     Text(StringConstants.Cancel)
-                        .foregroundColor(.primary)
                         .padding(8)
                         .background(.ultraThinMaterial)
                         .clipShape(Capsule())
@@ -172,14 +162,13 @@ extension PracticeView {
                 ViewModel.ShowMoveAlert = true
             } label: {
                 Image(systemName: StringConstants.SystemImage.FolderBadgePlus)
-                    .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
             }
             .disabled(ViewModel.SelectedPractices.isEmpty)
             
             Spacer()
             
             Text(ViewModel.SelectionCount(For: ViewModel.SelectedPractices.count))
-                .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
+                .foregroundStyle(ViewModel.SelectedPractices.isEmpty || ViewModel.ShowMoveAlert || ViewModel.ShowDeleteAlert || ViewModel.ShowDeleteAlert ? .secondary : .primary)
             
             Spacer()
             
@@ -191,7 +180,6 @@ extension PracticeView {
                 }
             } label: {
                 Image(systemName: StringConstants.SystemImage.Trash)
-                    .foregroundColor(ViewModel.SelectedPractices.isEmpty ? .gray : .primary)
             }
             .disabled(ViewModel.SelectedPractices.isEmpty)
         }
@@ -274,8 +262,8 @@ extension PracticeView {
     }
 }
 
-//struct PracticeView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        PracticeView(ViewModel: PracticeViewModel(Folder: FolderModel(Name: "LVS")))
-//    }
-//}
+struct PracticeView_Previews: PreviewProvider {
+    static var previews: some View {
+        PracticeView(ViewModel: PracticeViewModel(Folder: SessionModel()))
+    }
+}

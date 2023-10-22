@@ -27,8 +27,6 @@ struct FolderView: View {
                         SelectionBottomBar
                     }
                 }
-                .disabled(ViewModel.ShowDeleteAlert)
-                .navigationBarBackButtonHidden(ViewModel.ShowDeleteAlert)
                 .onAppear {
                     ViewModel.SetupColumnsToDevice(To: HorizontalSizeClass)
                     ViewModel.LoadFolders()
@@ -82,7 +80,7 @@ extension FolderView {
                                 NavigationLink(destination: PracticeView(ViewModel: PracticeViewModel(Folder: Folder))) {
                                     FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
                                 }
-                                .foregroundColor(.primary)
+                                .buttonStyle(NoEffectButtonStyle())
                             }
                         }
                     }
@@ -98,7 +96,6 @@ extension FolderView {
                 ViewModel.AddButtonAction()
             } label: {
                 Image(systemName: StringConstants.SystemImage.Plus)
-                    .foregroundColor(.primary)
                     .padding(8)
                     .background(.ultraThinMaterial)
                     .clipShape(Circle())
@@ -107,7 +104,6 @@ extension FolderView {
                 ViewModel.AddPractice()
             } label: {
                 Text("Ekle")
-                    .foregroundColor(.primary)
                     .padding(8)
                     .background(.ultraThinMaterial)
                     .clipShape(Capsule())
@@ -122,7 +118,6 @@ extension FolderView {
                     ViewModel.FavoritesButtonAction()
                 } label: {
                     Image(systemName: ViewModel.OnlyShowFavorites ? StringConstants.SystemImage.HeartFill : StringConstants.SystemImage.Heart)
-                        .foregroundColor(.primary)
                         .padding(8)
                         .background(.ultraThinMaterial)
                         .clipShape(Circle())
@@ -131,7 +126,6 @@ extension FolderView {
                     ViewModel.SelectCancelButtonAction()
                 } label: {
                     Text(StringConstants.Select)
-                        .foregroundColor(.primary)
                         .padding(8)
                         .background(.ultraThinMaterial)
                         .clipShape(Capsule())
@@ -146,7 +140,6 @@ extension FolderView {
                 ViewModel.SelectCancelButtonAction()
             } label: {
                 Text(StringConstants.Cancel)
-                    .foregroundColor(.primary)
                     .padding(8)
                     .background(.ultraThinMaterial)
                     .clipShape(Capsule())
@@ -168,7 +161,6 @@ extension FolderView {
                 }
             } label: {
                 Image(systemName: StringConstants.SystemImage.Trash)
-                    .foregroundColor(ViewModel.SelectedSessions.isEmpty ? .gray : .primary)
             }
             .disabled(ViewModel.SelectedSessions.isEmpty)
         }
@@ -299,8 +291,8 @@ extension FolderView {
     }
 }
 
-//struct FolderView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        FolderView()
-//    }
-//}
+struct FolderView_Previews: PreviewProvider {
+    static var previews: some View {
+        FolderView()
+    }
+}
