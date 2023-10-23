@@ -15,36 +15,23 @@ struct PracticeItemView: View {
     let ItemWidth: CGFloat
     
     var body: some View {
-        if ViewModel.IsSelecting {
-            Button {
-                if let Index = ViewModel.SelectedPractices.firstIndex(where: { $0.id == Practice.id }) {
-                    ViewModel.SelectedPractices.remove(at: Index)
-                } else {
-                    ViewModel.SelectedPractices.append(Practice)
+        PracticeItem
+            .overlay {
+                NameTimeTitle
+                if ViewModel.IsSelecting {
+                    SelectionIcon
+                } else if Practice.isFavorite {
+                    FavoriteIcon
                 }
-            } label: {
-                PracticeItem
-                    .overlay {
-                        NameTimeTitle
-                        SelectionIcon
-                    }
-                    .opacity(ViewModel.Opacity(For: Practice))
             }
-            .buttonStyle(NoEffectButtonStyle())
-        } else {
-            PracticeItem
-                .overlay {
-                    NameTimeTitle
-                    if Practice.isFavorite {
-                        FavoriteIcon
-                    }
-                }
-                .contextMenu {
+            .contextMenu {
+                if !ViewModel.IsSelecting {
                     VideoContextMenu
                 }
-        }
+            }
     }
 }
+
 
 extension PracticeItemView {
     
@@ -59,6 +46,7 @@ extension PracticeItemView {
                         .resizable()
                         .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
                         .scaledToFit()
+                        .cornerRadius(2)
                 } placeholder: {
                     ProgressView()
                         .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
@@ -67,6 +55,7 @@ extension PracticeItemView {
                 Rectangle()
                     .fill(ColorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.1) : Color(red: 0.9, green: 0.9, blue: 0.9))
                     .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
+                    .cornerRadius(2)
                     .overlay {
                         Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
                             .resizable()
@@ -90,10 +79,10 @@ extension PracticeItemView {
                 Text(Practice.Name)
                     .truncationMode(.tail)
                     .lineLimit(1)
-                    .font(.system(size: 9, weight: .bold))
+                    .font(.system(size: 11, weight: .bold))
                     .foregroundStyle(.white)
                 Text(Date.CurrentTime(From: Practice.UpdatedAt))
-                    .font(.system(size: 8))
+                    .font(.system(size: 9, weight: .bold))
                     .foregroundStyle(.gray)
             }
             .padding(5)
@@ -118,12 +107,12 @@ extension PracticeItemView {
         let CircleOffset = ViewModel.CircleOffset(For: ItemWidth, XOffsetValue: 15, YOffsetValue: 15)
         
         return Circle()
-            .stroke(.gray, lineWidth: 2)
+            .stroke(.white, lineWidth: 2)
             .background(Circle().fill(ViewModel.SelectedPractices.contains(where: { $0.id == Practice.id }) ? Color.white : Color.clear))
             .frame(width: 16, height: 16)
             .overlay(
                 ViewModel.SelectedPractices.contains(where: { $0.id == Practice.id }) ?
-                Circle().stroke(.gray, lineWidth: 2).frame(width: 8, height: 8) : nil
+                Circle().stroke(.black, lineWidth: 2).frame(width: 8, height: 8) : nil
             )
             .offset(x: CircleOffset.X, y: CircleOffset.Y)
     }

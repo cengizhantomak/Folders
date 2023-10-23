@@ -43,7 +43,7 @@ struct FolderView: View {
 }
 
 
-// MARK: - extension
+// MARK: - Extension
 extension FolderView {
     private var Content: some View {
         Group {
@@ -57,14 +57,15 @@ extension FolderView {
     
     private var GridView: some View {
         GeometryReader { Geometry in
-            let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 12, Amount: CGFloat(ViewModel.Columns.count))
+            let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 16, Amount: CGFloat(ViewModel.Columns.count))
             ScrollView {
                 VStack(alignment: .leading, spacing: 44) {
                     CreateSection(WithTitle: StringConstants.SectionTitle.Todays, Folders: ViewModel.TodaySection, ItemWidth: ItemWidth)
                     CreateSection(WithTitle: StringConstants.SectionTitle.Pinned, Folders: ViewModel.PinnedSection, ItemWidth: ItemWidth)
                     CreateSection(WithTitle: StringConstants.SectionTitle.Session, Folders: ViewModel.SessionSection, ItemWidth: ItemWidth)
                 }
-                .padding(10)
+                .padding(.horizontal, 16)
+                .padding(.bottom, 75)
             }
         }
     }
@@ -74,13 +75,25 @@ extension FolderView {
             if !Folders.isEmpty {
                 VStack(alignment: .leading) {
                     Divider()
-                    Section(header: Text(Title).font(.headline)) {
-                        LazyVGrid(columns: ViewModel.Columns, spacing: 10) {
+                    Section(header: Text(Title).font(.title2.weight(.bold))) {
+                        LazyVGrid(columns: ViewModel.Columns, spacing: 14) {
                             ForEach(Folders, id: \.id) { Folder in
-                                NavigationLink(destination: PracticeView(ViewModel: PracticeViewModel(Folder: Folder))) {
+                                if !ViewModel.IsSelecting {
+                                    NavigationLink(destination: PracticeView(ViewModel: PracticeViewModel(Folder: Folder))) {
+                                        FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
+                                    }
+                                    .buttonStyle(NoEffectButtonStyle())
+                                } else {
                                     FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
+                                        .onTapGesture{
+                                            if let Index = ViewModel.SelectedSessions.firstIndex(where: { $0.id == Folder.id }) {
+                                                ViewModel.SelectedSessions.remove(at: Index)
+                                            } else {
+                                                ViewModel.SelectedSessions.append(Folder)
+                                            }
+                                        }
+                                        .opacity(ViewModel.Opacity(For: Folder))
                                 }
-                                .buttonStyle(NoEffectButtonStyle())
                             }
                         }
                     }
@@ -96,7 +109,7 @@ extension FolderView {
                 ViewModel.AddButtonAction()
             } label: {
                 Image(systemName: StringConstants.SystemImage.Plus)
-                    .padding(8)
+                    .padding(7)
                     .background(.ultraThinMaterial)
                     .clipShape(Circle())
             }
@@ -104,7 +117,7 @@ extension FolderView {
                 ViewModel.AddPractice()
             } label: {
                 Text("Ekle")
-                    .padding(8)
+                    .padding(7)
                     .background(.ultraThinMaterial)
                     .clipShape(Capsule())
             }
@@ -118,7 +131,7 @@ extension FolderView {
                     ViewModel.FavoritesButtonAction()
                 } label: {
                     Image(systemName: ViewModel.OnlyShowFavorites ? StringConstants.SystemImage.HeartFill : StringConstants.SystemImage.Heart)
-                        .padding(8)
+                        .padding(7)
                         .background(.ultraThinMaterial)
                         .clipShape(Circle())
                 }

@@ -65,24 +65,39 @@ extension PracticeView {
                 Section(header: DateHeader) {
                     LazyVGrid(columns: ViewModel.Columns, spacing: 1) {
                         ForEach(ViewModel.DisplayedPractices, id: \.id) { Practice in
-                            NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
+                            if !ViewModel.IsSelecting {
+                                NavigationLink(destination: VideoPlayerView(url: Practice.VideoPath)) {
+                                    PracticeItemView(ViewModel: ViewModel, Practice: Practice, ItemWidth: ItemWidth)
+                                }
+                                .buttonStyle(NoEffectButtonStyle())
+                            } else {
                                 PracticeItemView(ViewModel: ViewModel, Practice: Practice, ItemWidth: ItemWidth)
+                                    .onTapGesture {
+                                        if let Index = ViewModel.SelectedPractices.firstIndex(where: { $0.id == Practice.id }) {
+                                            ViewModel.SelectedPractices.remove(at: Index)
+                                        } else {
+                                            ViewModel.SelectedPractices.append(Practice)
+                                        }
+                                    }
+                                    .opacity(ViewModel.Opacity(For: Practice))
                             }
-                            .buttonStyle(NoEffectButtonStyle())
-                            .foregroundStyle(.primary)
                         }
                     }
                 }
-                .padding(5)
+                .padding(.horizontal, 5)
+                .padding(.top, 5)
+                .padding(.bottom, 75)
             }
         }
     }
     
     private var DateHeader: some View {
         Text(Date.CurrentDate(From: ViewModel.Session.createdAt))
-            .foregroundStyle(.gray)
+            .fontWeight(.semibold)
+            .foregroundStyle(.secondary)
             .frame(maxWidth: .infinity, alignment: .trailing)
             .background(.clear)
+            .padding(.trailing, 5)
     }
     
     // MARK: - Title
@@ -125,7 +140,7 @@ extension PracticeView {
                     ViewModel.FavoritesButtonAction()
                 } label: {
                     Image(systemName: ViewModel.OnlyShowFavorites ? StringConstants.SystemImage.HeartFill : StringConstants.SystemImage.Heart)
-                        .padding(8)
+                        .padding(7)
                         .background(.ultraThinMaterial)
                         .clipShape(Circle())
                 }
