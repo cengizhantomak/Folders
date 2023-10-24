@@ -12,6 +12,7 @@ import CustomAlertPackage
 struct FolderView: View {
     @StateObject var ViewModel = FolderViewModel()
     @Environment(\.horizontalSizeClass) var HorizontalSizeClass
+//    @State private var scrollPosition: CGFloat = .zero
     
     var body: some View {
         NavigationStack {
@@ -58,7 +59,7 @@ extension FolderView {
     private var GridView: some View {
         GeometryReader { Geometry in
             let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 16, Amount: CGFloat(ViewModel.Columns.count))
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 VStack(alignment: .leading, spacing: 44) {
                     CreateSection(WithTitle: StringConstants.SectionTitle.Todays, Folders: ViewModel.TodaySection, ItemWidth: ItemWidth)
                     CreateSection(WithTitle: StringConstants.SectionTitle.Pinned, Folders: ViewModel.PinnedSection, ItemWidth: ItemWidth)
@@ -66,7 +67,29 @@ extension FolderView {
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 75)
+//                .background(GeometryReader { Proxy -> Color in
+//                    DispatchQueue.main.async {
+//                        //                                                     ViewModel.UpdateClampedOpacity(With: Proxy, Name: StringConstants.Scroll)
+//                    }
+//                    return Color.clear
+//                })
+//                //                .background(GeometryReader { geometry in
+//                //                        Color.clear
+//                //                            .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .named("Scroll")).origin)
+//                //                })
+//                //                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+//                //                    self.scrollPosition = value.y
+//                //                    print("scrollPosition: ", value)
+//                //                }
             }
+//            .coordinateSpace(name: StringConstants.Scroll)
+//            //            LinearGradient(
+//            //                gradient: Gradient(colors: [.black, .clear]),
+//            //                startPoint: .top,
+//            //                endPoint: .bottom)
+//            //            .opacity(ViewModel.ClampedOpacity)
+//            //            .edgesIgnoringSafeArea(.top)
+//            //            .frame(height: 10)
         }
     }
     
@@ -309,3 +332,10 @@ struct FolderView_Previews: PreviewProvider {
         FolderView()
     }
 }
+
+//struct ScrollOffsetPreferenceKey: PreferenceKey {
+//    static var defaultValue: CGPoint = .zero
+//    
+//    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
+//    }
+//}

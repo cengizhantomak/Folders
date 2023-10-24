@@ -18,9 +18,9 @@ struct DestinationFolderItemView: View {
         VStack(alignment: .leading) {
             FolderItem
                 .overlay {
-                    if Folder.isFavorite && !ViewModel.isSelected(session: Folder) {
+                    if Folder.isFavorite && !ViewModel.IsSelected(Session: Folder) {
                         FavoriteIcon
-                    } else if ViewModel.isSelected(session: Folder) {
+                    } else if ViewModel.IsSelected(Session: Folder) {
                         Color.primary.opacity(0.5)
                             .cornerRadius(10)
                         SelectionIcon

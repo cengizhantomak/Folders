@@ -13,6 +13,7 @@ struct PracticeView: View {
     @StateObject var ViewModel: PracticeViewModel
     @Environment(\.horizontalSizeClass) var HorizontalSizeClass
     @Environment(\.presentationMode) var PresentationMode
+//    @State private var scrollPosition: CGFloat = .zero
     
     var body: some View {
         Content
@@ -61,7 +62,7 @@ extension PracticeView {
     private var GridView: some View {
         GeometryReader { Geometry in
             let ItemWidth = ViewModel.CalculateItemWidth(ScreenWidth: Geometry.size.width, Padding: 1, Amount: CGFloat(ViewModel.Columns.count))
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 Section(header: DateHeader) {
                     LazyVGrid(columns: ViewModel.Columns, spacing: 1) {
                         ForEach(ViewModel.DisplayedPractices, id: \.id) { Practice in
@@ -84,6 +85,24 @@ extension PracticeView {
                         }
                     }
                 }
+//                .background(GeometryReader { geometry in
+//                    Color.clear
+//                        .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .named("Scroll")).origin)
+//                })
+//                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+//                    self.scrollPosition = value.y
+//                    //                    print("detail scrollPosition: ", value)
+//                }
+//                .overlay(alignment: .top, content: {
+//                    //                    if scrollPosition <= 0 {
+//                    //                        LinearGradient(
+//                    //                            gradient: Gradient(colors: [.black, .clear]),
+//                    //                            startPoint: .top,
+//                    //                            endPoint: .bottom)
+//                    //                        .edgesIgnoringSafeArea(.top)
+//                    //                        .frame(height: 10)
+//                    //                    }
+//                })
                 .padding(.horizontal, 5)
                 .padding(.top, 5)
                 .padding(.bottom, 75)

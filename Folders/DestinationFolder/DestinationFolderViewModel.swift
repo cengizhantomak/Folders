@@ -55,52 +55,32 @@ class DestinationFolderViewModel: ObservableObject {
         DispatchQueue.main.async { [weak self] in
             withAnimation {
                 guard let self else { return }
-                if let sessionID = self.PracticeViewModel?.Session.id {
-                    let updatedSessions = SessionModel.filter { session in
-                        sessionID != session.id
+                if let SessionID = self.PracticeViewModel?.Session.id {
+                    let UpdatedSessions = SessionModel.filter { Session in
+                        SessionID != Session.id
                     }
-                    self.Sessions = updatedSessions
+                    self.Sessions = UpdatedSessions
                 }
             }
         }
     }
     
-    func isSelected(session: SessionModel) -> Bool {
-        return SelectedFolder?.id == session.id
+    func IsSelected(Session: SessionModel) -> Bool {
+        return SelectedFolder?.id == Session.id
     }
     
     func MovePractice() {
         Task {
             do {
-                var UpdatedPracticesArray: [PracticeModel] = []
-                
-                PracticeViewModel?.SelectedPractices.forEach { Practice in
-                    var UpdatedPractice = Practice
-                    UpdatedPractice.Session = SelectedFolder
-                    UpdatedPracticesArray.append(UpdatedPractice)
-                }
-                
-                try await PracticeRepository.shared.edit(UpdatedPracticesArray)
-                try await UpdateDestinationFolder()
+                guard let FromSession = PracticeViewModel?.Session else { return }
+                guard let ToFolder = SelectedFolder else { return }
+                guard let SelectedPractices = PracticeViewModel?.SelectedPractices else { return }
+                try await PracticeRepository.shared.movePractices(from: FromSession, to: ToFolder, SelectedPractices)
                 UpdateUI()
             } catch {
-                print("Error updating practice status: \(error)")
+                print("Error updating move status: \(error)")
                 ErrorTTProgressHUD()
             }
-        }
-        SuccessTTProgressHUD()
-    }
-    
-    private func UpdateDestinationFolder() async throws {
-        if var DestinationFolder = SelectedFolder {
-            let Practices = try await PracticeRepository.shared.getPractices(DestinationFolder)
-            // DestinationFolder içindeki Practice sayısını güncelle
-            DestinationFolder.practiceCount = Practices.count
-            // DestinationFolder'ın thumbnail'ını güncelle
-            if let LastPractice = Practices.first {
-                DestinationFolder.thumbnail = LastPractice.ThumbPath
-            }
-            try await FolderRepository.shared.edit(DestinationFolder)
         }
     }
     
@@ -110,7 +90,7 @@ class DestinationFolderViewModel: ObservableObject {
             self.PracticeViewModel?.LoadPractices()
             self.PracticeViewModel?.IsSelecting = false
             self.PracticeViewModel?.ShowMoveAlert = false
-//            self.PracticeViewModel?.SuccessTTProgressHUD()
+            self.PracticeViewModel?.SuccessTTProgressHUD()
         }
     }
     
@@ -143,7 +123,6 @@ class DestinationFolderViewModel: ObservableObject {
                 ErrorTTProgressHUD()
             }
         }
-        SuccessTTProgressHUD()
     }
     
     private func SuccessTTProgressHUD() {

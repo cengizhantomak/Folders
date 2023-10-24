@@ -49,16 +49,17 @@ extension FolderItemView {
         
         return Group {
             if let ThumbPath = Folder.thumbnail {
-                AsyncImage(url: URL.documentsDirectory.appending(path: ThumbPath)) { Image in
-                    Image
+                Image(uiImage: UIImage(contentsOfFile: URL.documentsDirectory.appending(path: ThumbPath).path) ?? UIImage())
+//                AsyncImage(url: URL.documentsDirectory.appending(path: ThumbPath)) { Image in
+//                    Image
                         .resizable()
                         .frame(width: SafeItemWidth, height: SafeItemWidth * (1850 / 1080))
                         .scaledToFit()
                         .cornerRadius(5)
-                } placeholder: {
-                    ProgressView()
-                        .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
-                }
+//                } placeholder: {
+//                    ProgressView()
+//                        .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
+//                }
             } else {
                 Rectangle()
                     .fill(ColorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.1) : Color(red: 0.9, green: 0.9, blue: 0.9))
