@@ -89,7 +89,7 @@ class DestinationFolderViewModel: ObservableObject {
             guard let self else { return }
             self.PracticeViewModel?.LoadPractices()
             self.PracticeViewModel?.IsSelecting = false
-            self.PracticeViewModel?.ShowMoveAlert = false
+            self.PracticeViewModel?.ShowMove = false
             self.PracticeViewModel?.SuccessTTProgressHUD()
         }
     }

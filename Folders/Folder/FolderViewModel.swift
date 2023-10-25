@@ -10,8 +10,6 @@ import LVRealmKit
 import AVFoundation
 
 class FolderViewModel: ObservableObject {
-    @Published var mediaURLs: [URL: URL] = [:]  // [videoURL: imageURL]
-    @Published var sortedVideoURLs: [URL] = []
     @Published var Columns: [GridItem] = []
     @Published var IsSelecting = false
     @Published var OnlyShowFavorites = false
@@ -95,12 +93,12 @@ class FolderViewModel: ObservableObject {
                 Folder.createdAt = FolderCreationDate ?? Date()
                 try await FolderRepository.shared.addFolder(Folder)
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error adding session: \(error)")
                 ErrorTTProgressHUD()
             }
         }
-        SuccessTTProgressHUD()
     }
     
     func AddPractice() {
@@ -130,6 +128,7 @@ class FolderViewModel: ObservableObject {
                         _ = try await PracticeRepository.shared.addPractice(&NewPractice)
                     }
                     LoadFolders()
+                    SuccessTTProgressHUD()
                 } catch {
                     print("Failed to add practice: \(error)")
                     ErrorTTProgressHUD()
@@ -139,7 +138,6 @@ class FolderViewModel: ObservableObject {
             print("An error occurred: \(error)")
             ErrorTTProgressHUD()
         }
-        SuccessTTProgressHUD()
     }
     
     func SaveRandomVideoToContainer() throws -> (Date: Date, VideoPath: String, ThumbnailPath: String, Duration: Int64, Size: Int64)? {
@@ -209,12 +207,12 @@ class FolderViewModel: ObservableObject {
                     try await FolderRepository.shared.edit(Folder)
                 }
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error updating rename status: \(error)")
                 ErrorTTProgressHUD()
             }
         }
-        SuccessTTProgressHUD()
     }
     
     func DeleteFolders(_ Folder: [SessionModel]) {
@@ -222,13 +220,13 @@ class FolderViewModel: ObservableObject {
             do {
                 try await FolderRepository.shared.deleteFolders(Folder)
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error deleting session: \(error)")
                 ErrorTTProgressHUD()
             }
         }
         SelectedSessions.removeAll()
-        SuccessTTProgressHUD()
     }
     
     func TogglePin() {
@@ -239,20 +237,17 @@ class FolderViewModel: ObservableObject {
                     try await FolderRepository.shared.edit(Folder)
                 }
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error updating pin status: \(error)")
                 ErrorTTProgressHUD()
             }
         }
-        SuccessTTProgressHUD()
     }
     
     func FavoritesButtonAction() {
         isActive = true
-        withAnimation { [weak self] in
-            guard let self else { return }
-            self.OnlyShowFavorites.toggle()
-        }
+        OnlyShowFavorites.toggle()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self else { return }
             self.isActive = false
@@ -268,20 +263,17 @@ class FolderViewModel: ObservableObject {
                     try await FolderRepository.shared.edit(Folder)
                 }
                 LoadFolders()
+                SuccessTTProgressHUD()
             } catch {
                 print("Error updating favorite status: \(error)")
                 ErrorTTProgressHUD()
             }
         }
-        SuccessTTProgressHUD()
     }
     
     func SelectCancelButtonAction() {
         isActive = true
-        withAnimation { [weak self] in
-            guard let self else { return }
-            self.IsSelecting.toggle()
-        }
+        IsSelecting.toggle()
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
             guard let self else { return }
             self.isActive = false

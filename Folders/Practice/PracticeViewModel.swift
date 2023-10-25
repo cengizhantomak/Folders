@@ -12,7 +12,7 @@ class PracticeViewModel: ObservableObject {
     @Published var Columns: [GridItem] = []
     @Published var IsSelecting = false
     @Published var OnlyShowFavorites = false
-    @Published var ShowMoveAlert = false
+    @Published var ShowMove = false
     @Published var ShowRenameAlert = false
     @Published var ShowDeleteAlert = false
     @Published var IsSuccessTTProgressHUDVisible = false

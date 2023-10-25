@@ -34,7 +34,7 @@ struct PracticeView: View {
             .onAppear {
                 ViewModel.SetupColumnsToDevice(To: HorizontalSizeClass)
             }
-            .sheet(isPresented: $ViewModel.ShowMoveAlert) {
+            .sheet(isPresented: $ViewModel.ShowMove) {
                 DestinationFolderView(ViewModel: DestinationFolderViewModel(PracticeViewModel: ViewModel))
             }
             .overlay {
@@ -144,9 +144,9 @@ extension PracticeView {
                 PresentationMode.wrappedValue.dismiss()
             } label: {
                 HStack {
-                    Image(systemName: "chevron.backward")
+                    Image(systemName: StringConstants.SystemImage.ChevronBackward)
                         .fontWeight(.semibold)
-                    Text("Videos")
+                    Text(StringConstants.Videos)
                 }
             }
         }
@@ -193,7 +193,7 @@ extension PracticeView {
     private var SelectionBottomBar: some ToolbarContent {
         ToolbarItemGroup(placement: .bottomBar) {
             Button {
-                ViewModel.ShowMoveAlert = true
+                ViewModel.ShowMove = true
             } label: {
                 Image(systemName: StringConstants.SystemImage.FolderBadgePlus)
             }
@@ -202,7 +202,7 @@ extension PracticeView {
             Spacer()
             
             Text(ViewModel.SelectionCount(For: ViewModel.SelectedPractices.count))
-                .foregroundStyle(ViewModel.SelectedPractices.isEmpty || ViewModel.ShowMoveAlert || ViewModel.ShowDeleteAlert || ViewModel.ShowDeleteAlert ? .secondary : .primary)
+                .foregroundStyle(ViewModel.SelectedPractices.isEmpty || ViewModel.ShowMove || ViewModel.ShowDeleteAlert || ViewModel.ShowDeleteAlert ? .secondary : .primary)
             
             Spacer()
             

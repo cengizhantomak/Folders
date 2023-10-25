@@ -17,7 +17,6 @@ struct PracticeItemView: View {
     var body: some View {
         PracticeItem
             .overlay {
-                NameTimeTitle
                 if ViewModel.IsSelecting {
                     SelectionIcon
                 } else if Practice.isFavorite {
@@ -39,7 +38,7 @@ extension PracticeItemView {
     private var PracticeItem: some View {
         let SafeItemWidth = max(ItemWidth, 1)
         
-        return ZStack {
+        return Group {
             if let ThumbPath = Practice.ThumbPath {
                 Image(uiImage: UIImage(contentsOfFile: URL.documentsDirectory.appending(path: ThumbPath).path) ?? UIImage())
 //                AsyncImage(url: URL.documentsDirectory.appending(path: ThumbPath)) { Image in
@@ -65,11 +64,14 @@ extension PracticeItemView {
                             .foregroundStyle(ColorScheme == .dark ? Color(red: 0.3, green: 0.3, blue: 0.3) : Color(red: 0.6, green: 0.6, blue: 0.6))
                     }
             }
+        }
+        .overlay {
             VStack {
                 Spacer()
                 LinearGradient(colors: [Color.black, Color.clear], startPoint: .bottom, endPoint: .top)
                     .frame(height: 150)
             }
+            NameTimeTitle
         }
     }
     
@@ -99,7 +101,7 @@ extension PracticeItemView {
         return Image(systemName: StringConstants.SystemImage.HeartFill)
             .resizable()
             .scaledToFit()
-            .frame(width: 15, height: 15)
+            .frame(width: 12, height: 12)
             .foregroundStyle(.red)
             .offset(x: CircleOffset.X, y: CircleOffset.Y)
     }
@@ -107,14 +109,11 @@ extension PracticeItemView {
     private var SelectionIcon: some View {
         let CircleOffset = ViewModel.CircleOffset(For: ItemWidth, XOffsetValue: 15, YOffsetValue: 15)
         
-        return Circle()
-            .stroke(.white, lineWidth: 2)
-            .background(Circle().fill(ViewModel.SelectedPractices.contains(where: { $0.id == Practice.id }) ? Color.white : Color.clear))
+        return Image(systemName: ViewModel.SelectedPractices.contains(where: { $0.id == Practice.id }) ? StringConstants.SystemImage.CircleCircleFill : StringConstants.SystemImage.Circle)
+            .resizable()
+            .scaledToFit()
             .frame(width: 16, height: 16)
-            .overlay(
-                ViewModel.SelectedPractices.contains(where: { $0.id == Practice.id }) ?
-                Circle().stroke(.black, lineWidth: 2).frame(width: 8, height: 8) : nil
-            )
+            .foregroundStyle(.white)
             .offset(x: CircleOffset.X, y: CircleOffset.Y)
     }
     
@@ -156,7 +155,7 @@ extension PracticeItemView {
     private var MoveButton: some View {
         Button {
             ViewModel.SelectedPractices.append(Practice)
-            ViewModel.ShowMoveAlert = true
+            ViewModel.ShowMove = true
         } label: {
             Label(
                 StringConstants.ContextMenu.Move.Text,

@@ -92,14 +92,11 @@ extension FolderItemView {
     private var SelectionIcon: some View {
         let CircleOffset = ViewModel.CircleOffset(For: ItemWidth, XOffsetValue: 20, YOffsetValue: 30)
         
-        return Circle()
-            .stroke(.white, lineWidth: 2)
-            .background(Circle().fill(ViewModel.SelectedSessions.contains(where: { $0.id == Folder.id }) ? Color.white : Color.clear))
+        return Image(systemName: ViewModel.SelectedSessions.contains(where: { $0.id == Folder.id }) ? StringConstants.SystemImage.CircleCircleFill : StringConstants.SystemImage.Circle)
+            .resizable()
+            .scaledToFit()
             .frame(width: 20, height: 20)
-            .overlay(
-                ViewModel.SelectedSessions.contains(where: { $0.id == Folder.id }) ?
-                Circle().stroke(.black, lineWidth: 2).frame(width: 10, height: 10) : nil
-            )
+            .foregroundStyle(.white)
             .offset(x: CircleOffset.X, y: CircleOffset.Y)
     }
     

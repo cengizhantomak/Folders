@@ -18,6 +18,7 @@ struct FolderView: View {
         NavigationStack {
             Content
                 .disabled(ViewModel.isActive)
+                .animation(.default, value: [ViewModel.IsSelecting, ViewModel.OnlyShowFavorites])
                 .navigationTitle(StringConstants.Videos)
                 .toolbar {
                     if !ViewModel.IsSelecting {
@@ -136,6 +137,7 @@ extension FolderView {
                     .background(.ultraThinMaterial)
                     .clipShape(Circle())
             }
+            // TODO: Delete Toolbar
             Button {
                 ViewModel.AddPractice()
             } label: {
