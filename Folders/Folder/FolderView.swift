@@ -12,13 +12,11 @@ import CustomAlertPackage
 struct FolderView: View {
     @StateObject var ViewModel = FolderViewModel()
     @Environment(\.horizontalSizeClass) var HorizontalSizeClass
-//    @State private var scrollPosition: CGFloat = .zero
     
     var body: some View {
         NavigationStack {
             Content
                 .disabled(ViewModel.isActive)
-                .animation(.default, value: [ViewModel.IsSelecting, ViewModel.OnlyShowFavorites])
                 .navigationTitle(StringConstants.Videos)
                 .toolbar {
                     if !ViewModel.IsSelecting {
@@ -32,6 +30,10 @@ struct FolderView: View {
                 .onAppear {
                     ViewModel.SetupColumnsToDevice(To: HorizontalSizeClass)
                     ViewModel.LoadFolders()
+                }
+                .animation(.linear(duration: 0.2), value: [ViewModel.IsSelecting, ViewModel.OnlyShowFavorites])
+                .overlay(alignment: .top) {
+                    NavBarLinearGradient
                 }
         }
         .accentColor(.primary)
@@ -68,29 +70,22 @@ extension FolderView {
                 }
                 .padding(.horizontal, 16)
                 .padding(.bottom, 75)
-//                .background(GeometryReader { Proxy -> Color in
-//                    DispatchQueue.main.async {
-//                        //                                                     ViewModel.UpdateClampedOpacity(With: Proxy, Name: StringConstants.Scroll)
-//                    }
-//                    return Color.clear
-//                })
-//                //                .background(GeometryReader { geometry in
-//                //                        Color.clear
-//                //                            .preference(key: ScrollOffsetPreferenceKey.self, value: geometry.frame(in: .named("Scroll")).origin)
-//                //                })
-//                //                .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
-//                //                    self.scrollPosition = value.y
-//                //                    print("scrollPosition: ", value)
-//                //                }
+                .overlay {
+                    GeometryReader { ScrollGeometry in
+                        Color.clear.preference(key: ScrollPreferenceKey.self, value: ScrollGeometry.frame(in: .named(StringConstants.Scroll)).minY)
+                    }
+                }
             }
-//            .coordinateSpace(name: StringConstants.Scroll)
-//            //            LinearGradient(
-//            //                gradient: Gradient(colors: [.black, .clear]),
-//            //                startPoint: .top,
-//            //                endPoint: .bottom)
-//            //            .opacity(ViewModel.ClampedOpacity)
-//            //            .edgesIgnoringSafeArea(.top)
-//            //            .frame(height: 10)
+            .coordinateSpace(name: StringConstants.Scroll)
+            .onPreferenceChange(ScrollPreferenceKey.self, perform: { Value in
+                withAnimation(.linear) {
+                    if Value < -7 {
+                        ViewModel.IsScroll = true
+                    } else {
+                        ViewModel.IsScroll = false
+                    }
+                }
+            })
         }
     }
     
@@ -110,11 +105,7 @@ extension FolderView {
                                 } else {
                                     FolderItemView(ViewModel: ViewModel, Folder: Folder, ItemWidth: ItemWidth)
                                         .onTapGesture{
-                                            if let Index = ViewModel.SelectedSessions.firstIndex(where: { $0.id == Folder.id }) {
-                                                ViewModel.SelectedSessions.remove(at: Index)
-                                            } else {
-                                                ViewModel.SelectedSessions.append(Folder)
-                                            }
+                                            ViewModel.ToggleSelection(Of: Folder)
                                         }
                                         .opacity(ViewModel.Opacity(For: Folder))
                                 }
@@ -124,6 +115,17 @@ extension FolderView {
                 }
             }
         }
+    }
+    
+    // MARK: - NavBarLinearGradient
+    private var NavBarLinearGradient: some View {
+        LinearGradient(
+            gradient: Gradient(colors: [.black, .clear]),
+            startPoint: .top,
+            endPoint: .bottom)
+        .opacity(ViewModel.IsScroll ? 0.75 : 0)
+        .edgesIgnoringSafeArea(.top)
+        .frame(height: 100)
     }
     
     // MARK: - Toolbars
@@ -137,11 +139,11 @@ extension FolderView {
                     .background(.ultraThinMaterial)
                     .clipShape(Circle())
             }
-            // TODO: Delete Toolbar
+            // TODO: Add Practice toolbar will be deleted
             Button {
                 ViewModel.AddPractice()
             } label: {
-                Text("Ekle")
+                Text("Add Practice")
                     .padding(7)
                     .background(.ultraThinMaterial)
                     .clipShape(Capsule())
@@ -334,10 +336,3 @@ struct FolderView_Previews: PreviewProvider {
         FolderView()
     }
 }
-
-//struct ScrollOffsetPreferenceKey: PreferenceKey {
-//    static var defaultValue: CGPoint = .zero
-//    
-//    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
-//    }
-//}
