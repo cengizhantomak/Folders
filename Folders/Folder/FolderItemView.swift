@@ -62,14 +62,12 @@ extension FolderItemView {
                 // MARK: - KINGFISHER
                 if let ThumbPath = Folder.thumbnail {
                     KFImage(URL.documentsDirectory.appending(path: ThumbPath))
-//                        .loadDiskFileSynchronously()
-//                        .cancelOnDisappear(true)
                         .cacheMemoryOnly()
                         .setProcessor(DownsamplingImageProcessor(size: .init(width: SafeItemWidth, height: SafeItemWidth * (1850 / 1080))))
                         .scaleFactor(UIApplication.shared.firstWindow?.screen.scale ?? 2)
-//                        .resizable()
-                        .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
-//                        .scaledToFit()
+                        .resizable()
+                        .frame(width: SafeItemWidth, height: SafeItemWidth * (1850 / 1080))
+                        .scaledToFit()
                         .cornerRadius(5)
             } else {
                 Rectangle()

@@ -17,7 +17,7 @@ struct FolderView: View {
         NavigationStack {
             Content
                 .disabled(ViewModel.isActive)
-                .navigationTitle(StringConstants.Videos)
+//                .navigationTitle(StringConstants.Videos)
                 .toolbar {
                     if !ViewModel.IsSelecting {
                         DefaultTopBarLeading
@@ -33,7 +33,10 @@ struct FolderView: View {
                 }
                 .animation(.linear(duration: 0.2), value: [ViewModel.IsSelecting, ViewModel.OnlyShowFavorites])
                 .overlay(alignment: .top) {
-                    NavBarLinearGradient
+                    CustomNavBar
+                }
+                .overlay {
+                    CustomNavTitle
                 }
         }
         .accentColor(.primary)
@@ -68,6 +71,7 @@ extension FolderView {
                     CreateSection(WithTitle: StringConstants.SectionTitle.Pinned, Folders: ViewModel.PinnedSection, ItemWidth: ItemWidth)
                     CreateSection(WithTitle: StringConstants.SectionTitle.Session, Folders: ViewModel.SessionSection, ItemWidth: ItemWidth)
                 }
+                .padding(.top, 52)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 75)
                 .overlay {
@@ -77,15 +81,15 @@ extension FolderView {
                 }
             }
             .coordinateSpace(name: StringConstants.Scroll)
-            .onPreferenceChange(ScrollPreferenceKey.self, perform: { Value in
+            .onPreferenceChange(ScrollPreferenceKey.self) { Value in
                 withAnimation(.linear) {
-                    if Value < -7 {
+                    if Value < -16 {
                         ViewModel.IsScroll = true
                     } else {
                         ViewModel.IsScroll = false
                     }
                 }
-            })
+            }
         }
     }
     
@@ -117,8 +121,20 @@ extension FolderView {
         }
     }
     
-    // MARK: - NavBarLinearGradient
-    private var NavBarLinearGradient: some View {
+    // MARK: - Custom Navigation Title
+    private var CustomNavTitle: some View {
+        Text("Videos")
+            .fontWeight(.bold)
+            .font(ViewModel.IsScroll ? .headline : .largeTitle)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: ViewModel.IsScroll ? .top : .topLeading)
+            .padding(.horizontal)
+            .offset(y: ViewModel.IsScroll ? -32 : 4)
+            .background(.clear)
+            .foregroundStyle(ViewModel.IsScroll ? .white : .primary)
+    }
+    
+    // MARK: - Custom Navigation Bar
+    private var CustomNavBar: some View {
         LinearGradient(
             gradient: Gradient(colors: [.black, .clear]),
             startPoint: .top,
@@ -131,22 +147,24 @@ extension FolderView {
     // MARK: - Toolbars
     private var DefaultTopBarLeading: some ToolbarContent {
         ToolbarItemGroup(placement: .topBarLeading) {
-            Button {
-                ViewModel.AddButtonAction()
-            } label: {
-                Image(systemName: StringConstants.SystemImage.Plus)
-                    .padding(7)
-                    .background(.ultraThinMaterial)
-                    .clipShape(Circle())
-            }
-            // TODO: Add Practice toolbar will be deleted
-            Button {
-                ViewModel.AddPractice()
-            } label: {
-                Text("Add Practice")
-                    .padding(7)
-                    .background(.ultraThinMaterial)
-                    .clipShape(Capsule())
+            HStack(spacing: 0) {
+                Button {
+                    ViewModel.AddButtonAction()
+                } label: {
+                    Image(systemName: StringConstants.SystemImage.Plus)
+                        .padding(7)
+                        .background(.ultraThinMaterial)
+                        .clipShape(Circle())
+                }
+                // TODO: Add Practice toolbar will be deleted
+                Button {
+                    ViewModel.AddPractice()
+                } label: {
+                    Image(systemName: "camera")
+                        .padding(7)
+                        .background(.ultraThinMaterial)
+                        .clipShape(Circle())
+                }
             }
         }
     }

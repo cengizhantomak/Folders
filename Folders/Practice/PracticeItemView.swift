@@ -47,7 +47,6 @@ extension PracticeItemView {
 //                    .resizable()
 //                    .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
 //                    .scaledToFit()
-//                    .cornerRadius(2)
                 
             // MARK: - AsyncImage
 //            if let ThumbPath = Practice.ThumbPath {
@@ -56,7 +55,6 @@ extension PracticeItemView {
 //                        .resizable()
 //                        .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
 //                        .scaledToFit()
-//                        .cornerRadius(2)
 //                } placeholder: {
 //                    ProgressView()
 //                        .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
@@ -65,22 +63,18 @@ extension PracticeItemView {
             // MARK: - KINGFISHER
             if let ThumbPath = Practice.ThumbPath {
                 KFImage(URL.documentsDirectory.appending(path: ThumbPath))
-                    .loadDiskFileSynchronously()
-                    .cancelOnDisappear(true)
                     .cacheMemoryOnly()
                     .setProcessor(DownsamplingImageProcessor(size: .init(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))))
                     .scaleFactor(UIApplication.shared.firstWindow?.screen.scale ?? 2)
-//                    .resizable()
+                    .resizable()
                     .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
-//                    .scaledToFit()
-//                    .cornerRadius(2)
+                    .scaledToFit()
                 
                 
             } else {
                 Rectangle()
                     .fill(ColorScheme == .dark ? Color(red: 0.1, green: 0.1, blue: 0.1) : Color(red: 0.9, green: 0.9, blue: 0.9))
                     .frame(width: SafeItemWidth, height: SafeItemWidth * (16 / 9))
-                    .cornerRadius(2)
                     .overlay {
                         Image(systemName: StringConstants.SystemImage.RectangleStackBadgePlay)
                             .resizable()
@@ -94,7 +88,7 @@ extension PracticeItemView {
             VStack {
                 Spacer()
                 LinearGradient(colors: [Color.black, Color.clear], startPoint: .bottom, endPoint: .top)
-                    .frame(height: 150)
+                    .frame(height: 100)
             }
             NameTimeTitle
         }

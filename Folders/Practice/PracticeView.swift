@@ -37,7 +37,7 @@ struct PracticeView: View {
                 DestinationFolderView(ViewModel: DestinationFolderViewModel(PracticeViewModel: ViewModel))
             }
             .overlay(alignment: .top) {
-                NavBarLinearGradient
+                CustomNavBar
             }
             .overlay {
                 SessionTitle
@@ -112,7 +112,7 @@ extension PracticeView {
             .coordinateSpace(name: StringConstants.Scroll)
             .onPreferenceChange(ScrollPreferenceKey.self, perform: { Value in
                 withAnimation(.linear) {
-                    if Value < -70 {
+                    if Value < -16 {
                         ViewModel.IsScroll = true
                     } else {
                         ViewModel.IsScroll = false
@@ -150,8 +150,8 @@ extension PracticeView {
         }
     }
     
-    // MARK: - NavBarLinearGradient
-    private var NavBarLinearGradient: some View {
+    // MARK: - Custom Navigation Bar
+    private var CustomNavBar: some View {
         LinearGradient(
             gradient: Gradient(colors: [.black, .clear]),
             startPoint: .top,
